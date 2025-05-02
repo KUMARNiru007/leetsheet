@@ -47,3 +47,31 @@ export const authMiddleware = async (req , res , next)=>{
         res.status(500).json({message:"Error authenticating user"});
     }
 }
+
+
+
+export const checkAdmin = async(req,res,next) => {
+    try {
+        const userId = db.user.id;
+        const user = await db.user.findUnique({
+            where:{
+                id:userId
+            },
+            select:{
+                role:true
+            }
+        })
+
+        if(!user || user.role !== "ADMIN") {
+            return res.status(403).json({
+                message:"Access denied- Admin Only"
+            })
+        }
+
+    }catch(error){
+        console.error("Error check user role",error)
+        return res.status(500).json({
+            message:"Access denied- Admin Only check user role"
+        })
+    }
+}
