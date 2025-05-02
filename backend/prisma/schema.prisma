@@ -19,6 +19,12 @@ enum UserRole {
   ADMIN
   USER
 }
+enum Difficulty {
+  EAST
+  MEDIUM 
+  HARD
+}
+
 
 model User {
   id String @id@default(uuid())
@@ -29,4 +35,39 @@ model User {
   password String
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+
+  problems Problem[] // one user multiple problem
+}
+
+model Problem {
+  id String @id @default(uuid())
+  title String
+  description String
+  difficulty Difficulty
+  tags String[] // ["tag1","tag2"]
+  userId String
+  examples Json
+  constraints String
+  hints String?
+  editorial String?
+
+
+  testcases Json 
+  codeSnippet Json
+  referencesolutions Json
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+
+  //Relationship
+
+  // User -model type 
+  // decorator -field --kis basis pe relation uske id ke base par
+  //user Id se problem ko kis use ne banaya useidentify 
+  // refernces userid kiso refer kare gi  kya data store  
+
+  user User @relation(fields:[userId], references:[id], onDelete:Cascade)
+
+
 }
