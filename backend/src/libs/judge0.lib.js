@@ -41,4 +41,6 @@ export const pollBatchResults = async (tokens)=>{
         if(isAllDone) return results
         await sleep(1000)
     }
-}
+} // afetr every 1000 ms ek pbar endpoint to ungali kar dega -- aur bhai kya hal chal hai .
+
+const sleep = (ms) => new Promise ((resolve) => setTimout(resolve , ms))
