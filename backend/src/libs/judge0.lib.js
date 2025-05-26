@@ -16,7 +16,7 @@ export const submitBatch = async (submissions) => {
 
     console.log("Submission Results",data)
 
-    return data
+    return data //return token
 }
 
 
@@ -35,7 +35,9 @@ export const pollBatchResults = async (tokens)=>{
 
         //every- -> when all the condition true then return
         const isAllDone = results.every(
-            (r)=> r.status.id !== 1 && r.status.id !== 2
+            (r)=> r.status.id !== 1 && r.status.id !== 2 
+            //1--> kyu represesnt
+            //2--> abhi processing chal rahi hai
         ) 
 
         if(isAllDone) return results
