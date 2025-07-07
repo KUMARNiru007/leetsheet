@@ -36,7 +36,10 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  problems Problem[] // one user multiple problem
+  problems      Problem[] // one user multiple problem
+  submission    Submission[]
+  problemSolved ProblemSolved[]
+  playlists     Playlist[]
 }
 
 model Problem {
@@ -51,19 +54,112 @@ model Problem {
   hints       String?
   editorial   String?
 
-  testcases         Json
-  codeSnippet       Json
-  referencesolution Json
+  testcases          Json
+  codeSnippet        Json
+  referenceSolutions Json
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   //Relationship
-
   // User -model type 
-  // decorator -field --kis basis pe relation uske id ke base par
+  // decorator -[field] --kis basis pe relation uske id ke base par
   //user Id se problem ko kis use ne banaya useidentify 
   // refernces userid kiso refer kare gi  kya data store  
 
+  user              User                @relation(fields: [userId], references: [id], onDelete: Cascade)
+  submission        Submission[]
+  solvedBy          ProblemSolved[]
+  problemsPlaylists ProblemInPlaylist[]
+}
+
+// enum Status{
+//   ACCEPTED
+//   WORNG_ANSWER
+// }
+
+model Submission {
+  id            String  @id @default(uuid())
+  userId        String // kon sa user
+  problemId     String // kon se unser ka kon sa problem
+  sourceCode    Json // code ko submit - Json 
+  language      String // lang of the code solved in 
+  stdin         String?
+  stdout        String?
+  stderr        String? // stan error
+  compileOutput String?
+  status        String // all Tested passed the - Accepted , wrong answer
+  memory        String?
+  time          String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  testCases TestCaseResult[]
+}
+
+model TestCaseResult {
+  id            String  @id @default(uuid())
+  submissionId  String
+  testCase      Int
+  passed        Boolean
+  stdout        String?
+  expected      String //expected outpout
+  stderr        String?
+  compileOutput String?
+  status        String // accepted , failed
+  memory        String?
+  time          String?
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
+
+  @@index([submissionId]) // test case of unique submission 
+}
+
+model ProblemSolved {
+  id        String   @id @default(uuid())
+  userId    String
+  problemId String
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
+  problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([userId, problemId]) // indexing
+}
+
+model Playlist {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+  userId      String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  problems ProblemInPlaylist[]
+
   user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([name, userId]) // unique playlist names per user
+}
+
+model ProblemInPlaylist {
+  id         String   @id @default(uuid())
+  playListId String
+  problemId  String
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  playlist Playlist @relation(fields: [playListId], references: [id], onDelete: Cascade)
+  problem  Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
+
+  @@unique([playListId, problemId])
 }

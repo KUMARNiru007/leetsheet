@@ -43,7 +43,7 @@ export const register = async (req , res ) => {
             maxAge : 1000*60*60*24*7,//7days
 
         })
-        res.status(200).json({
+        res.status(201).json({
             success:true,
             message:"User created successfully",
             user:{
@@ -61,7 +61,7 @@ export const register = async (req , res ) => {
     }catch(error){
     
         console.error("Error creating a User",error)
-        res.status(400).json({
+        res.status(500).json({
             message:"Error creating a user"
         })
 
