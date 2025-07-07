@@ -8,19 +8,9 @@ export const getJudge0LanguageId = (Language) => {
 }
 
 //to hit the endpoint of judge0 submission batch
-export const submitBatch = async (submissions) => {
 
-    const {data} = await axios.post(`${process.env.JUDGE0_API-URL}/submissions/batch?base64_encoded=false`, {
-        submissions
-    })
+const sleep = (ms) => new Promise ((resolve) => setTimout(resolve , ms))
 
-    console.log("Submission Results",data)
-
-    return data //return token
-}
-
-
-// in the loop always ask the endpoint is the work done is the work done 
 export const pollBatchResults = async (tokens)=>{
     while(true){
         
@@ -43,6 +33,27 @@ export const pollBatchResults = async (tokens)=>{
         if(isAllDone) return results
         await sleep(1000)
     }
-} // afetr every 1000 ms ek pbar endpoint to ungali kar dega -- aur bhai kya hal chal hai .
+} // after every 1000 ms ek pbar endpoint to ungali kar dega -- aur bhai kya hal chal hai .
 
-const sleep = (ms) => new Promise ((resolve) => setTimout(resolve , ms))
+export const submitBatch = async (submissions) => {
+
+    const {data} = await axios.post(`${process.env.JUDGE0_API-URL}/submissions/batch?base64_encoded=false`, {
+        submissions
+    })
+
+    console.log("Submission Results",data)
+
+    return data //return token
+}
+// in the loop always ask the endpoint is the work done is the work done 
+
+export function getLanguageName(languageId){
+    const LANGUAGE_NAMES = {
+        74: "TypeScript",
+        63: "JavaScript",
+        71: "Python",
+        62: "Java",
+    }
+
+    return LANGUAGE_NAMES[languageId] || "Unknown"
+}

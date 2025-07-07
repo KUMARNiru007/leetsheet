@@ -63,7 +63,7 @@ model Problem {
 
   //Relationship
   // User -model type 
-  // decorator -field --kis basis pe relation uske id ke base par
+  // decorator -[field] --kis basis pe relation uske id ke base par
   //user Id se problem ko kis use ne banaya useidentify 
   // refernces userid kiso refer kare gi  kya data store  
 
@@ -80,15 +80,15 @@ model Problem {
 
 model Submission {
   id            String  @id @default(uuid())
-  userId        String
-  problemId     String
-  sourceCode    Json
-  language      String
-  stdin         String?
+  userId        String // kon sa user
+  problemId     String  // kon se unser ka kon sa problem
+  sourceCode    Json   // code ko submit - Json 
+  language      String  // lang of the code solved in 
+  stdin         String?  
   stdout        String?
-  stderr        String?
+  stderr        String?  // stan error
   compileOutput String?
-  status        String // Accepted , wrong answer
+  status        String // all Tested passed the - Accepted , wrong answer
   memory        String?
   time          String?
 
@@ -107,10 +107,10 @@ model TestCaseResult {
   testCase      Int
   passed        Boolean
   stdout        String?
-  expected      String
+  expected      String   //expected outpout
   stderr        String?
   compileOutput String?
-  status        String
+  status        String    // accepted , failed
   memory        String?
   time          String?
 
@@ -119,7 +119,7 @@ model TestCaseResult {
 
   submission Submission @relation(fields: [submissionId], references: [id], onDelete: Cascade)
 
-  @@index([submissionId])
+  @@index([submissionId])  // test case of unique submission 
 }
 
 model ProblemSolved {
@@ -132,7 +132,7 @@ model ProblemSolved {
   user    User    @relation(fields: [userId], references: [id], onDelete: Cascade)
   problem Problem @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
-  @@unique([userId, problemId])
+  @@unique([userId, problemId]) // indexing
 }
 
 model Playlist {
