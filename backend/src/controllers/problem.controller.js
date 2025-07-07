@@ -35,7 +35,7 @@ export const createProblem = async (req,res) => {
  if (!languageId){
     return res.status(400).json({error:`Language ${language} is not supported`})
  }
-//destructutr input and output
+//destructor input and output
    const submissions = testcases.map(({input,output}) => ({
 
       source_code:solutionCode,
@@ -55,7 +55,7 @@ export const createProblem = async (req,res) => {
    //polling
 
 
-    const results = await pollBatchResults(tokens);
+     const results = await pollBatchResults(tokens);
 
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
