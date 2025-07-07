@@ -85,7 +85,7 @@ export const login = async (req , res ) => {
         const isMatch = await bcrypt.compare(password, user.password);
 
         if(!isMatch){
-            return res.status(403).json({
+            return res.status(401).json({
           error:"Invalid credentials",
             })
         }
@@ -115,7 +115,7 @@ export const login = async (req , res ) => {
 
     }catch(error) {
         console.error("Error creating a User",error)
-        res.status(400).json({
+        res.status(500).json({
             message:"Error login user"
         })
     }
@@ -138,7 +138,7 @@ export const logout = async (req , res ) => {
 
     }catch(error){
         console.error("Error logging out User",error)
-        res.status(400).json({
+        res.status(500).json({
             message:"Error logging out user"
         })
 
@@ -149,13 +149,13 @@ export const check = async (req , res ) => {
     try{
         res.status(200).json({
             succes:true,
-            message:"User authentication successfully",
+            message:"User authenticated successfully",
             user:req.user
         })
 
     }catch(error){
         console.error("Error checking user",error)
-        res.status(404).json({
+        res.status(500).json({
             message:"Error checking the user"
         })
 

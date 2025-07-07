@@ -40,7 +40,7 @@ export const authMiddleware = async (req , res , next)=>{
         }
 
         req.user = user;
-        next();
+        next(); //attrached in user
 
     } catch (error) {
         console.error("Error authenticating user:", error);
