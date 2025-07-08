@@ -19,15 +19,16 @@ export const createProblem = async (req,res) => {
     codeSnippets,
     referenceSolutions,
   } = req.body;
+   console.log(req.user)
 
    // going to check the user role
- console.log(req.user)
+
    if(req.user.role !== "ADMIN"){
     return res.status(403).json({
         message:"You are not allowed to create problem"
     })
    }
-
+//loop through diff reference solution
    try{
     for(const [language , solutionCode] of Object.entries(referenceSolutions)){
  const languageId = getJudge0LanguageId(language)
@@ -35,7 +36,7 @@ export const createProblem = async (req,res) => {
  if (!languageId){
     return res.status(400).json({error:`Language ${language} is not supported`})
  }
-//destructor input and output
+//destructure input and output
    const submissions = testcases.map(({input,output}) => ({
 
       source_code:solutionCode,
@@ -44,15 +45,16 @@ export const createProblem = async (req,res) => {
       expected_output:output, //the output that will come after judge0
 
 
-   })) // array of submission of each lanhuage -- all language will be checked.
+   })) // array of submission of each language -- all language will be checked.
    
    const submissionResults = await submitBatch(submissions);  //recieved tokens from the test cases
+   // batch ready
 
 
-   const tokens = submissionResults.map((res) => res.token); //token recived
+   const tokens = submissionResults.map((res) => res.token); //token recived res- result
 
 
-   //polling
+   //polling- ungali karna ho gaya hogaya
 
 
      const results = await pollBatchResults(tokens);
@@ -95,7 +97,7 @@ export const createProblem = async (req,res) => {
    // loop each and every solution for different language
 }
 
-export const getAllProblem = async (req,res) => {
+export const getAllProblems = async (req,res) => {
    try{
       
     const problems = await db.problem.findMany(
@@ -161,7 +163,7 @@ export const getProblemById = async (req, res) => {
   }
 };
 
-export const updatedProblem = async (req, res) => {
+export const updateProblem = async (req, res) => {
   const { id } = req.params;
   const {
     title,

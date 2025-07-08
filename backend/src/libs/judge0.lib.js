@@ -12,6 +12,7 @@ export const getJudge0LanguageId = (Language) => {
 const sleep = (ms) => new Promise ((resolve) => setTimout(resolve , ms))
 
 export const pollBatchResults = async (tokens)=>{
+    //infinite loop 
     while(true){
         
         const {data} = await axios.get(`${process.env.JUDGE0_API_URL}/submissions/batch`,{
@@ -26,8 +27,10 @@ export const pollBatchResults = async (tokens)=>{
         //every- -> when all the condition true then return
         const isAllDone = results.every(
             (r)=> r.status.id !== 1 && r.status.id !== 2 
-            //1--> kyu represesnt
+            //1--> in queue
             //2--> abhi processing chal rahi hai
+            //taken from judge0
+            //every-all true then
         ) 
 
         if(isAllDone) return results
@@ -37,7 +40,7 @@ export const pollBatchResults = async (tokens)=>{
 
 export const submitBatch = async (submissions) => {
 
-    const {data} = await axios.post(`${process.env.JUDGE0_API-URL}/submissions/batch?base64_encoded=false`, {
+    const {data} = await axios.post(`${process.env.JUDGE0_API_URL}/submissions/batch?base64_encoded=false`, {
         submissions
     })
 
