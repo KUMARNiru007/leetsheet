@@ -61,6 +61,7 @@ export const createProblem = async (req,res) => {
 
       for (let i = 0; i < results.length; i++) {
         const result = results[i];
+
         console.log("Result-----", result);
         // console.log(
         //   `Testcase ${i + 1} and Language ${language} ----- result ${JSON.stringify(result.status.description)}`
@@ -71,22 +72,22 @@ export const createProblem = async (req,res) => {
           });
         }
       }
-    }
-
-
-   // new problem
+       
+       // save the problem to database
    const newProblem = await db.problem.create({
       data:{
          title ,description , difficulty ,tags , examples , constraints , testcases , codeSnippets , referenceSolutions , 
          userId:req.user.id,
       }
    });
+     
 
-   return res.status(201).json({
+    return res.status(201).json({
       success:"true",
-      message:"Message Created Successfully",
+      message:"Problem Created Successfully",
       problem:newProblem
    });
+    }
   
    }catch(error){
       console.log(error);
