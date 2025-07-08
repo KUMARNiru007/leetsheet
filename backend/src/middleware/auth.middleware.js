@@ -69,6 +69,7 @@ export const checkAdmin  = async(req , res , next)=>{
         }
 
         next();
+        
     } catch (error) {
         console.error("Error checking admin role:", error);
         res.status(500).json({message:"Error checking admin role"});
