@@ -1,15 +1,16 @@
+import axios from "axios"
 export const getJudge0LanguageId = (Language) => {
     const languageMap = {
         "PYTHON" :71,
         "JAVA": 62,
-        "JAVASCRIPT":63.
+        "JAVASCRIPT":63
     }
     return languageMap[Language.toUpperCase()]
 }
 
 //to hit the endpoint of judge0 submission batch
 
-const sleep = (ms) => new Promise ((resolve) => setTimout(resolve , ms))
+const sleep = (ms) => new Promise ((resolve) => setTimeout(resolve , ms))
 
 export const pollBatchResults = async (tokens)=>{
     //infinite loop 
