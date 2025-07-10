@@ -137,7 +137,7 @@ export const getAllProblems = async (req,res) => {
     });
 
    } catch (error) {
-      csonsole.log(error);
+      console.log(error);
       return res.status(500).json({
          error:"Error while fetching Problems"
       })
@@ -209,6 +209,16 @@ export const updateProblem = async (req, res) => {
     }
 
     // Validate reference solutions
+     if (!referenceSolutions || typeof referenceSolutions !== "object" || Array.isArray(referenceSolutions)) {
+  return res.status(400).json({
+    error: "referenceSolutions must be a non-empty object"
+    });
+    }
+   if (!Array.isArray(testcases) || testcases.length === 0) {
+  return res.status(400).json({
+    error: "testcases must be a non-empty array"
+  });
+}
 
     for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
       const languageId = getJudge0LanguageId(language);
@@ -258,7 +268,6 @@ export const updateProblem = async (req, res) => {
         testcases,
         codeSnippets,
         referenceSolutions,
-        userId: req.user.id
       }
     });
 
@@ -293,10 +302,11 @@ export const deleteProblem = async (req, res) => {
       success: true,
       message: "Problem deleted Successfully",
     });
+    
   } catch (error) {
     console.log(error)
     return res.status(500).json({
-      error: "Error While deleting the problem",
+      error: "Error while deleting the problem",
     });
   }
 };

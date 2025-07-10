@@ -21,7 +21,7 @@ enum UserRole {
 }
 
 enum Difficulty {
-  EAST
+  EASY
   MEDIUM
   HARD
 }

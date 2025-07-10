@@ -1,6 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cookieParser from "cookie-parser";
+import cors from "cors";
 
 
 import authRoutes from "../src/routes/auth.routes.js";
@@ -11,6 +12,16 @@ dotenv.config();
 
 const app = express();
 
+const PORT =process.nextTick.PORT || 8080
+
+app.use(
+  cors({
+    origin:process.env.JUDGE0_API_URL,
+    credentials:true,
+    methods:['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
+    allowedHeaders:['Content-Type','Authorization']
+  })
+)
 
 
 app.use(express.json());

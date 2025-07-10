@@ -234,7 +234,7 @@ exports.UserRole = exports.$Enums.UserRole = {
 };
 
 exports.Difficulty = exports.$Enums.Difficulty = {
-  EAST: 'EAST',
+  EASY: 'EASY',
   MEDIUM: 'MEDIUM',
   HARD: 'HARD'
 };
