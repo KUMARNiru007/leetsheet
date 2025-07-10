@@ -62,7 +62,7 @@ export type UserRole = (typeof UserRole)[keyof typeof UserRole]
 
 
 export const Difficulty: {
-  EAST: 'EAST',
+  EASY: 'EASY',
   MEDIUM: 'MEDIUM',
   HARD: 'HARD'
 };
