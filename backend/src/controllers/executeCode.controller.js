@@ -34,6 +34,7 @@ export const executeCode = async (req, res) => {
 
     // 3. Send batch of submissions to judge0
     const submitResponse = await submitBatch(submissions);
+    console.log("SubmitBatch",submissions);
 
     const tokens = submitResponse.map((res) => res.token);
 
@@ -74,7 +75,7 @@ export const executeCode = async (req, res) => {
 
     console.log(detailedResults);
 
-    // store submission summary
+    // store submission summary in db
     const submission = await db.submission.create({
       data: {
         userId,
@@ -82,13 +83,13 @@ export const executeCode = async (req, res) => {
         sourceCode: source_code,
         language: getLanguageName(language_id),
         stdin: stdin.join("\n"),
-        stdout: JSON.stringify(detailedResults.map((r) => r.stdout)),
+        stdout: JSON.stringify(detailedResults.map((r) => r.stdout)), //taken out stdout and store in string not raw
         stderr: detailedResults.some((r) => r.stderr)
           ? JSON.stringify(detailedResults.map((r) => r.stderr))
-          : null,
+          : null, // check if error exist std error store
         compileOutput: detailedResults.some((r) => r.compile_output)
           ? JSON.stringify(detailedResults.map((r) => r.compile_output))
-          : null,
+          : null, // same output stored
         status: allPassed ? "Accepted" : "Wrong Answer",
         memory: detailedResults.some((r) => r.memory)
           ? JSON.stringify(detailedResults.map((r) => r.memory))
@@ -106,7 +107,7 @@ export const executeCode = async (req, res) => {
           userId_problemId: {
             userId,
             problemId,
-          },
+          },//upsert - ek user multiple time 
         },
         update: {},
         create: {
