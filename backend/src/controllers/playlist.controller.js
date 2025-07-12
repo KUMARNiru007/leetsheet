@@ -142,7 +142,7 @@ export const removeProblemFromPlaylist = async (req, res) => {
     if (!Array.isArray(problemIds) || problemIds.length === 0) {
       return res.status(400).json({ error: "Invalid or missing problemIds" });
     }
-    // Only delete given problemIds not all
+    // Only delete given problemIds not all ONE PROBLEM
 
     const deletedProblem = await db.problemInPlaylist.deleteMany({
       where: {
