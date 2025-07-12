@@ -53,7 +53,7 @@ export const getAllTheSubmissionsForProblem = async (req , res)=>{
             where:{
                 problemId:problemId
             }
-        })
+        }) //we are geting the count
 
         res.status(200).json({
             success:true,
