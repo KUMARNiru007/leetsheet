@@ -320,7 +320,7 @@ export const getAllProblemsSolvedByUser = async (req, res) => {
           some:{
             userId:req.user.id
           }
-        }
+        } // some - anyone is true then use
       },
       include:{
         solvedBy:{
