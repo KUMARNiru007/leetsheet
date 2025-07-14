@@ -23,7 +23,7 @@ export const createPlayList = async (req, res) => {
   }
 };
 
-export const getPlayAllListDetails = async (req, res) => {
+export const getPlayListAllDetails = async (req, res) => {
   try {
     const playLists = await db.playlist.findMany({
       where: {
@@ -135,7 +135,7 @@ export const deletePlayList = async (req, res) => {
 };
 
 export const removeProblemFromPlaylist = async (req, res) => {
-  const { playlistId } = req.params;
+  const { playListId } = req.params;
   const { problemIds } = req.body;
 
   try {
@@ -146,7 +146,7 @@ export const removeProblemFromPlaylist = async (req, res) => {
 
     const deletedProblem = await db.problemInPlaylist.deleteMany({
       where: {
-        playlistId,
+        playListId,
         problemId: {
           in: problemIds,
         },
