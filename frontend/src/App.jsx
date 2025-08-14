@@ -1,83 +1,35 @@
-import React, { useEffect } from "react";
-import { Routes, Route, Navigate } from "react-router-dom";
-import { Toaster } from "react-hot-toast";
+import { useState } from 'react'
+import reactLogo from './assets/react.svg'
+import viteLogo from '/vite.svg'
+import './App.css'
 
-import HomePage from "./pages/HomePage";
-import LoginPage from "./pages/LoginPage";
-import SignUpPage from "./pages/SignUpPage";
-import { useAuthStore } from "./store/useAuthStore";
-import { Loader } from "lucide-react";
-import Layout from "./Layout/Layout";
-import AdminRoute from "./components/AdminRoute";
-import AddProblem from "./pages/AddProblem";
-import ProblemPage from "./pages/ProblemPage";
-
-const App = () => {
-  const { authUser, checkAuth, isCheckingAuth } = useAuthStore();
-
-  useEffect(() => {
-    checkAuth();
-  }, [checkAuth]);
-
-  if (isCheckingAuth && !authUser) {
-    return (
-      <div className="flex items-center justify-center h-screen">
-        <Loader className="size-10 animate-spin" />
-      </div>
-    );
-  }
+function App() {
+  const [count, setCount] = useState(0)
 
   return (
-    <div className="flex flex-col items-center justify-start ">
-      <Toaster />
-      <Routes>
-        {/* Landing page accessible to everyone */}
-        <Route path="/" element={<HomePage />} />
-        
-        {/* Authenticated routes */}
-        <Route path="/dashboard" element={<Layout />}>
-          <Route
-            index
-            element={authUser ? <HomePage /> : <Navigate to={"/login"} />}
-          />
-          <Route
-            path="problems"
-            element={authUser ? <HomePage /> : <Navigate to={"/login"} />}
-          />
-          <Route
-            path="playlists"
-            element={authUser ? <HomePage /> : <Navigate to={"/login"} />}
-          />
-          <Route
-            path="profile"
-            element={authUser ? <HomePage /> : <Navigate to={"/login"} />}
-          />
-        </Route>
+    <>
+      <div>
+        <a href="https://vite.dev" target="_blank">
+          <img src={viteLogo} className="logo" alt="Vite logo" />
+        </a>
+        <a href="https://react.dev" target="_blank">
+          <img src={reactLogo} className="logo react" alt="React logo" />
+        </a>
+      </div>
+      <h1>Vite + React</h1>
+      <div className="card">
+        <button onClick={() => setCount((count) => count + 1)}>
+          count is {count}
+        </button>
+        <p>
+          Edit <code>src/App.jsx</code> and save to test HMR
+        </p>
+      </div>
+      <p className="read-the-docs">
+        Click on the Vite and React logos to learn more
+      </p>
+    </>
+  )
+}
 
-        <Route
-          path="/login"
-          element={!authUser ? <LoginPage /> : <Navigate to={"/"} />}
-        />
-
-        <Route
-          path="/signup"
-          element={!authUser ? <SignUpPage /> : <Navigate to={"/"} />}
-        />
-
-        <Route
-          path="/problem/:id"
-          element={authUser ? <ProblemPage /> : <Navigate to={"/login"} />}
-        />
-
-        <Route element={<AdminRoute />}>
-          <Route
-            path="/add-problem"
-            element={authUser ? <AddProblem /> : <Navigate to="/" />}
-          />
-        </Route>
-      </Routes>
-    </div>
-  );
-};
-
-export default App;
+export default App
