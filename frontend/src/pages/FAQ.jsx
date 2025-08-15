@@ -1,8 +1,9 @@
-import React  from "react";
-import { Plus, Minus } from "lucide-react";
+import React from "react";
 
-
-
-function FAQ() {}
+function FAQ() {
+  return (
+    <div>FAQ</div>
+  )
+}
 
 export default FAQ;
