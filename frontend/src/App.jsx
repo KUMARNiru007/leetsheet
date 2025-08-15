@@ -12,6 +12,8 @@ import Support from "./pages/Support";
 import Blog from "./pages/Blog";
 import AllProblems from "./pages/Problems";
 import Companies from "./pages/Companies";
+import Signin from "./pages/SignUpPage";
+import Login from "./pages/LoginPage";
 
 const App = () => {
   return (
@@ -26,7 +28,7 @@ const App = () => {
         <Route path="/support" element={<Support />} />
         <Route path="/companies" element={<Companies />} />
         <Route path="/problems" element={<AllProblems />} />
-        <Route path="/sigin" element={<Sigin />} />
+        <Route path="/signin" element={<Signin />} />
         <Route path="/login" element={<Login />} />
       </Routes>
       <Footer />
