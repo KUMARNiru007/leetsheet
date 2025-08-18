@@ -9,9 +9,18 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: false,
 
   checkAuth: async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      // No user logged in, exit early
+      set({ authUser: null });
+      return;
+    }
+
     set({ isCheckingAuth: true });
     try {
-      const response = await axiosInstance.get("/auth/check");
+      const response = await axiosInstance.get("/auth/check", {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       set({ authUser: response.data.Data });
       console.log("Auth user: ", response.data);
     } catch (error) {
@@ -29,7 +38,7 @@ export const useAuthStore = create((set) => ({
       set({ authUser: response.data.Data });
       toast.success(response.data.message);
     } catch (error) {
-      console.log("error while signing up: ", error);
+      console.log("Error while signing up: ", error);
       toast.error("Error while signing up");
     } finally {
       set({ isSigninUp: false });
@@ -41,12 +50,11 @@ export const useAuthStore = create((set) => ({
     try {
       const response = await axiosInstance.post("/auth/login", data);
       set({ authUser: response.data.Data });
-      console.log("Response: ", response.data.Data);
-      // console.log("Authenticated user: ", response.data.user);
+      localStorage.setItem("token", response.data.Data.token); // Save token
       toast.success(response.data.message);
     } catch (error) {
-      console.log("error while loginin user: ", error);
-      toast.error("Error while loginin user");
+      console.log("Error while logging in user: ", error);
+      toast.error("Error while logging in user");
     } finally {
       set({ isLoggingIn: false });
     }
@@ -56,11 +64,11 @@ export const useAuthStore = create((set) => ({
     try {
       await axiosInstance.get("/auth/logout");
       set({ authUser: null });
-
-      toast.success("User Logout Successfully");
+      localStorage.removeItem("token"); // Remove token
+      toast.success("User logged out successfully");
     } catch (error) {
-      console.log("Error while loging out user: ", error);
-      toast.error("Error while loging out the user");
+      console.log("Error while logging out user: ", error);
+      toast.error("Error while logging out user");
     }
   },
 
@@ -69,9 +77,8 @@ export const useAuthStore = create((set) => ({
       const response = await axiosInstance.get("/auth/refreshTokens", {
         withCredentials: true,
       });
-
       set({ authUser: response.data.Data });
-      console.log("Toknens created successfully");
+      console.log("Tokens refreshed successfully");
     } catch (error) {
       console.error("Error refreshing tokens: ", error);
     }
