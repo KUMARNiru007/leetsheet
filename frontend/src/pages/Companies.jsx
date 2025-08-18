@@ -1,9 +1,9 @@
 import React from "react";
 
-function Companies() {
+function Playlist() {
   return (
-    <div>Companies</div>
+    <div>Playlist</div>
   )
 }
 
-export default Companies;
+export default Playlist;

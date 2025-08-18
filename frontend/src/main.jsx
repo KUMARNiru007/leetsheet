@@ -7,11 +7,11 @@ import ScrollToTop from "./utils/scrollToTop.jsx";
 
 
 createRoot(document.getElementById("root")).render(
+  
   <BrowserRouter>
     <StrictMode>
       <ScrollToTop />
       <App />
-      {/* <ComingSoon /> */}
     </StrictMode>
   </BrowserRouter>
 );

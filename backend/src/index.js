@@ -19,12 +19,12 @@ const PORT =process.nextTick.PORT || 8080
 
 app.use(
   cors({
-    origin:process.env.JUDGE0_API_URL,
-    credentials:true,
-    methods:['GET','POST','PUT','PATCH','DELETE','OPTIONS'],
-    allowedHeaders:['Content-Type','Authorization']
-  })
-)
+    origin: process.env.FONTEND_URL,
+    credentials: true,
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+  }),
+);
 
 
 app.use(express.json());
