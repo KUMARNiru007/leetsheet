@@ -52,7 +52,7 @@ export const useAuthStore = create((set) => ({
     }
   },
 
-  logout: async (data) => {
+  logout: async () => {
     try {
       await axiosInstance.get("/auth/logout");
       set({ authUser: null });

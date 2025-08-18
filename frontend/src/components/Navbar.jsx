@@ -28,7 +28,7 @@ export default function Navbar() {
             </button>
             {isDropdownOpen && (
               <div className="dropdown-menu">
-                <Link to="/companies" className="dropdown-item">Company Sheets</Link>
+                <Link to="/playlist" className="dropdown-item">Company Sheets</Link>
                 <Link to="/problems" className="dropdown-item">All Problems</Link>
               </div>
             )}
