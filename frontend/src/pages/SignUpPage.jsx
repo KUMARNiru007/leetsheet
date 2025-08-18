@@ -160,7 +160,7 @@ const SignUpPage = () => {
         <p className="text-[#9BA8C7]">
           Already have an account?{" "}
           <Link to="/login" className="text-[var(--color-accent)] hover:text-[var(--color-accent-border)]">
-            Sign in
+            Login
           </Link>
         </p>
       </div>
