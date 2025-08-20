@@ -15,7 +15,7 @@ dotenv.config();
 
 const app = express();
 
-const PORT =process.nextTick.PORT || 8080
+const PORT = process.env.PORT || 8080
 
 app.use(
   cors({
@@ -41,6 +41,6 @@ app.use("/api/v1/execute-code", executionRoute);
 app.use("/api/v1/submission", submissionRoutes);
 app.use("/api/v1/playlist",playlistRoutes)
 
-app.listen(process.env.PORT, () => {
-    console.log("Server is running on port 8080 ");
+app.listen(PORT, () => {
+    console.log(`Server is running on port ${PORT}`);
 })

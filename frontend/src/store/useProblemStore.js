@@ -14,9 +14,9 @@ export const useProblemStore = create((set) => ({
       set({ isProblemsLoading: true });
 
       const response = await axiosInstance.get("/problems/get-all-problems");
-      //   console.log(response.data.Data);
+      //   console.log(response.data.problems);
 
-      set({ problems: response.data.Data });
+      set({ problems: response.data.problems });
     } catch (error) {
       console.error("Error while fetching all problems", error);
       toast.error("Error while fetching all problems");
@@ -31,9 +31,9 @@ export const useProblemStore = create((set) => ({
 
       const response = await axiosInstance.get(`/problems/get-problem/${id}`);
       console.log(response);
-      console.log(response.data.Data);
+      console.log(response.data.problem);
 
-      set({ problem: response.data.Data });
+      set({ problem: response.data.problem });
       // toast.success(response.data.message);
     } catch (error) {
       console.error("Error getting all problems", error);
@@ -47,7 +47,7 @@ export const useProblemStore = create((set) => ({
     try {
       const response = await axiosInstance.get("/problems/get-solved-problems");
 
-      set({ solvedProblems: response.data.Data });
+      set({ solvedProblems: response.data.problems });
     } catch (error) {
       console.error("Error getting all solved problems", error);
       toast.error("Error in fetching solved problems");
