@@ -2,6 +2,7 @@ import React, { useEffect } from "react";
 import { Routes, Route,Navigate } from "react-router-dom";
 import {Toaster} from "react-hot-toast";
 import "./App.css";
+import Layout from "./Layout/Layout.jsx";
 
 import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
@@ -43,9 +44,14 @@ const App = () => {
       />
       <div className="relative z-10">
         <div className="flex flex-col items-center justify-start">
-
+          <Toaster/>
           <Routes>
-            <Route path="/" element={<Home />} />
+
+            <Route>
+              <Route path="/" element={<Layout/>} />
+
+            </Route>
+            
 
             <Route path="/login" element={!authUser ?<LoginPage/> : <Navigate to={"/"}/>} />
             <Route path="/signup" element={<SignUpPage/>} />

@@ -104,7 +104,7 @@ export const login = async (req , res ) => {
             message:"User loggedIn successfully",
             user:{
                 id:user.id,
-                emil:user.email,
+                email:user.email,
                 name:user.name,
                 role:user.role,
                 image:user.image,

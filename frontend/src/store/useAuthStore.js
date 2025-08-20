@@ -21,7 +21,7 @@ export const useAuthStore = create((set) => ({
       const response = await axiosInstance.get("/auth/check", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      set({ authUser: response.data.Data });
+      set({ authUser: response.data.user });
       console.log("Auth user: ", response.data);
     } catch (error) {
       console.log("Error checking auth:", error);
@@ -35,7 +35,7 @@ export const useAuthStore = create((set) => ({
     set({ isSigninUp: true });
     try {
       const response = await axiosInstance.post("/auth/register", data);
-      set({ authUser: response.data.Data });
+      set({ authUser: response.data.user });
       toast.success(response.data.message);
     } catch (error) {
       console.log("Error while signing up: ", error);
@@ -49,8 +49,8 @@ export const useAuthStore = create((set) => ({
     set({ isLoggingIn: true });
     try {
       const response = await axiosInstance.post("/auth/login", data);
-      set({ authUser: response.data.Data });
-      localStorage.setItem("token", response.data.Data.token); // Save token
+      set({ authUser: response.data.user });
+      localStorage.setItem("token", response.data.token); // Save token
       toast.success(response.data.message);
     } catch (error) {
       console.log("Error while logging in user: ", error);

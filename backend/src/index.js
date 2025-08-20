@@ -19,7 +19,7 @@ const PORT =process.nextTick.PORT || 8080
 
 app.use(
   cors({
-    origin: process.env.FONTEND_URL,
+    origin: process.env.FRONTEND_URL,
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
