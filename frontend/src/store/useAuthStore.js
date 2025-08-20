@@ -77,7 +77,7 @@ export const useAuthStore = create((set) => ({
       const response = await axiosInstance.get("/auth/refreshTokens", {
         withCredentials: true,
       });
-      set({ authUser: response.data.Data });
+      set({ authUser: response.data.user });
       console.log("Tokens refreshed successfully");
     } catch (error) {
       console.error("Error refreshing tokens: ", error);

@@ -37,7 +37,7 @@ export const useExecutionStore = create((set) => ({
         store,
       });
 
-      set({ submission: response.data.Data });
+      set({ submission: response.data.submission });
       toast.success(response.data.message);
     } catch (error) {
       console.log("Error while executing code: ", error);

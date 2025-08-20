@@ -14,7 +14,7 @@ export const useSubmissionStore = create((set) => ({
       const reposne = await axiosInstance.get(
         "/submission/get-all-submissions"
       );
-      set({ submissions: reposne.data.Data });
+      set({ submissions: reposne.data.submissions });
       toast.success(reposne.data.message);
     } catch (error) {
       console.error("Error fetching all submissions: ", error);
@@ -29,7 +29,7 @@ export const useSubmissionStore = create((set) => ({
       const resposne = await axiosInstance.get(
         `/submission/get-submission/${problemId}`
       );
-      set({ submission: resposne.data.Data });
+      set({ submission: resposne.data.submissions });
     } catch (error) {
       console.error("Error fecthing submission for problem: ", error);
       toast.error("Error in fecting submission for problem");
@@ -41,7 +41,7 @@ export const useSubmissionStore = create((set) => ({
       const resposne = await axiosInstance.get(
         `/submission/get-submission-count/${problemId}`
       );
-      set({ submissionCount: resposne.data.Data });
+      set({ submissionCount: resposne.data.count });
     } catch (error) {
       console.error("Error fetching count for problem: ", error);
       toast.error("Error fetching count for problem");
