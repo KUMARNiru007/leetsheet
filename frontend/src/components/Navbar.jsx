@@ -6,9 +6,12 @@ import LogoutButton from "./LogoutButton";
 import "../index.css";
 
 const Navbar = () => {
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-
+  const [openDropdown, setOpenDropdown] = useState(null); // 'sheets' | 'resources' | null
   const { authUser } = useAuthStore();
+
+  const toggleDropdown = (menu) => {
+    setOpenDropdown(openDropdown === menu ? null : menu);
+  };
 
   return (
     <nav className="navbar sticky top-0 z-50 w-full py-5 bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-gray-200/10 rounded-2xl">
@@ -18,6 +21,7 @@ const Navbar = () => {
           <img
             src="/leetlab.svg"
             className="h-12 w-12 bg-primary/20 text-primary border-none px-2 py-2 rounded-full"
+            alt="Logo"
           />
           <span className="text-xl md:text-2xl font-bold tracking-tight text-white hidden md:block">
             LeetLab
@@ -34,13 +38,13 @@ const Navbar = () => {
           <div className="dropdown relative">
             <button
               className="navbar-link dropdown-toggle"
-              onClick={() => setIsDropdownOpen(!isDropdownOpen)}
+              onClick={() => toggleDropdown("sheets")}
             >
               Sheets ▼
             </button>
-            {isDropdownOpen && (
+            {openDropdown === "sheets" && (
               <div className="dropdown-menu absolute top-full left-0 mt-2 bg-base-100 rounded-xl shadow-lg flex flex-col">
-                <Link to="/playlist" className="dropdown-item px-4 py-2">
+                <Link to="/companies-sheets" className="dropdown-item px-4 py-2">
                   Company Sheets
                 </Link>
                 <Link to="/problems" className="dropdown-item px-4 py-2">
@@ -52,24 +56,27 @@ const Navbar = () => {
 
           {/* Resources dropdown */}
           <div className="dropdown relative">
-            <button className="navbar-link dropdown-toggle">
+            <button
+              className="navbar-link dropdown-toggle"
+              onClick={() => toggleDropdown("resources")}
+            >
               Resources ▼
             </button>
-            {isDropdownOpen && (
-            <div className="dropdown-menu absolute top-full left-0 mt-2 bg-base-100 rounded-xl shadow-lg flex flex-col space-y-1">
-              <Link to="/about" className="dropdown-item px-4 py-2">
-                About
-              </Link>
-              <Link to="/FAQ" className="dropdown-item px-4 py-2">
-                FAQ
-              </Link>
-              <Link to="/blog" className="dropdown-item px-4 py-2">
-                Blog
-              </Link>
-              <Link to="/support" className="dropdown-item px-4 py-2">
-                Support
-              </Link>
-            </div>
+            {openDropdown === "resources" && (
+              <div className="dropdown-menu absolute top-full left-0 mt-2 bg-base-100 rounded-xl shadow-lg flex flex-col space-y-1">
+                <Link to="/about" className="dropdown-item px-4 py-2">
+                  About
+                </Link>
+                <Link to="/FAQ" className="dropdown-item px-4 py-2">
+                  FAQ
+                </Link>
+                <Link to="/blog" className="dropdown-item px-4 py-2">
+                  Blog
+                </Link>
+                <Link to="/support" className="dropdown-item px-4 py-2">
+                  Support
+                </Link>
+              </div>
             )}
           </div>
 
