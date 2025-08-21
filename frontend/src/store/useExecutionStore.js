@@ -29,10 +29,10 @@ export const useExecutionStore = create((set) => ({
       );
 
       const response = await axiosInstance.post("/execute-code", {
-        sourceCode,
+        source_code: sourceCode,
         language_id,
         stdin,
-        expectedOutputs,
+        expected_outputs: expectedOutputs,
         problemId,
         store,
       });
