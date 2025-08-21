@@ -13,6 +13,8 @@ import { Loader } from "lucide-react";
 import AddProblem from "./pages/AddProblem.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
 import ProblemPage from "./pages/ProblemPage.jsx";
+import AllProblems from "./pages/Problems.jsx"
+import Playlists from "./pages/PlaylistsPage.jsx";
 
 const App = () => {
 
@@ -37,6 +39,7 @@ const App = () => {
           <Toaster/>
           <Routes>
             <Route element={<Layout />}>
+              <Route path="/problems" element={<AllProblems />} />
               <Route path="/" element={<Home />} />
             </Route>
 
@@ -49,8 +52,11 @@ const App = () => {
             <Route element={<AdminRoute />}>
           <Route
             path="/add-problem"
-            element={authUser ? <AddProblem /> : <Navigate to="/" />}
-          />
+            element={authUser ? <AddProblem /> : <Navigate to="/" />}/>
+        </Route>
+        <Route
+        path="/companies-sheets"
+            element={authUser ? <Playlists /> : <Navigate to="/" />}>          
         </Route>
 
             

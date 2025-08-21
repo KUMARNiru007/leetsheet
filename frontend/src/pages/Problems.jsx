@@ -4,7 +4,7 @@ import { Loader } from "lucide-react";
 import { useProblemStore } from "../store/useProblemStore.js";
 
 import { useAuthStore } from "../store/useAuthStore.js";
-import ProblemsTable from "../components/ProblemsTable.jsx";
+import ProblemsTable from "../components/ProblemTable.jsx";
 
 
 function AllProblems() {

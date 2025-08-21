@@ -1,5 +1,4 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useFetcher } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 import {
   Play,
@@ -8,28 +7,27 @@ import {
   Lightbulb,
   Bookmark,
   Share2,
+  Clock,
+  ChevronRight,
   BookOpen,
   Terminal,
   Code2,
-  BugPlayIcon,
-  CheckCircle,
-  XCircle,
-  Clock,
-  ArrowRight,
+  Users,
+  ThumbsUp,
+  Home,
 } from "lucide-react";
-import { toast } from "react-hot-toast";
-
-import { useProblemStore } from "../store/useProblemStore.js";
-import { useExecutionStore } from "../store/useExecutionStore.js";
-import { getLanguageId } from "../lib/lang.js";
-import { useSubmissionStore } from "../store/useSubmissionStore.js";
-import SubmissionResults from "../components/Submission.jsx";
-import SubmissionList from "../components/SubmissionList.jsx";
-import AddtoPlaylist from "../components/AddtoPlaylist.jsx";
+import { Link, useParams } from "react-router-dom";
+import { useProblemStore } from "../store/useProblemStore";
+import { getLanguageId } from "../lib/lang";
+import { useExecutionStore } from "../store/useExecutionStore";
+import { useSubmissionStore } from "../store/useSubmissionStore";
+import Submission from "../components/Submission";
+import SubmissionsList from "../components/SubmissionList";
 
 const ProblemPage = () => {
   const { id } = useParams();
   const { getProblemById, problem, isProblemLoading } = useProblemStore();
+
   const {
     submission: submissions,
     isLoading: isSubmissionsLoading,
@@ -37,65 +35,25 @@ const ProblemPage = () => {
     getSubmissionCountForProblem,
     submissionCount,
   } = useSubmissionStore();
+
   const [code, setCode] = useState("");
   const [activeTab, setActiveTab] = useState("description");
-  const [selectedLanguage, setSelectedLanguage] = useState("JAVASCRIPT");
+  const [selectedLanguage, setSelectedLanguage] = useState("javascript");
   const [isBookmarked, setIsBookmarked] = useState(false);
-  const [testCases, setTestCases] = useState([]);
-  const [activeTestCase, setActiveTestCase] = useState(0);
-  const [activeResultTab, setActiveResultTab] = useState("testcases");
-  const [cooldown, setCooldown] = useState(0);
-  const [selectedProblemId, setSelectedProblemId] = useState(null);
-  const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] =
-    useState(false);
+  const [testcases, setTestCases] = useState([]);
 
-  const { executeCode, submission, isExecuting, clearSubmission } =
-    useExecutionStore();
+  const { executeCode, submission, isExecuting } = useExecutionStore();
 
   useEffect(() => {
     getProblemById(id);
     getSubmissionCountForProblem(id);
   }, [id]);
 
-  const startCooldown = () => {
-    setCooldown(30);
-  };
-
-  useEffect(() => {
-    if (cooldown === 0) return;
-
-    const timer = setInterval(() => {
-      setCooldown((prev) => {
-        if (prev <= 1) {
-          clearInterval(timer);
-          return 0;
-        }
-        return prev - 1;
-      });
-    }, 1000);
-
-    return () => clearInterval(timer);
-  }, [cooldown]);
-
   useEffect(() => {
     if (problem) {
-      // Set default language to JAVASCRIPT if it exists in codeSnippet
-      const availableLanguages = Object.keys(problem.codeSnippet || {});
-      const defaultLanguage = availableLanguages.includes("JAVASCRIPT")
-        ? "JAVASCRIPT"
-        : availableLanguages[0] || "JAVASCRIPT";
-
-      if (
-        !code &&
-        selectedLanguage === "JAVASCRIPT" &&
-        !availableLanguages.includes("JAVASCRIPT")
-      ) {
-        setSelectedLanguage(defaultLanguage);
-      }
-
-      const currentCode = problem.codeSnippet?.[selectedLanguage] || "";
-      setCode(currentCode);
-
+      setCode(
+        problem.codeSnippets?.[selectedLanguage] || submission?.sourceCode || ""
+      );
       setTestCases(
         problem.testcases?.map((tc) => ({
           input: tc.input,
@@ -105,460 +63,320 @@ const ProblemPage = () => {
     }
   }, [problem, selectedLanguage]);
 
-  // Separate useEffect to handle initial language setup
-  useEffect(() => {
-    if (problem && !code) {
-      const availableLanguages = Object.keys(problem.codeSnippet || {});
-      if (availableLanguages.includes("JAVASCRIPT")) {
-        setSelectedLanguage("JAVASCRIPT");
-      } else if (availableLanguages.length > 0) {
-        setSelectedLanguage(availableLanguages[0]);
-      }
-    }
-  }, [problem]);
-
   useEffect(() => {
     if (activeTab === "submissions" && id) {
       getSubmissionForProblem(id);
     }
   }, [activeTab, id]);
 
-  useEffect(() => {
-    return () => {
-      setActiveResultTab("testcases");
-      useExecutionStore.getState().clearSubmission();
-    };
-  }, [id]);
-
-  useEffect(() => {
-    if (submission) {
-      setActiveResultTab("results");
-    }
-  }, [submission]);
-
-  console.log("Submission: ", submissions);
+  console.log("submission", submissions);
 
   const handleLanguageChange = (e) => {
-    const language = e.target.value;
-    setSelectedLanguage(language);
-    setCode(problem.codeSnippet?.[language] || "");
+    const lang = e.target.value;
+    setSelectedLanguage(lang);
+    setCode(problem.codeSnippets?.[lang] || "");
   };
 
   const handleRunCode = (e) => {
     e.preventDefault();
-    if (cooldown > 0) return;
-
     try {
       const language_id = getLanguageId(selectedLanguage);
       const stdin = problem.testcases.map((tc) => tc.input);
       const expected_outputs = problem.testcases.map((tc) => tc.output);
-
-      executeCode(code, language_id, stdin, expected_outputs, id, false);
-      startCooldown();
+      executeCode(code, language_id, stdin, expected_outputs, id);
     } catch (error) {
-      console.log("Error running code: ", error);
-    }
-  };
-
-  const handleSubmitCode = (e) => {
-    e.preventDefault();
-    if (cooldown > 0) return;
-
-    try {
-      const language_id = getLanguageId(selectedLanguage);
-      const stdin = problem.testcases.map((tc) => tc.input);
-      const expected_outputs = problem.testcases.map((tc) => tc.output);
-
-      executeCode(code, language_id, stdin, expected_outputs, id, true);
-      startCooldown();
-    } catch (error) {
-      console.log("Error submitting code: ", error);
-    }
-  };
-
-  const handleBookmark = (problemId) => {
-    setSelectedProblemId(problemId);
-    console.log("Selected Problem: ", selectedProblemId);
-    setIsAddToPlaylistModalOpen(true);
-  };
-
-  const handleShare = () => {
-    try {
-      navigator.clipboard.writeText(window.location.href);
-      toast.success("Link copied to clipboard");
-    } catch (error) {
-      console.log("Failed to copy url: ", error);
-      toast.error("Failed to copy url");
+      console.log("Error executing code", error);
     }
   };
 
   if (isProblemLoading || !problem) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+      <div className="flex items-center justify-center h-screen bg-base-200">
+        <div className="card bg-base-100 p-8 shadow-xl">
+          <span className="loading loading-spinner loading-lg text-primary"></span>
+          <p className="mt-4 text-base-content/70">Loading problem...</p>
+        </div>
       </div>
     );
   }
 
-  return (
-    <div className="min-h-screen text-white mt-24 px-6">
-      <nav className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 py-4 border-b border-zinc-700">
-        {/* Problem Title */}
-        <div className="flex items-center gap-3">
-          <FileText className="w-6 h-6 text-[#F4FF54]" />
-          <h1 className="text-2xl font-bold tracking-wide text-white">
-            {problem.title}
-          </h1>
-        </div>
+  const renderTabContent = () => {
+    switch (activeTab) {
+      case "description":
+        return (
+          <div className="prose max-w-none">
+            <p className="text-lg mb-6">{problem.description}</p>
 
-        {/* Right Options */}
-        <div className="flex flex-wrap items-center gap-3">
-          {/* Bookmark Button */}
-          <button
-            onClick={() => {
-              handleBookmark(problem.id);
-              setIsBookmarked(!isBookmarked);
-            }}
-            className={`rounded-lg px-3 py-2 text-sm font-medium flex items-center gap-2 transition-all ${
-              isBookmarked
-                ? "bg-yellow-400/20 text-yellow-300 border border-yellow-300"
-                : "hover:bg-zinc-700 text-zinc-300 border border-transparent"
-            }`}
-          >
-            <Bookmark className="w-4 h-4" />
-            {isBookmarked ? "Bookmarked" : "Bookmark"}
-          </button>
-
-          {/* Share Button */}
-          <button
-            onClick={handleShare}
-            className="rounded-lg px-3 py-2 text-sm font-medium flex items-center gap-2 hover:bg-zinc-700 text-zinc-300 transition-all"
-          >
-            <Share2 className="w-4 h-4" />
-            Share
-          </button>
-
-          {/* Language Selector */}
-          <div className="relative">
-            <select
-              value={selectedLanguage}
-              onChange={handleLanguageChange}
-              className="select select-bordered bg-zinc-800 border-zinc-600 text-white text-sm px-3 py-2 rounded-lg pr-10"
-            >
-              {Object.keys(problem.codeSnippet || {}).map((lang) => (
-                <option key={lang} value={lang}>
-                  {lang.toUpperCase()}
-                </option>
-              ))}
-            </select>
-          </div>
-        </div>
-      </nav>
-
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        {/* Problem Description Section */}
-        <div className="bg-zinc-800 rounded-xl p-6 shadow-lg">
-          <div className="relative flex justify-between mb-4 border-b border-zinc-700 pb-2 w-full">
-            {["description", "submissions", "discussion", "hints"].map(
-              (tab, index) => {
-                const Icon =
-                  tab === "description"
-                    ? FileText
-                    : tab === "submissions"
-                    ? Code2
-                    : tab === "discussion"
-                    ? BookOpen
-                    : Lightbulb;
-
-                return (
-                  <button
-                    key={tab}
-                    onClick={() => setActiveTab(tab)}
-                    className={`relative flex-1 text-sm text-center font-medium py-2 transition-colors duration-300 ${
-                      activeTab === tab ? "text-[#F4FF54]" : "text-zinc-400"
-                    }`}
-                  >
-                    <div className="flex justify-center items-center gap-1">
-                      <Icon className="w-4 h-4" />
-                      <span className="uppercase">{tab}</span>
-                    </div>
-                  </button>
-                );
-              }
-            )}
-
-            {/* Bubble underline */}
-            <div
-              className="absolute bottom-0 h-1 bg-[#F4FF54] rounded-full transition-all duration-300"
-              style={{
-                width: "25%",
-                transform: `translateX(${
-                  ["description", "submissions", "discussion", "hints"].indexOf(
-                    activeTab
-                  ) * 100
-                }%)`,
-              }}
-            />
-          </div>
-
-          <div className="max-h-96 overflow-y-auto">
-            {activeTab === "description" && (
-              <div className="prose prose-invert max-w-none">
-                <h3 className="text-lg frot-semibold mb-1">Description:</h3>
-                <p>{problem.description}</p>
-                {problem.examples && (
-                  <div className="mt-4">
-                    <h3 className="text-lg frot-semibold mb-2">Examples:</h3>
-                    {Object.entries(problem.examples).map(([lang, ex], idx) => (
-                      <div
-                        key={idx}
-                        className="bg-zinc-700 p-4 rounded-lg mb-4"
-                      >
-                        <p>
-                          <strong>Input:</strong> <code>{ex.input}</code>
-                        </p>
-                        <p>
-                          <strong>Output:</strong> <code>{ex.output}</code>
-                        </p>
-                        {ex.explanation && (
-                          <p>
-                            <strong>Explanation:</strong> {ex.explanation}
+            {problem.examples && (
+              <>
+                <h3 className="text-xl font-bold mb-4">Examples:</h3>
+                {Object.entries(problem.examples).map(
+                  ([lang, example], idx) => (
+                    <div
+                      key={lang}
+                      className="bg-base-200 p-6 rounded-xl mb-6 font-mono"
+                    >
+                      <div className="mb-4">
+                        <div className="text-indigo-300 mb-2 text-base font-semibold">
+                          Input:
+                        </div>
+                        <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
+                          {example.input}
+                        </span>
+                      </div>
+                      <div className="mb-4">
+                        <div className="text-indigo-300 mb-2 text-base font-semibold">
+                          Output:
+                        </div>
+                        <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white">
+                          {example.output}
+                        </span>
+                      </div>
+                      {example.explanation && (
+                        <div>
+                          <div className="text-emerald-300 mb-2 text-base font-semibold">
+                            Explanation:
+                          </div>
+                          <p className="text-base-content/70 text-lg font-sem">
+                            {example.explanation}
                           </p>
-                        )}
-                      </div>
-                    ))}
-                  </div>
-                )}
-                {problem.constraints && (
-                  <div className="mt-4">
-                    <h3>Constraints:</h3>
-                    <p>
-                      <code>{problem.constraints}</code>
-                    </p>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {activeTab === "submissions" && (
-              <SubmissionList
-                submissions={submissions}
-                isLoading={isSubmissionsLoading}
-              />
-            )}
-
-            {activeTab === "discussion" && (
-              <div className="p-4 text-center text-base-content/70">
-                No discussions yet
-              </div>
-            )}
-
-            {activeTab === "hints" && (
-              <div className="p-4">
-                {problem?.hints ? (
-                  <div className="bg-base-200 p-6 rounded-xl">
-                    <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white text-lg">
-                      {problem.hints}
-                    </span>
-                  </div>
-                ) : (
-                  <div className="text-center text-base-content/70">
-                    No hints available
-                  </div>
-                )}
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Right Side - Code Editor and Test Cases/Results */}
-        <div className="flex flex-col gap-4">
-          {/* Code Editor Section */}
-          <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-lg">
-            <div className="bg-zinc-700 px-4 py-2 flex justify-between items-center">
-              <h2 className="text-lg font-semibold flex items-center gap-2">
-                <Terminal className="w-5 h-5" /> Code Editor
-              </h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={handleRunCode}
-                  className="btn btn-base bg-[#F4FF54] text-black hover:bg-[#F4FF54]/80"
-                  disabled={isExecuting || cooldown > 0}
-                >
-                  {isExecuting ? (
-                    "Running..."
-                  ) : cooldown > 0 ? (
-                    `Wait ${cooldown}s`
-                  ) : (
-                    <>
-                      <Play className="w-4 h-4 mr-1" />
-                      Run Code
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={handleSubmitCode}
-                  className="btn btn-base btn-success"
-                  disabled={isExecuting || cooldown > 0}
-                >
-                  {isExecuting ? (
-                    "Submitting..."
-                  ) : cooldown > 0 ? (
-                    `Wait ${cooldown}s`
-                  ) : (
-                    <>
-                      <BugPlayIcon className="w-5 h-5 mr-1" /> Submit
-                    </>
-                  )}
-                </button>
-              </div>
-            </div>
-
-            <Editor
-              height="350px"
-              language={selectedLanguage.toLowerCase()}
-              theme="vs-dark"
-              value={code}
-              onChange={(value) => setCode(value || "")}
-              options={{ fontSize: 18, minimap: { enabled: false } }}
-            />
-          </div>
-
-          <div className="bg-zinc-800 rounded-xl shadow-lg">
-            {/* Stylish Tab Header */}
-            <div className="bg-gradient-to-r from-zinc-700 to-zinc-600 px-4 py-3 relative">
-              <div className="flex gap-2">
-                {[
-                  { key: "testcases", label: "Test Cases", icon: Code2 },
-                  { key: "results", label: "Results", icon: CheckCircle },
-                ].map(({ key, label, icon: Icon }) => (
-                  <button
-                    key={key}
-                    onClick={() => setActiveResultTab(key)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
-                      activeResultTab === key
-                        ? "bg-[#F4FF54] text-black shadow-lg transform scale-105"
-                        : "bg-zinc-600/50 text-white hover:bg-zinc-500/50 hover:scale-102"
-                    }`}
-                  >
-                    <Icon className="w-4 h-4" />
-                    {label}
-                  </button>
-                ))}
-              </div>
-            </div>
-
-            {/* Content Area */}
-            <div className="p-4 h-80">
-              {activeResultTab === "results" ? (
-                submission ? (
-                  <div className="h-full overflow-y-auto">
-                    <SubmissionResults submission={submission} />
-                  </div>
-                ) : (
-                  <div className="h-full overflow-y-auto flex items-center justify-center text-center text-zinc-400">
-                    <p>Please run or submit the code first to see results.</p>
-                  </div>
-                )
-              ) : (
-                <div className="h-full flex flex-col">
-                  {/* Enhanced Test Case Selector */}
-                  <div className="flex gap-2 mb-4 pb-3 border-b border-zinc-700 flex-shrink-0">
-                    <div className="flex gap-2 flex-wrap flex-1">
-                      {testCases.map((_, idx) => (
-                        <button
-                          key={idx}
-                          onClick={() => setActiveTestCase(idx)}
-                          className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
-                            activeTestCase === idx
-                              ? "bg-gradient-to-r from-[#F4FF54] to-yellow-300 text-black shadow-md transform scale-105"
-                              : "bg-zinc-700 text-white hover:bg-zinc-600 hover:scale-102"
-                          }`}
-                        >
-                          <div
-                            className={`w-2 h-2 rounded-full ${
-                              activeTestCase === idx
-                                ? "bg-black/30"
-                                : "bg-white/50"
-                            }`}
-                          />
-                          Case {idx + 1}
-                        </button>
-                      ))}
-                    </div>
-                    <div className="text-sm text-zinc-400 flex items-center flex-shrink-0">
-                      {testCases.length} test{testCases.length !== 1 ? "s" : ""}
-                    </div>
-                  </div>
-
-                  {/* Enhanced Test Case Display */}
-                  {testCases[activeTestCase] && (
-                    <div className="flex-1 bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-xl p-4 space-y-4 border border-zinc-700/50 overflow-y-auto">
-                      {/* Input Section */}
-                      <div className="group">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                            <ArrowRight className="w-3 h-3 text-emerald-400" />
-                          </div>
-                          <span className="font-semibold text-emerald-400">
-                            Input
-                          </span>
-                        </div>
-                        <div className="bg-zinc-800/80 backdrop-blur-sm p-3 rounded-lg border border-emerald-500/20 group-hover:border-emerald-500/40 transition-colors">
-                          <code className="text-white font-mono text-sm break-all">
-                            {testCases[activeTestCase]?.input}
-                          </code>
-                        </div>
-                      </div>
-
-                      {/* Output Section */}
-                      <div className="group">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-3 h-3 text-blue-400" />
-                          </div>
-                          <span className="font-semibold text-blue-400">
-                            Expected Output
-                          </span>
-                        </div>
-                        <div className="bg-zinc-800/80 backdrop-blur-sm p-3 rounded-lg border border-blue-500/20 group-hover:border-blue-500/40 transition-colors">
-                          <code className="text-white font-mono text-sm break-all">
-                            {testCases[activeTestCase]?.output}
-                          </code>
-                        </div>
-                      </div>
-
-                      {/* Explanation Section */}
-                      {testCases[activeTestCase]?.explanation && (
-                        <div className="group">
-                          <div className="flex items-center gap-3 mb-2">
-                            <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0">
-                              <Lightbulb className="w-3 h-3 text-purple-400" />
-                            </div>
-                            <span className="font-semibold text-purple-400">
-                              Explanation
-                            </span>
-                          </div>
-                          <div className="bg-zinc-800/80 backdrop-blur-sm p-3 rounded-lg border border-purple-500/20 group-hover:border-purple-500/40 transition-colors">
-                            <p className="text-white text-sm leading-relaxed">
-                              {testCases[activeTestCase].explanation}
-                            </p>
-                          </div>
                         </div>
                       )}
                     </div>
-                  )}
+                  )
+                )}
+              </>
+            )}
+
+            {problem.constraints && (
+              <>
+                <h3 className="text-xl font-bold mb-4">Constraints:</h3>
+                <div className="bg-base-200 p-6 rounded-xl mb-6">
+                  <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white text-lg">
+                    {problem.constraints}
+                  </span>
                 </div>
-              )}
+              </>
+            )}
+          </div>
+        );
+      case "submissions":
+        return (
+          <SubmissionsList
+            submissions={submissions}
+            isLoading={isSubmissionsLoading}
+          />
+        );
+      case "discussion":
+        return (
+          <div className="p-4 text-center text-base-content/70">
+            No discussions yet
+          </div>
+        );
+      case "hints":
+        return (
+          <div className="p-4">
+            {problem?.hints ? (
+              <div className="bg-base-200 p-6 rounded-xl">
+                <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white text-lg">
+                  {problem.hints}
+                </span>
+              </div>
+            ) : (
+              <div className="text-center text-base-content/70">
+                No hints available
+              </div>
+            )}
+          </div>
+        );
+      default:
+        return null;
+    }
+  };
+
+  return (
+    <div className="min-h-screen bg-gradient-to-br from-base-300 to-base-200 max-w-7xl w-full">
+      <nav className="navbar bg-base-100 shadow-lg px-4">
+        <div className="flex-1 gap-2">
+          <Link to={"/"} className="flex items-center gap-2 text-primary">
+            <Home className="w-6 h-6" />
+            <ChevronRight className="w-4 h-4" />
+          </Link>
+          <div className="mt-2">
+            <h1 className="text-xl font-bold">{problem.title}</h1>
+            <div className="flex items-center gap-2 text-sm text-base-content/70 mt-5">
+              <Clock className="w-4 h-4" />
+              <span>
+                Updated{" "}
+                {new Date(problem.createdAt).toLocaleString("en-US", {
+                  year: "numeric",
+                  month: "long",
+                  day: "numeric",
+                })}
+              </span>
+              <span className="text-base-content/30">•</span>
+              <Users className="w-4 h-4" />
+              <span>{submissionCount} Submissions</span>
+              <span className="text-base-content/30">•</span>
+              <ThumbsUp className="w-4 h-4" />
+              <span>95% Success Rate</span>
             </div>
           </div>
         </div>
+        <div className="flex-none gap-4">
+          <button
+            className={`btn btn-ghost btn-circle ${
+              isBookmarked ? "text-primary" : ""
+            }`}
+            onClick={() => setIsBookmarked(!isBookmarked)}
+          >
+            <Bookmark className="w-5 h-5" />
+          </button>
+          <button className="btn btn-ghost btn-circle">
+            <Share2 className="w-5 h-5" />
+          </button>
+          <select
+            className="select select-bordered select-primary w-40"
+            value={selectedLanguage}
+            onChange={handleLanguageChange}
+          >
+            {Object.keys(problem.codeSnippets || {}).map((lang) => (
+              <option key={lang} value={lang}>
+                {lang.charAt(0).toUpperCase() + lang.slice(1)}
+              </option>
+            ))}
+          </select>
+        </div>
+      </nav>
+
+      <div className="container mx-auto p-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body p-0">
+              <div className="tabs tabs-bordered">
+                <button
+                  className={`tab gap-2 ${
+                    activeTab === "description" ? "tab-active" : ""
+                  }`}
+                  onClick={() => setActiveTab("description")}
+                >
+                  <FileText className="w-4 h-4" />
+                  Description
+                </button>
+                <button
+                  className={`tab gap-2 ${
+                    activeTab === "submissions" ? "tab-active" : ""
+                  }`}
+                  onClick={() => setActiveTab("submissions")}
+                >
+                  <Code2 className="w-4 h-4" />
+                  Submissions
+                </button>
+                <button
+                  className={`tab gap-2 ${
+                    activeTab === "discussion" ? "tab-active" : ""
+                  }`}
+                  onClick={() => setActiveTab("discussion")}
+                >
+                  <MessageSquare className="w-4 h-4" />
+                  Discussion
+                </button>
+                <button
+                  className={`tab gap-2 ${
+                    activeTab === "hints" ? "tab-active" : ""
+                  }`}
+                  onClick={() => setActiveTab("hints")}
+                >
+                  <Lightbulb className="w-4 h-4" />
+                  Hints
+                </button>
+              </div>
+
+              <div className="p-6">{renderTabContent()}</div>
+            </div>
+          </div>
+
+          <div className="card bg-base-100 shadow-xl">
+            <div className="card-body p-0">
+              <div className="tabs tabs-bordered">
+                <button className="tab tab-active gap-2">
+                  <Terminal className="w-4 h-4" />
+                  Code Editor
+                </button>
+              </div>
+
+              <div className="h-[600px] w-full">
+                <Editor
+                  height="100%"
+                  language={selectedLanguage.toLowerCase()}
+                  theme="vs-dark"
+                  value={code}
+                  onChange={(value) => setCode(value || "")}
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 20,
+                    lineNumbers: "on",
+                    roundedSelection: false,
+                    scrollBeyondLastLine: false,
+                    readOnly: false,
+                    automaticLayout: true,
+                  }}
+                />
+              </div>
+
+              <div className="p-4 border-t border-base-300 bg-base-200">
+                <div className="flex justify-between items-center">
+                  <button
+                    className={`btn btn-primary gap-2 ${
+                      isExecuting ? "loading" : ""
+                    }`}
+                    onClick={handleRunCode}
+                    disabled={isExecuting}
+                  >
+                    {!isExecuting && <Play className="w-4 h-4" />}
+                    Run Code
+                  </button>
+                  <button className="btn btn-success gap-2">
+                    Submit Solution
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div className="card bg-base-100 shadow-xl mt-6">
+          <div className="card-body">
+            {submission ? (
+              <Submission submission={submission} />
+            ) : (
+              <>
+                <div className="flex items-center justify-between mb-6">
+                  <h3 className="text-xl font-bold">Test Cases</h3>
+                </div>
+                <div className="overflow-x-auto">
+                  <table className="table table-zebra w-full">
+                    <thead>
+                      <tr>
+                        <th>Input</th>
+                        <th>Expected Output</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {testcases.map((testCase, index) => (
+                        <tr key={index}>
+                          <td className="font-mono">{testCase.input}</td>
+                          <td className="font-mono">{testCase.output}</td>
+                        </tr>
+                      ))}
+                    </tbody>
+                  </table>
+                </div>
+              </>
+            )}
+          </div>
+        </div>
       </div>
-      <AddtoPlaylist
-        isOpen={isAddToPlaylistModalOpen}
-        onClose={() => setIsAddToPlaylistModalOpen(false)}
-        problemId={selectedProblemId}
-      />
     </div>
   );
 };
