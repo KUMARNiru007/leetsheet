@@ -64,78 +64,78 @@ const problemSchema = z.object({
 });
 
 
-const sampledpData = {
-  title: "Climbing Stairs",
-  category: "dp", // Dynamic Programming
+const sampledpData =  {
+  title: "Valid Palindrome",
+  category: "string", // String Manipulation
   description:
-    "You are climbing a staircase. It takes n steps to reach the top. Each time you can either climb 1 or 2 steps. In how many distinct ways can you climb to the top?",
+    "Given a string s, determine if it is a palindrome, considering only alphanumeric characters and ignoring cases.",
   difficulty: "EASY",
-  tags: ["Dynamic Programming", "Math", "Memoization"],
-  constraints: "1 <= n <= 45",
+  tags: ["String", "Two Pointers"],
+  constraints: "1 <= s.length <= 2 * 10^5\ns consists only of printable ASCII characters.",
   hints:
-    "To reach the nth step, you can either come from the (n-1)th step or the (n-2)th step.",
+    "Use two pointers: one starting from the left and one from the right, skipping non-alphanumeric characters and comparing characters case-insensitively.",
   editorial:
-    "This is a classic dynamic programming problem. The number of ways to reach the nth step is the sum of the number of ways to reach the (n-1)th step and the (n-2)th step, forming a Fibonacci-like sequence.",
+    "This is a classic two-pointer problem. By ignoring non-alphanumeric characters and converting everything to lowercase, you can compare characters from both ends. If all pairs match, the string is a palindrome.",
   testcases: [
     {
-      input: "2",
-      output: "2",
+      input: "\"A man, a plan, a canal: Panama\"",
+      output: "true",
     },
     {
-      input: "3",
-      output: "3",
+      input: "\"race a car\"",
+      output: "false",
     },
     {
-      input: "4",
-      output: "5",
+      input: "\" \"",
+      output: "true",
     },
   ],
   examples: {
     JAVASCRIPT: {
-      input: "n = 2",
-      output: "2",
+      input: "s = \"A man, a plan, a canal: Panama\"",
+      output: "true",
       explanation:
-        "There are two ways to climb to the top:\n1. 1 step + 1 step\n2. 2 steps",
+        "After removing non-alphanumeric characters and ignoring cases, s becomes \"amanaplanacanalpanama\", which is a palindrome.",
     },
     PYTHON: {
-      input: "n = 3",
-      output: "3",
+      input: "s = \"race a car\"",
+      output: "false",
       explanation:
-        "There are three ways to climb to the top:\n1. 1 step + 1 step + 1 step\n2. 1 step + 2 steps\n3. 2 steps + 1 step",
+        "After removing non-alphanumeric characters and ignoring cases, s becomes \"raceacar\", which is not a palindrome.",
     },
     JAVA: {
-      input: "n = 4",
-      output: "5",
+      input: "s = \" \"",
+      output: "true",
       explanation:
-        "There are five ways to climb to the top:\n1. 1 step + 1 step + 1 step + 1 step\n2. 1 step + 1 step + 2 steps\n3. 1 step + 2 steps + 1 step\n4. 2 steps + 1 step + 1 step\n5. 2 steps + 2 steps",
+        "An empty string or a string with only non-alphanumeric characters is considered a valid palindrome.",
     },
   },
   codeSnippets: {
     JAVASCRIPT: `/**
-* @param {number} n
-* @return {number}
+* @param {string} s
+* @return {boolean}
 */
-function climbStairs(n) {
-// Write your code here
+function isPalindrome(s) {
+  // Write your code here
 }
 
 // Parse input and execute
 const readline = require('readline');
 const rl = readline.createInterface({
-input: process.stdin,
-output: process.stdout,
-terminal: false
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
 });
 
 rl.on('line', (line) => {
-const n = parseInt(line.trim());
-const result = climbStairs(n);
+  const s = line.trim();
+  const result = isPalindrome(s);
 
-console.log(result);
-rl.close();
+  console.log(result);
+  rl.close();
 });`,
     PYTHON: `class Solution:
-  def climbStairs(self, n: int) -> int:
+  def isPalindrome(self, s: str) -> bool:
       # Write your code here
       pass
 
@@ -144,29 +144,29 @@ if __name__ == "__main__":
   import sys
   
   # Parse input
-  n = int(sys.stdin.readline().strip())
+  s = sys.stdin.readline().strip()
   
   # Solve
   sol = Solution()
-  result = sol.climbStairs(n)
+  result = sol.isPalindrome(s)
   
   # Print result
-  print(result)`,
+  print(str(result).lower())`,
     JAVA: `import java.util.Scanner;
 
 class Main {
-  public int climbStairs(int n) {
+  public boolean isPalindrome(String s) {
       // Write your code here
-      return 0;
+      return false;
   }
   
   public static void main(String[] args) {
       Scanner scanner = new Scanner(System.in);
-      int n = Integer.parseInt(scanner.nextLine().trim());
+      String s = scanner.nextLine().trim();
       
       // Use Main class instead of Solution
       Main main = new Main();
-      int result = main.climbStairs(n);
+      boolean result = main.isPalindrome(s);
       
       System.out.println(result);
       scanner.close();
@@ -175,133 +175,95 @@ class Main {
   },
   referenceSolutions: {
     JAVASCRIPT: `/**
-* @param {number} n
-* @return {number}
+* @param {string} s
+* @return {boolean}
 */
-function climbStairs(n) {
-// Base cases
-if (n <= 2) {
-  return n;
-}
+function isPalindrome(s) {
+  // Normalize string: keep only alphanumeric, lowercase
+  s = s.replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
 
-// Dynamic programming approach
-let dp = new Array(n + 1);
-dp[1] = 1;
-dp[2] = 2;
-
-for (let i = 3; i <= n; i++) {
-  dp[i] = dp[i - 1] + dp[i - 2];
-}
-
-return dp[n];
-
-/* Alternative approach with O(1) space
-let a = 1; // ways to climb 1 step
-let b = 2; // ways to climb 2 steps
-
-for (let i = 3; i <= n; i++) {
-  let temp = a + b;
-  a = b;
-  b = temp;
-}
-
-return n === 1 ? a : b;
-*/
+  let left = 0, right = s.length - 1;
+  while (left < right) {
+    if (s[left] !== s[right]) {
+      return false;
+    }
+    left++;
+    right--;
+  }
+  return true;
 }
 
 // Parse input and execute
 const readline = require('readline');
 const rl = readline.createInterface({
-input: process.stdin,
-output: process.stdout,
-terminal: false
+  input: process.stdin,
+  output: process.stdout,
+  terminal: false
 });
 
 rl.on('line', (line) => {
-const n = parseInt(line.trim());
-const result = climbStairs(n);
+  const s = line.trim();
+  const result = isPalindrome(s);
 
-console.log(result);
-rl.close();
+  console.log(result);
+  rl.close();
 });`,
     PYTHON: `class Solution:
-  def climbStairs(self, n: int) -> int:
-      # Base cases
-      if n <= 2:
-          return n
+  def isPalindrome(self, s: str) -> bool:
+      # Normalize string: keep only alphanumeric, lowercase
+      filtered = [ch.lower() for ch in s if ch.isalnum()]
+      left, right = 0, len(filtered) - 1
       
-      # Dynamic programming approach
-      dp = [0] * (n + 1)
-      dp[1] = 1
-      dp[2] = 2
-      
-      for i in range(3, n + 1):
-          dp[i] = dp[i - 1] + dp[i - 2]
-      
-      return dp[n]
-      
-      # Alternative approach with O(1) space
-      # a, b = 1, 2
-      # 
-      # for i in range(3, n + 1):
-      #     a, b = b, a + b
-      # 
-      # return a if n == 1 else b
+      while left < right:
+          if filtered[left] != filtered[right]:
+              return False
+          left += 1
+          right -= 1
+      return True
 
 # Input parsing
 if __name__ == "__main__":
   import sys
   
   # Parse input
-  n = int(sys.stdin.readline().strip())
+  s = sys.stdin.readline().strip()
   
   # Solve
   sol = Solution()
-  result = sol.climbStairs(n)
+  result = sol.isPalindrome(s)
   
   # Print result
-  print(result)`,
+  print(str(result).lower())`,
     JAVA: `import java.util.Scanner;
 
 class Main {
-  public int climbStairs(int n) {
-      // Base cases
-      if (n <= 2) {
-          return n;
+  public boolean isPalindrome(String s) {
+      // Normalize string: keep only alphanumeric, lowercase
+      StringBuilder filtered = new StringBuilder();
+      for (char c : s.toCharArray()) {
+          if (Character.isLetterOrDigit(c)) {
+              filtered.append(Character.toLowerCase(c));
+          }
       }
       
-      // Dynamic programming approach
-      int[] dp = new int[n + 1];
-      dp[1] = 1;
-      dp[2] = 2;
-      
-      for (int i = 3; i <= n; i++) {
-          dp[i] = dp[i - 1] + dp[i - 2];
+      int left = 0, right = filtered.length() - 1;
+      while (left < right) {
+          if (filtered.charAt(left) != filtered.charAt(right)) {
+              return false;
+          }
+          left++;
+          right--;
       }
-      
-      return dp[n];
-      
-      /* Alternative approach with O(1) space
-      int a = 1; // ways to climb 1 step
-      int b = 2; // ways to climb 2 steps
-      
-      for (int i = 3; i <= n; i++) {
-          int temp = a + b;
-          a = b;
-          b = temp;
-      }
-      
-      return n == 1 ? a : b;
-      */
+      return true;
   }
   
   public static void main(String[] args) {
       Scanner scanner = new Scanner(System.in);
-      int n = Integer.parseInt(scanner.nextLine().trim());
+      String s = scanner.nextLine().trim();
       
       // Use Main class instead of Solution
       Main main = new Main();
-      int result = main.climbStairs(n);
+      boolean result = main.isPalindrome(s);
       
       System.out.println(result);
       scanner.close();
@@ -312,7 +274,7 @@ class Main {
 
 // Sample problem data for another type of question
 const sampleStringProblem = {
-  title: "Valid Palindrome",
+  title: "Valid Palindrome-1",
   description:
     "A phrase is a palindrome if, after converting all uppercase letters into lowercase letters and removing all non-alphanumeric characters, it reads the same forward and backward. Alphanumeric characters include letters and numbers. Given a string s, return true if it is a palindrome, or false otherwise.",
   difficulty: "EASY",
