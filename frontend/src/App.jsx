@@ -15,6 +15,9 @@ import AdminRoute from "./components/AdminRoute.jsx";
 import ProblemPage from "./pages/ProblemPage.jsx";
 import AllProblems from "./pages/Problems.jsx"
 import Playlists from "./pages/PlaylistsPage.jsx";
+import FAQ from "./pages/FAQ.jsx"
+import About from "./pages/About.jsx"
+import Pricing from "./pages/Pricing.jsx"
 
 const App = () => {
 
@@ -45,19 +48,22 @@ const App = () => {
 
             <Route path="/login" element={!authUser ?<LoginPage/> : <Navigate to={"/"}/>} />
             <Route path="/signup" element={<SignUpPage/>} />
+            <Route path="/about" element={<About/>} />
+            <Route path="/faq" element={<FAQ/>} />
+            <Route path="/pricing" element={<Pricing/>} />
 
             <Route path="/problem/:id" element={authUser ? <ProblemPage/> : <Navigate to={"/login"}/>}
             />
 
             <Route element={<AdminRoute />}>
-          <Route
+             <Route
             path="/add-problem"
             element={authUser ? <AddProblem /> : <Navigate to="/" />}/>
-        </Route>
-        <Route
-        path="/companies-sheets"
+            </Route>
+           <Route
+             path="/companies-sheets"
             element={authUser ? <Playlists /> : <Navigate to="/" />}>          
-        </Route>
+            </Route>
 
             
           </Routes>
