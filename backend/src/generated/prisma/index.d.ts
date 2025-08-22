@@ -1619,8 +1619,20 @@ export namespace Prisma {
 
   export type AggregateUser = {
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
+  }
+
+  export type UserAvgAggregateOutputType = {
+    streakCount: number | null
+    longestCount: number | null
+  }
+
+  export type UserSumAggregateOutputType = {
+    streakCount: number | null
+    longestCount: number | null
   }
 
   export type UserMinAggregateOutputType = {
@@ -1630,8 +1642,15 @@ export namespace Prisma {
     image: string | null
     role: $Enums.UserRole | null
     password: string | null
+    verificationToken: string | null
+    isVerified: boolean | null
+    accessToken: string | null
+    refreshToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    lastloginDate: Date | null
+    streakCount: number | null
+    longestCount: number | null
   }
 
   export type UserMaxAggregateOutputType = {
@@ -1641,8 +1660,15 @@ export namespace Prisma {
     image: string | null
     role: $Enums.UserRole | null
     password: string | null
+    verificationToken: string | null
+    isVerified: boolean | null
+    accessToken: string | null
+    refreshToken: string | null
     createdAt: Date | null
     updatedAt: Date | null
+    lastloginDate: Date | null
+    streakCount: number | null
+    longestCount: number | null
   }
 
   export type UserCountAggregateOutputType = {
@@ -1652,11 +1678,29 @@ export namespace Prisma {
     image: number
     role: number
     password: number
+    verificationToken: number
+    isVerified: number
+    accessToken: number
+    refreshToken: number
     createdAt: number
     updatedAt: number
+    lastloginDate: number
+    streakCount: number
+    longestCount: number
+    loginMap: number
     _all: number
   }
 
+
+  export type UserAvgAggregateInputType = {
+    streakCount?: true
+    longestCount?: true
+  }
+
+  export type UserSumAggregateInputType = {
+    streakCount?: true
+    longestCount?: true
+  }
 
   export type UserMinAggregateInputType = {
     id?: true
@@ -1665,8 +1709,15 @@ export namespace Prisma {
     image?: true
     role?: true
     password?: true
+    verificationToken?: true
+    isVerified?: true
+    accessToken?: true
+    refreshToken?: true
     createdAt?: true
     updatedAt?: true
+    lastloginDate?: true
+    streakCount?: true
+    longestCount?: true
   }
 
   export type UserMaxAggregateInputType = {
@@ -1676,8 +1727,15 @@ export namespace Prisma {
     image?: true
     role?: true
     password?: true
+    verificationToken?: true
+    isVerified?: true
+    accessToken?: true
+    refreshToken?: true
     createdAt?: true
     updatedAt?: true
+    lastloginDate?: true
+    streakCount?: true
+    longestCount?: true
   }
 
   export type UserCountAggregateInputType = {
@@ -1687,8 +1745,16 @@ export namespace Prisma {
     image?: true
     role?: true
     password?: true
+    verificationToken?: true
+    isVerified?: true
+    accessToken?: true
+    refreshToken?: true
     createdAt?: true
     updatedAt?: true
+    lastloginDate?: true
+    streakCount?: true
+    longestCount?: true
+    loginMap?: true
     _all?: true
   }
 
@@ -1730,6 +1796,18 @@ export namespace Prisma {
     /**
      * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
      * 
+     * Select which fields to average
+    **/
+    _avg?: UserAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: UserSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
      * Select which fields to find the minimum value
     **/
     _min?: UserMinAggregateInputType
@@ -1760,6 +1838,8 @@ export namespace Prisma {
     take?: number
     skip?: number
     _count?: UserCountAggregateInputType | true
+    _avg?: UserAvgAggregateInputType
+    _sum?: UserSumAggregateInputType
     _min?: UserMinAggregateInputType
     _max?: UserMaxAggregateInputType
   }
@@ -1771,9 +1851,19 @@ export namespace Prisma {
     image: string | null
     role: $Enums.UserRole
     password: string
+    verificationToken: string | null
+    isVerified: boolean
+    accessToken: string | null
+    refreshToken: string | null
     createdAt: Date
     updatedAt: Date
+    lastloginDate: Date | null
+    streakCount: number
+    longestCount: number
+    loginMap: JsonValue | null
     _count: UserCountAggregateOutputType | null
+    _avg: UserAvgAggregateOutputType | null
+    _sum: UserSumAggregateOutputType | null
     _min: UserMinAggregateOutputType | null
     _max: UserMaxAggregateOutputType | null
   }
@@ -1799,8 +1889,16 @@ export namespace Prisma {
     image?: boolean
     role?: boolean
     password?: boolean
+    verificationToken?: boolean
+    isVerified?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    lastloginDate?: boolean
+    streakCount?: boolean
+    longestCount?: boolean
+    loginMap?: boolean
     problems?: boolean | User$problemsArgs<ExtArgs>
     submission?: boolean | User$submissionArgs<ExtArgs>
     problemSolved?: boolean | User$problemSolvedArgs<ExtArgs>
@@ -1815,8 +1913,16 @@ export namespace Prisma {
     image?: boolean
     role?: boolean
     password?: boolean
+    verificationToken?: boolean
+    isVerified?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    lastloginDate?: boolean
+    streakCount?: boolean
+    longestCount?: boolean
+    loginMap?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
@@ -1826,8 +1932,16 @@ export namespace Prisma {
     image?: boolean
     role?: boolean
     password?: boolean
+    verificationToken?: boolean
+    isVerified?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    lastloginDate?: boolean
+    streakCount?: boolean
+    longestCount?: boolean
+    loginMap?: boolean
   }, ExtArgs["result"]["user"]>
 
   export type UserSelectScalar = {
@@ -1837,11 +1951,19 @@ export namespace Prisma {
     image?: boolean
     role?: boolean
     password?: boolean
+    verificationToken?: boolean
+    isVerified?: boolean
+    accessToken?: boolean
+    refreshToken?: boolean
     createdAt?: boolean
     updatedAt?: boolean
+    lastloginDate?: boolean
+    streakCount?: boolean
+    longestCount?: boolean
+    loginMap?: boolean
   }
 
-  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "role" | "password" | "createdAt" | "updatedAt", ExtArgs["result"]["user"]>
+  export type UserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "image" | "role" | "password" | "verificationToken" | "isVerified" | "accessToken" | "refreshToken" | "createdAt" | "updatedAt" | "lastloginDate" | "streakCount" | "longestCount" | "loginMap", ExtArgs["result"]["user"]>
   export type UserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     problems?: boolean | User$problemsArgs<ExtArgs>
     submission?: boolean | User$submissionArgs<ExtArgs>
@@ -1867,8 +1989,16 @@ export namespace Prisma {
       image: string | null
       role: $Enums.UserRole
       password: string
+      verificationToken: string | null
+      isVerified: boolean
+      accessToken: string | null
+      refreshToken: string | null
       createdAt: Date
       updatedAt: Date
+      lastloginDate: Date | null
+      streakCount: number
+      longestCount: number
+      loginMap: Prisma.JsonValue | null
     }, ExtArgs["result"]["user"]>
     composites: {}
   }
@@ -2302,8 +2432,16 @@ export namespace Prisma {
     readonly image: FieldRef<"User", 'String'>
     readonly role: FieldRef<"User", 'UserRole'>
     readonly password: FieldRef<"User", 'String'>
+    readonly verificationToken: FieldRef<"User", 'String'>
+    readonly isVerified: FieldRef<"User", 'Boolean'>
+    readonly accessToken: FieldRef<"User", 'String'>
+    readonly refreshToken: FieldRef<"User", 'String'>
     readonly createdAt: FieldRef<"User", 'DateTime'>
     readonly updatedAt: FieldRef<"User", 'DateTime'>
+    readonly lastloginDate: FieldRef<"User", 'DateTime'>
+    readonly streakCount: FieldRef<"User", 'Int'>
+    readonly longestCount: FieldRef<"User", 'Int'>
+    readonly loginMap: FieldRef<"User", 'Json'>
   }
     
 
@@ -8644,7 +8782,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistMinAggregateOutputType = {
     id: string | null
-    playlistId: string | null
+    playListId: string | null
     problemId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8652,7 +8790,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistMaxAggregateOutputType = {
     id: string | null
-    playlistId: string | null
+    playListId: string | null
     problemId: string | null
     createdAt: Date | null
     updatedAt: Date | null
@@ -8660,7 +8798,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistCountAggregateOutputType = {
     id: number
-    playlistId: number
+    playListId: number
     problemId: number
     createdAt: number
     updatedAt: number
@@ -8670,7 +8808,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistMinAggregateInputType = {
     id?: true
-    playlistId?: true
+    playListId?: true
     problemId?: true
     createdAt?: true
     updatedAt?: true
@@ -8678,7 +8816,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistMaxAggregateInputType = {
     id?: true
-    playlistId?: true
+    playListId?: true
     problemId?: true
     createdAt?: true
     updatedAt?: true
@@ -8686,7 +8824,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistCountAggregateInputType = {
     id?: true
-    playlistId?: true
+    playListId?: true
     problemId?: true
     createdAt?: true
     updatedAt?: true
@@ -8767,7 +8905,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistGroupByOutputType = {
     id: string
-    playlistId: string
+    playListId: string
     problemId: string
     createdAt: Date
     updatedAt: Date
@@ -8792,7 +8930,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    playlistId?: boolean
+    playListId?: boolean
     problemId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8802,7 +8940,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    playlistId?: boolean
+    playListId?: boolean
     problemId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8812,7 +8950,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
-    playlistId?: boolean
+    playListId?: boolean
     problemId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
@@ -8822,13 +8960,13 @@ export namespace Prisma {
 
   export type ProblemInPlaylistSelectScalar = {
     id?: boolean
-    playlistId?: boolean
+    playListId?: boolean
     problemId?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type ProblemInPlaylistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "playlistId" | "problemId" | "createdAt" | "updatedAt", ExtArgs["result"]["problemInPlaylist"]>
+  export type ProblemInPlaylistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "playListId" | "problemId" | "createdAt" | "updatedAt", ExtArgs["result"]["problemInPlaylist"]>
   export type ProblemInPlaylistInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     playlist?: boolean | PlaylistDefaultArgs<ExtArgs>
     problem?: boolean | ProblemDefaultArgs<ExtArgs>
@@ -8850,7 +8988,7 @@ export namespace Prisma {
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
-      playlistId: string
+      playListId: string
       problemId: string
       createdAt: Date
       updatedAt: Date
@@ -9280,7 +9418,7 @@ export namespace Prisma {
    */
   interface ProblemInPlaylistFieldRefs {
     readonly id: FieldRef<"ProblemInPlaylist", 'String'>
-    readonly playlistId: FieldRef<"ProblemInPlaylist", 'String'>
+    readonly playListId: FieldRef<"ProblemInPlaylist", 'String'>
     readonly problemId: FieldRef<"ProblemInPlaylist", 'String'>
     readonly createdAt: FieldRef<"ProblemInPlaylist", 'DateTime'>
     readonly updatedAt: FieldRef<"ProblemInPlaylist", 'DateTime'>
@@ -9719,8 +9857,16 @@ export namespace Prisma {
     image: 'image',
     role: 'role',
     password: 'password',
+    verificationToken: 'verificationToken',
+    isVerified: 'isVerified',
+    accessToken: 'accessToken',
+    refreshToken: 'refreshToken',
     createdAt: 'createdAt',
-    updatedAt: 'updatedAt'
+    updatedAt: 'updatedAt',
+    lastloginDate: 'lastloginDate',
+    streakCount: 'streakCount',
+    longestCount: 'longestCount',
+    loginMap: 'loginMap'
   };
 
   export type UserScalarFieldEnum = (typeof UserScalarFieldEnum)[keyof typeof UserScalarFieldEnum]
@@ -9811,7 +9957,7 @@ export namespace Prisma {
 
   export const ProblemInPlaylistScalarFieldEnum: {
     id: 'id',
-    playlistId: 'playlistId',
+    playListId: 'playListId',
     problemId: 'problemId',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
@@ -9826,6 +9972,14 @@ export namespace Prisma {
   };
 
   export type SortOrder = (typeof SortOrder)[keyof typeof SortOrder]
+
+
+  export const NullableJsonNullValueInput: {
+    DbNull: typeof DbNull,
+    JsonNull: typeof JsonNull
+  };
+
+  export type NullableJsonNullValueInput = (typeof NullableJsonNullValueInput)[keyof typeof NullableJsonNullValueInput]
 
 
   export const JsonNullValueInput: {
@@ -9843,14 +9997,6 @@ export namespace Prisma {
   export type QueryMode = (typeof QueryMode)[keyof typeof QueryMode]
 
 
-  export const NullsOrder: {
-    first: 'first',
-    last: 'last'
-  };
-
-  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
-
-
   export const JsonNullValueFilter: {
     DbNull: typeof DbNull,
     JsonNull: typeof JsonNull,
@@ -9858,6 +10004,14 @@ export namespace Prisma {
   };
 
   export type JsonNullValueFilter = (typeof JsonNullValueFilter)[keyof typeof JsonNullValueFilter]
+
+
+  export const NullsOrder: {
+    first: 'first',
+    last: 'last'
+  };
+
+  export type NullsOrder = (typeof NullsOrder)[keyof typeof NullsOrder]
 
 
   /**
@@ -9894,6 +10048,13 @@ export namespace Prisma {
 
 
   /**
+   * Reference to a field of type 'Boolean'
+   */
+  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+    
+
+
+  /**
    * Reference to a field of type 'DateTime'
    */
   export type DateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime'>
@@ -9904,34 +10065,6 @@ export namespace Prisma {
    * Reference to a field of type 'DateTime[]'
    */
   export type ListDateTimeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'DateTime[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Difficulty'
-   */
-  export type EnumDifficultyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Difficulty'>
-    
-
-
-  /**
-   * Reference to a field of type 'Difficulty[]'
-   */
-  export type ListEnumDifficultyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Difficulty[]'>
-    
-
-
-  /**
-   * Reference to a field of type 'Json'
-   */
-  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
-    
-
-
-  /**
-   * Reference to a field of type 'QueryMode'
-   */
-  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
     
 
 
@@ -9950,9 +10083,30 @@ export namespace Prisma {
 
 
   /**
-   * Reference to a field of type 'Boolean'
+   * Reference to a field of type 'Json'
    */
-  export type BooleanFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Boolean'>
+  export type JsonFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Json'>
+    
+
+
+  /**
+   * Reference to a field of type 'QueryMode'
+   */
+  export type EnumQueryModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'QueryMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'Difficulty'
+   */
+  export type EnumDifficultyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Difficulty'>
+    
+
+
+  /**
+   * Reference to a field of type 'Difficulty[]'
+   */
+  export type ListEnumDifficultyFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Difficulty[]'>
     
 
 
@@ -9983,8 +10137,16 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     password?: StringFilter<"User"> | string
+    verificationToken?: StringNullableFilter<"User"> | string | null
+    isVerified?: BoolFilter<"User"> | boolean
+    accessToken?: StringNullableFilter<"User"> | string | null
+    refreshToken?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    lastloginDate?: DateTimeNullableFilter<"User"> | Date | string | null
+    streakCount?: IntFilter<"User"> | number
+    longestCount?: IntFilter<"User"> | number
+    loginMap?: JsonNullableFilter<"User">
     problems?: ProblemListRelationFilter
     submission?: SubmissionListRelationFilter
     problemSolved?: ProblemSolvedListRelationFilter
@@ -9998,8 +10160,16 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     role?: SortOrder
     password?: SortOrder
+    verificationToken?: SortOrderInput | SortOrder
+    isVerified?: SortOrder
+    accessToken?: SortOrderInput | SortOrder
+    refreshToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    lastloginDate?: SortOrderInput | SortOrder
+    streakCount?: SortOrder
+    longestCount?: SortOrder
+    loginMap?: SortOrderInput | SortOrder
     problems?: ProblemOrderByRelationAggregateInput
     submission?: SubmissionOrderByRelationAggregateInput
     problemSolved?: ProblemSolvedOrderByRelationAggregateInput
@@ -10016,8 +10186,16 @@ export namespace Prisma {
     image?: StringNullableFilter<"User"> | string | null
     role?: EnumUserRoleFilter<"User"> | $Enums.UserRole
     password?: StringFilter<"User"> | string
+    verificationToken?: StringNullableFilter<"User"> | string | null
+    isVerified?: BoolFilter<"User"> | boolean
+    accessToken?: StringNullableFilter<"User"> | string | null
+    refreshToken?: StringNullableFilter<"User"> | string | null
     createdAt?: DateTimeFilter<"User"> | Date | string
     updatedAt?: DateTimeFilter<"User"> | Date | string
+    lastloginDate?: DateTimeNullableFilter<"User"> | Date | string | null
+    streakCount?: IntFilter<"User"> | number
+    longestCount?: IntFilter<"User"> | number
+    loginMap?: JsonNullableFilter<"User">
     problems?: ProblemListRelationFilter
     submission?: SubmissionListRelationFilter
     problemSolved?: ProblemSolvedListRelationFilter
@@ -10031,11 +10209,21 @@ export namespace Prisma {
     image?: SortOrderInput | SortOrder
     role?: SortOrder
     password?: SortOrder
+    verificationToken?: SortOrderInput | SortOrder
+    isVerified?: SortOrder
+    accessToken?: SortOrderInput | SortOrder
+    refreshToken?: SortOrderInput | SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    lastloginDate?: SortOrderInput | SortOrder
+    streakCount?: SortOrder
+    longestCount?: SortOrder
+    loginMap?: SortOrderInput | SortOrder
     _count?: UserCountOrderByAggregateInput
+    _avg?: UserAvgOrderByAggregateInput
     _max?: UserMaxOrderByAggregateInput
     _min?: UserMinOrderByAggregateInput
+    _sum?: UserSumOrderByAggregateInput
   }
 
   export type UserScalarWhereWithAggregatesInput = {
@@ -10048,8 +10236,16 @@ export namespace Prisma {
     image?: StringNullableWithAggregatesFilter<"User"> | string | null
     role?: EnumUserRoleWithAggregatesFilter<"User"> | $Enums.UserRole
     password?: StringWithAggregatesFilter<"User"> | string
+    verificationToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    isVerified?: BoolWithAggregatesFilter<"User"> | boolean
+    accessToken?: StringNullableWithAggregatesFilter<"User"> | string | null
+    refreshToken?: StringNullableWithAggregatesFilter<"User"> | string | null
     createdAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"User"> | Date | string
+    lastloginDate?: DateTimeNullableWithAggregatesFilter<"User"> | Date | string | null
+    streakCount?: IntWithAggregatesFilter<"User"> | number
+    longestCount?: IntWithAggregatesFilter<"User"> | number
+    loginMap?: JsonNullableWithAggregatesFilter<"User">
   }
 
   export type ProblemWhereInput = {
@@ -10497,7 +10693,7 @@ export namespace Prisma {
     OR?: ProblemInPlaylistWhereInput[]
     NOT?: ProblemInPlaylistWhereInput | ProblemInPlaylistWhereInput[]
     id?: StringFilter<"ProblemInPlaylist"> | string
-    playlistId?: StringFilter<"ProblemInPlaylist"> | string
+    playListId?: StringFilter<"ProblemInPlaylist"> | string
     problemId?: StringFilter<"ProblemInPlaylist"> | string
     createdAt?: DateTimeFilter<"ProblemInPlaylist"> | Date | string
     updatedAt?: DateTimeFilter<"ProblemInPlaylist"> | Date | string
@@ -10507,7 +10703,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistOrderByWithRelationInput = {
     id?: SortOrder
-    playlistId?: SortOrder
+    playListId?: SortOrder
     problemId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10517,21 +10713,21 @@ export namespace Prisma {
 
   export type ProblemInPlaylistWhereUniqueInput = Prisma.AtLeast<{
     id?: string
-    playlistId_problemId?: ProblemInPlaylistPlaylistIdProblemIdCompoundUniqueInput
+    playListId_problemId?: ProblemInPlaylistPlayListIdProblemIdCompoundUniqueInput
     AND?: ProblemInPlaylistWhereInput | ProblemInPlaylistWhereInput[]
     OR?: ProblemInPlaylistWhereInput[]
     NOT?: ProblemInPlaylistWhereInput | ProblemInPlaylistWhereInput[]
-    playlistId?: StringFilter<"ProblemInPlaylist"> | string
+    playListId?: StringFilter<"ProblemInPlaylist"> | string
     problemId?: StringFilter<"ProblemInPlaylist"> | string
     createdAt?: DateTimeFilter<"ProblemInPlaylist"> | Date | string
     updatedAt?: DateTimeFilter<"ProblemInPlaylist"> | Date | string
     playlist?: XOR<PlaylistScalarRelationFilter, PlaylistWhereInput>
     problem?: XOR<ProblemScalarRelationFilter, ProblemWhereInput>
-  }, "id" | "playlistId_problemId">
+  }, "id" | "playListId_problemId">
 
   export type ProblemInPlaylistOrderByWithAggregationInput = {
     id?: SortOrder
-    playlistId?: SortOrder
+    playListId?: SortOrder
     problemId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -10545,7 +10741,7 @@ export namespace Prisma {
     OR?: ProblemInPlaylistScalarWhereWithAggregatesInput[]
     NOT?: ProblemInPlaylistScalarWhereWithAggregatesInput | ProblemInPlaylistScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"ProblemInPlaylist"> | string
-    playlistId?: StringWithAggregatesFilter<"ProblemInPlaylist"> | string
+    playListId?: StringWithAggregatesFilter<"ProblemInPlaylist"> | string
     problemId?: StringWithAggregatesFilter<"ProblemInPlaylist"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ProblemInPlaylist"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"ProblemInPlaylist"> | Date | string
@@ -10558,8 +10754,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
@@ -10573,8 +10777,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
@@ -10588,8 +10800,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
@@ -10603,8 +10823,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
@@ -10618,8 +10846,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUpdateManyMutationInput = {
@@ -10629,8 +10865,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type UserUncheckedUpdateManyInput = {
@@ -10640,8 +10884,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
   }
 
   export type ProblemCreateInput = {
@@ -11143,7 +11395,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistUncheckedCreateInput = {
     id?: string
-    playlistId: string
+    playListId: string
     problemId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11159,7 +11411,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
-    playlistId?: StringFieldUpdateOperationsInput | string
+    playListId?: StringFieldUpdateOperationsInput | string
     problemId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11167,7 +11419,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistCreateManyInput = {
     id?: string
-    playlistId: string
+    playListId: string
     problemId: string
     createdAt?: Date | string
     updatedAt?: Date | string
@@ -11181,7 +11433,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
-    playlistId?: StringFieldUpdateOperationsInput | string
+    playListId?: StringFieldUpdateOperationsInput | string
     problemId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -11224,6 +11476,11 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
+  export type BoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type DateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -11233,6 +11490,51 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type DateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type IntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
+  }
+  export type JsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type ProblemListRelationFilter = {
@@ -11287,8 +11589,21 @@ export namespace Prisma {
     image?: SortOrder
     role?: SortOrder
     password?: SortOrder
+    verificationToken?: SortOrder
+    isVerified?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    lastloginDate?: SortOrder
+    streakCount?: SortOrder
+    longestCount?: SortOrder
+    loginMap?: SortOrder
+  }
+
+  export type UserAvgOrderByAggregateInput = {
+    streakCount?: SortOrder
+    longestCount?: SortOrder
   }
 
   export type UserMaxOrderByAggregateInput = {
@@ -11298,8 +11613,15 @@ export namespace Prisma {
     image?: SortOrder
     role?: SortOrder
     password?: SortOrder
+    verificationToken?: SortOrder
+    isVerified?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    lastloginDate?: SortOrder
+    streakCount?: SortOrder
+    longestCount?: SortOrder
   }
 
   export type UserMinOrderByAggregateInput = {
@@ -11309,8 +11631,20 @@ export namespace Prisma {
     image?: SortOrder
     role?: SortOrder
     password?: SortOrder
+    verificationToken?: SortOrder
+    isVerified?: SortOrder
+    accessToken?: SortOrder
+    refreshToken?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
+    lastloginDate?: SortOrder
+    streakCount?: SortOrder
+    longestCount?: SortOrder
+  }
+
+  export type UserSumOrderByAggregateInput = {
+    streakCount?: SortOrder
+    longestCount?: SortOrder
   }
 
   export type StringWithAggregatesFilter<$PrismaModel = never> = {
@@ -11359,6 +11693,14 @@ export namespace Prisma {
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
+  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type DateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -11371,6 +11713,62 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type DateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type IntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+  export type JsonNullableWithAggregatesFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, Exclude<keyof Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>,
+        Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<JsonNullableWithAggregatesFilterBase<$PrismaModel>>, 'path'>>
+
+  export type JsonNullableWithAggregatesFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedJsonNullableFilter<$PrismaModel>
+    _max?: NestedJsonNullableFilter<$PrismaModel>
   }
 
   export type EnumDifficultyFilter<$PrismaModel = never> = {
@@ -11570,22 +11968,6 @@ export namespace Prisma {
     updatedAt?: SortOrder
   }
 
-  export type IntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
-  }
-
-  export type BoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
   export type SubmissionScalarRelationFilter = {
     is?: SubmissionWhereInput
     isNot?: SubmissionWhereInput
@@ -11645,30 +12027,6 @@ export namespace Prisma {
 
   export type TestCaseResultSumOrderByAggregateInput = {
     testCase?: SortOrder
-  }
-
-  export type IntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type BoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ProblemSolvedUserIdProblemIdCompoundUniqueInput = {
@@ -11737,14 +12095,14 @@ export namespace Prisma {
     isNot?: PlaylistWhereInput
   }
 
-  export type ProblemInPlaylistPlaylistIdProblemIdCompoundUniqueInput = {
-    playlistId: string
+  export type ProblemInPlaylistPlayListIdProblemIdCompoundUniqueInput = {
+    playListId: string
     problemId: string
   }
 
   export type ProblemInPlaylistCountOrderByAggregateInput = {
     id?: SortOrder
-    playlistId?: SortOrder
+    playListId?: SortOrder
     problemId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11752,7 +12110,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistMaxOrderByAggregateInput = {
     id?: SortOrder
-    playlistId?: SortOrder
+    playListId?: SortOrder
     problemId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11760,7 +12118,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistMinOrderByAggregateInput = {
     id?: SortOrder
-    playlistId?: SortOrder
+    playListId?: SortOrder
     problemId?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
@@ -11834,8 +12192,24 @@ export namespace Prisma {
     set?: $Enums.UserRole
   }
 
+  export type BoolFieldUpdateOperationsInput = {
+    set?: boolean
+  }
+
   export type DateTimeFieldUpdateOperationsInput = {
     set?: Date | string
+  }
+
+  export type NullableDateTimeFieldUpdateOperationsInput = {
+    set?: Date | string | null
+  }
+
+  export type IntFieldUpdateOperationsInput = {
+    set?: number
+    increment?: number
+    decrement?: number
+    multiply?: number
+    divide?: number
   }
 
   export type ProblemUpdateManyWithoutUserNestedInput = {
@@ -12179,18 +12553,6 @@ export namespace Prisma {
     connect?: SubmissionWhereUniqueInput
   }
 
-  export type IntFieldUpdateOperationsInput = {
-    set?: number
-    increment?: number
-    decrement?: number
-    multiply?: number
-    divide?: number
-  }
-
-  export type BoolFieldUpdateOperationsInput = {
-    set?: boolean
-  }
-
   export type SubmissionUpdateOneRequiredWithoutTestCasesNestedInput = {
     create?: XOR<SubmissionCreateWithoutTestCasesInput, SubmissionUncheckedCreateWithoutTestCasesInput>
     connectOrCreate?: SubmissionCreateOrConnectWithoutTestCasesInput
@@ -12346,6 +12708,11 @@ export namespace Prisma {
     not?: NestedEnumUserRoleFilter<$PrismaModel> | $Enums.UserRole
   }
 
+  export type NestedBoolFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolFilter<$PrismaModel> | boolean
+  }
+
   export type NestedDateTimeFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -12355,6 +12722,28 @@ export namespace Prisma {
     gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     not?: NestedDateTimeFilter<$PrismaModel> | Date | string
+  }
+
+  export type NestedDateTimeNullableFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableFilter<$PrismaModel> | Date | string | null
+  }
+
+  export type NestedIntFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringWithAggregatesFilter<$PrismaModel = never> = {
@@ -12372,17 +12761,6 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedStringFilter<$PrismaModel>
     _max?: NestedStringFilter<$PrismaModel>
-  }
-
-  export type NestedIntFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntFilter<$PrismaModel> | number
   }
 
   export type NestedStringNullableWithAggregatesFilter<$PrismaModel = never> = {
@@ -12423,6 +12801,14 @@ export namespace Prisma {
     _max?: NestedEnumUserRoleFilter<$PrismaModel>
   }
 
+  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
+    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedBoolFilter<$PrismaModel>
+    _max?: NestedBoolFilter<$PrismaModel>
+  }
+
   export type NestedDateTimeWithAggregatesFilter<$PrismaModel = never> = {
     equals?: Date | string | DateTimeFieldRefInput<$PrismaModel>
     in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel>
@@ -12435,6 +12821,70 @@ export namespace Prisma {
     _count?: NestedIntFilter<$PrismaModel>
     _min?: NestedDateTimeFilter<$PrismaModel>
     _max?: NestedDateTimeFilter<$PrismaModel>
+  }
+
+  export type NestedDateTimeNullableWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: Date | string | DateTimeFieldRefInput<$PrismaModel> | null
+    in?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    notIn?: Date[] | string[] | ListDateTimeFieldRefInput<$PrismaModel> | null
+    lt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    lte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gt?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    gte?: Date | string | DateTimeFieldRefInput<$PrismaModel>
+    not?: NestedDateTimeNullableWithAggregatesFilter<$PrismaModel> | Date | string | null
+    _count?: NestedIntNullableFilter<$PrismaModel>
+    _min?: NestedDateTimeNullableFilter<$PrismaModel>
+    _max?: NestedDateTimeNullableFilter<$PrismaModel>
+  }
+
+  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: number | IntFieldRefInput<$PrismaModel>
+    in?: number[] | ListIntFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
+    lt?: number | IntFieldRefInput<$PrismaModel>
+    lte?: number | IntFieldRefInput<$PrismaModel>
+    gt?: number | IntFieldRefInput<$PrismaModel>
+    gte?: number | IntFieldRefInput<$PrismaModel>
+    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
+    _count?: NestedIntFilter<$PrismaModel>
+    _avg?: NestedFloatFilter<$PrismaModel>
+    _sum?: NestedIntFilter<$PrismaModel>
+    _min?: NestedIntFilter<$PrismaModel>
+    _max?: NestedIntFilter<$PrismaModel>
+  }
+
+  export type NestedFloatFilter<$PrismaModel = never> = {
+    equals?: number | FloatFieldRefInput<$PrismaModel>
+    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
+    lt?: number | FloatFieldRefInput<$PrismaModel>
+    lte?: number | FloatFieldRefInput<$PrismaModel>
+    gt?: number | FloatFieldRefInput<$PrismaModel>
+    gte?: number | FloatFieldRefInput<$PrismaModel>
+    not?: NestedFloatFilter<$PrismaModel> | number
+  }
+  export type NestedJsonNullableFilter<$PrismaModel = never> =
+    | PatchUndefined<
+        Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
+        Required<NestedJsonNullableFilterBase<$PrismaModel>>
+      >
+    | OptionalFlat<Omit<Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>
+
+  export type NestedJsonNullableFilterBase<$PrismaModel = never> = {
+    equals?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
+    path?: string[]
+    mode?: QueryMode | EnumQueryModeFieldRefInput<$PrismaModel>
+    string_contains?: string | StringFieldRefInput<$PrismaModel>
+    string_starts_with?: string | StringFieldRefInput<$PrismaModel>
+    string_ends_with?: string | StringFieldRefInput<$PrismaModel>
+    array_starts_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_ends_with?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    array_contains?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | null
+    lt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    lte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
+    not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
   }
 
   export type NestedEnumDifficultyFilter<$PrismaModel = never> = {
@@ -12475,46 +12925,6 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type NestedBoolFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolFilter<$PrismaModel> | boolean
-  }
-
-  export type NestedIntWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: number | IntFieldRefInput<$PrismaModel>
-    in?: number[] | ListIntFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListIntFieldRefInput<$PrismaModel>
-    lt?: number | IntFieldRefInput<$PrismaModel>
-    lte?: number | IntFieldRefInput<$PrismaModel>
-    gt?: number | IntFieldRefInput<$PrismaModel>
-    gte?: number | IntFieldRefInput<$PrismaModel>
-    not?: NestedIntWithAggregatesFilter<$PrismaModel> | number
-    _count?: NestedIntFilter<$PrismaModel>
-    _avg?: NestedFloatFilter<$PrismaModel>
-    _sum?: NestedIntFilter<$PrismaModel>
-    _min?: NestedIntFilter<$PrismaModel>
-    _max?: NestedIntFilter<$PrismaModel>
-  }
-
-  export type NestedFloatFilter<$PrismaModel = never> = {
-    equals?: number | FloatFieldRefInput<$PrismaModel>
-    in?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    notIn?: number[] | ListFloatFieldRefInput<$PrismaModel>
-    lt?: number | FloatFieldRefInput<$PrismaModel>
-    lte?: number | FloatFieldRefInput<$PrismaModel>
-    gt?: number | FloatFieldRefInput<$PrismaModel>
-    gte?: number | FloatFieldRefInput<$PrismaModel>
-    not?: NestedFloatFilter<$PrismaModel> | number
-  }
-
-  export type NestedBoolWithAggregatesFilter<$PrismaModel = never> = {
-    equals?: boolean | BooleanFieldRefInput<$PrismaModel>
-    not?: NestedBoolWithAggregatesFilter<$PrismaModel> | boolean
-    _count?: NestedIntFilter<$PrismaModel>
-    _min?: NestedBoolFilter<$PrismaModel>
-    _max?: NestedBoolFilter<$PrismaModel>
   }
 
   export type ProblemCreateWithoutUserInput = {
@@ -12798,8 +13208,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     submission?: SubmissionCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
@@ -12812,8 +13230,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
@@ -12901,7 +13327,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistUncheckedCreateWithoutProblemInput = {
     id?: string
-    playlistId: string
+    playListId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -12934,8 +13360,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
@@ -12948,8 +13382,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
@@ -13008,7 +13450,7 @@ export namespace Prisma {
     OR?: ProblemInPlaylistScalarWhereInput[]
     NOT?: ProblemInPlaylistScalarWhereInput | ProblemInPlaylistScalarWhereInput[]
     id?: StringFilter<"ProblemInPlaylist"> | string
-    playlistId?: StringFilter<"ProblemInPlaylist"> | string
+    playListId?: StringFilter<"ProblemInPlaylist"> | string
     problemId?: StringFilter<"ProblemInPlaylist"> | string
     createdAt?: DateTimeFilter<"ProblemInPlaylist"> | Date | string
     updatedAt?: DateTimeFilter<"ProblemInPlaylist"> | Date | string
@@ -13021,8 +13463,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
@@ -13035,8 +13485,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
@@ -13150,8 +13608,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
@@ -13164,8 +13630,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
@@ -13348,8 +13822,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     playlists?: PlaylistCreateNestedManyWithoutUserInput
@@ -13362,8 +13844,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     playlists?: PlaylistUncheckedCreateNestedManyWithoutUserInput
@@ -13437,8 +13927,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUpdateManyWithoutUserNestedInput
@@ -13451,8 +13949,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     playlists?: PlaylistUncheckedUpdateManyWithoutUserNestedInput
@@ -13540,8 +14046,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemCreateNestedManyWithoutUserInput
     submission?: SubmissionCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedCreateNestedManyWithoutUserInput
@@ -13554,8 +14068,16 @@ export namespace Prisma {
     image?: string | null
     role?: $Enums.UserRole
     password: string
+    verificationToken?: string | null
+    isVerified?: boolean
+    accessToken?: string | null
+    refreshToken?: string | null
     createdAt?: Date | string
     updatedAt?: Date | string
+    lastloginDate?: Date | string | null
+    streakCount?: number
+    longestCount?: number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUncheckedCreateNestedManyWithoutUserInput
     submission?: SubmissionUncheckedCreateNestedManyWithoutUserInput
     problemSolved?: ProblemSolvedUncheckedCreateNestedManyWithoutUserInput
@@ -13600,8 +14122,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUpdateManyWithoutUserNestedInput
     submission?: SubmissionUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUpdateManyWithoutUserNestedInput
@@ -13614,8 +14144,16 @@ export namespace Prisma {
     image?: NullableStringFieldUpdateOperationsInput | string | null
     role?: EnumUserRoleFieldUpdateOperationsInput | $Enums.UserRole
     password?: StringFieldUpdateOperationsInput | string
+    verificationToken?: NullableStringFieldUpdateOperationsInput | string | null
+    isVerified?: BoolFieldUpdateOperationsInput | boolean
+    accessToken?: NullableStringFieldUpdateOperationsInput | string | null
+    refreshToken?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    lastloginDate?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    streakCount?: IntFieldUpdateOperationsInput | number
+    longestCount?: IntFieldUpdateOperationsInput | number
+    loginMap?: NullableJsonNullValueInput | InputJsonValue
     problems?: ProblemUncheckedUpdateManyWithoutUserNestedInput
     submission?: SubmissionUncheckedUpdateManyWithoutUserNestedInput
     problemSolved?: ProblemSolvedUncheckedUpdateManyWithoutUserNestedInput
@@ -13996,7 +14534,7 @@ export namespace Prisma {
 
   export type ProblemInPlaylistCreateManyProblemInput = {
     id?: string
-    playlistId: string
+    playListId: string
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14081,14 +14619,14 @@ export namespace Prisma {
 
   export type ProblemInPlaylistUncheckedUpdateWithoutProblemInput = {
     id?: StringFieldUpdateOperationsInput | string
-    playlistId?: StringFieldUpdateOperationsInput | string
+    playListId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type ProblemInPlaylistUncheckedUpdateManyWithoutProblemInput = {
     id?: StringFieldUpdateOperationsInput | string
-    playlistId?: StringFieldUpdateOperationsInput | string
+    playListId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }

@@ -47,10 +47,10 @@ export const useAuthStore = create((set) => ({
 
   login: async (data) => {
     set({ isLoggingIn: true });
+    console.log(data);
     try {
       const response = await axiosInstance.post("/auth/login", data);
       set({ authUser: response.data.user });
-      localStorage.setItem("token", response.data.token); // Save token
       toast.success(response.data.message);
     } catch (error) {
       console.log("Error while logging in user: ", error);
@@ -62,13 +62,16 @@ export const useAuthStore = create((set) => ({
 
   logout: async () => {
     try {
-      await axiosInstance.get("/auth/logout");
+      await axiosInstance.post("/auth/logout");
       set({ authUser: null });
       localStorage.removeItem("token"); // Remove token
       toast.success("User logged out successfully");
     } catch (error) {
       console.log("Error while logging out user: ", error);
-      toast.error("Error while logging out user");
+      // Even if the request fails, we should still clear the local state
+      set({ authUser: null });
+      localStorage.removeItem("token");
+      toast.success("Logged out successfully");
     }
   },
 

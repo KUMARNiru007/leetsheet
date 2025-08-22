@@ -27,16 +27,24 @@ enum Difficulty {
 }
 
 model User {
-  id        String   @id @default(uuid())
-  name      String?
-  email     String   @unique
-  image     String?
-  role      UserRole @default(USER)
-  password  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id                String    @id @default(uuid())
+  name              String?
+  email             String    @unique
+  image             String?
+  role              UserRole  @default(USER)
+  password          String
+  verificationToken String?
+  isVerified        Boolean   @default(false)
+  accessToken       String?
+  refreshToken      String?
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+  lastloginDate     DateTime?
+  streakCount       Int       @default(0)
+  longestCount      Int       @default(0)
+  loginMap          Json?
 
-  problems      Problem[] // one user multiple problem
+  problems      Problem[]
   submission    Submission[]
   problemSolved ProblemSolved[]
   playlists     Playlist[]
@@ -153,13 +161,13 @@ model Playlist {
 
 model ProblemInPlaylist {
   id         String   @id @default(uuid())
-  playlistId String
+  playListId String
   problemId  String
   createdAt  DateTime @default(now())
   updatedAt  DateTime @updatedAt
 
-  playlist Playlist @relation(fields: [playlistId], references: [id], onDelete: Cascade)
+  playlist Playlist @relation(fields: [playListId], references: [id], onDelete: Cascade)
   problem  Problem  @relation(fields: [problemId], references: [id], onDelete: Cascade)
 
-  @@unique([playlistId, problemId])
+  @@unique([playListId, problemId])
 }

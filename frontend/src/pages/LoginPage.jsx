@@ -13,6 +13,7 @@ import {
 
 import {z} from "zod";
 import { useAuthStore } from '../store/useAuthStore';
+import google from "./assets/google.svg";
 
 
 const LoginSchema = z.object({
@@ -134,9 +135,23 @@ const LoginPage = () => {
                   Loading...
                 </>
               ) : (
-                "Sign in"
+                "Login"
               )}
             </button>
+             {/* Google Sign-in */}
+            <div className="flex items-center justify-center">
+              <a
+                href={`http://localhost:8080/oauth2/redirect/google`}
+                className="w-full py-2 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-600/80 transition flex items-center justify-center gap-2 cursor-pointer"
+              >
+                <img
+                  src={google}
+                  alt="Google"
+                  className="w-6 h-6 bg-white mr-2"
+                />
+                Continue with Google
+              </a>
+            </div>
           </form>
 
           {/* Footer */}

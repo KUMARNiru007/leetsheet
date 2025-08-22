@@ -124,8 +124,16 @@ exports.Prisma.UserScalarFieldEnum = {
   image: 'image',
   role: 'role',
   password: 'password',
+  verificationToken: 'verificationToken',
+  isVerified: 'isVerified',
+  accessToken: 'accessToken',
+  refreshToken: 'refreshToken',
   createdAt: 'createdAt',
-  updatedAt: 'updatedAt'
+  updatedAt: 'updatedAt',
+  lastloginDate: 'lastloginDate',
+  streakCount: 'streakCount',
+  longestCount: 'longestCount',
+  loginMap: 'loginMap'
 };
 
 exports.Prisma.ProblemScalarFieldEnum = {
@@ -198,7 +206,7 @@ exports.Prisma.PlaylistScalarFieldEnum = {
 
 exports.Prisma.ProblemInPlaylistScalarFieldEnum = {
   id: 'id',
-  playlistId: 'playlistId',
+  playListId: 'playListId',
   problemId: 'problemId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
@@ -207,6 +215,11 @@ exports.Prisma.ProblemInPlaylistScalarFieldEnum = {
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
+};
+
+exports.Prisma.NullableJsonNullValueInput = {
+  DbNull: Prisma.DbNull,
+  JsonNull: Prisma.JsonNull
 };
 
 exports.Prisma.JsonNullValueInput = {
@@ -218,15 +231,15 @@ exports.Prisma.QueryMode = {
   insensitive: 'insensitive'
 };
 
-exports.Prisma.NullsOrder = {
-  first: 'first',
-  last: 'last'
-};
-
 exports.Prisma.JsonNullValueFilter = {
   DbNull: Prisma.DbNull,
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
+};
+
+exports.Prisma.NullsOrder = {
+  first: 'first',
+  last: 'last'
 };
 exports.UserRole = exports.$Enums.UserRole = {
   ADMIN: 'ADMIN',
