@@ -3,11 +3,7 @@ import {db} from "../libs/db.js"
 
 export const authMiddleware = async (req , res , next)=>{
     try {
-        const token = req.cookies.jwt;
-
-         if (!token && req.headers.authorization?.startsWith('Bearer ')) {
-      token = req.headers.authorization.split(' ')[1];
-    }
+       const token = req.cookies.accessToken;
 
         if(!token){
             return res.status(401).json({
@@ -18,7 +14,7 @@ export const authMiddleware = async (req , res , next)=>{
         let decoded;
 
         try {
-            decoded = jwt.verify(token , process.env.JWT_SECRET);
+            decoded = jwt.verify(token , process.env.JWT_ACCESS_TOKEN_SECRET);
         } catch (error) {
             return res.status(401).json({
                 message:"Unauthorized - Invalid token"
@@ -34,7 +30,12 @@ export const authMiddleware = async (req , res , next)=>{
                 image:true,
                 name:true,
                 email:true,
-                role:true
+                role:true,
+                image: true,
+            lastloginDate: true,
+            streakCount: true,
+            longestCount: true,
+            loginMap: true,
             }
         });
 

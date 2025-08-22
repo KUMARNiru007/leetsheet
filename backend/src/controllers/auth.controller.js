@@ -1,163 +1,417 @@
-import bcrypt from "bcryptjs"
-import {db} from "../libs/db.js"
-import jwt from "jsonwebtoken";
-import { UserRole } from "../generated/prisma/index.js";
+    import bcrypt from "bcryptjs"
+    import {db} from "../libs/db.js"
+    import jwt from "jsonwebtoken";
+    import { UserRole } from "../generated/prisma/index.js";
+import { mailVerificationMailGenContent,sendEmail } from "../utils/verificationMail.js";
+import { generateAccessToken, generateRefreshToken } from "../utils/generateToken.js";
 
 
 
 
-export const register = async (req , res ) => {
+    export const register = async (req , res ) => {
 
-    const {email,password,name} = req.body;
-    
-    try{
-        const existingUser =await db.user.findUnique({
-            where:{
-                email
+        const {email,password,name} = req.body;
+        
+        try{
+            const existingUser =await db.user.findUnique({
+                where:{
+                    email
+                }
+            })
+            if(existingUser){
+                return res.status(400).json({
+                    message: "User already exist"
+                })
             }
-        })
-        if(existingUser){
+            const hashedPassword = await bcrypt.hash(password,10);
+            const token = crypto.randomBytes(32).toString('hex');
+
+            const newUser = await db.user.create({
+                data:{
+                    email,
+                    password:hashedPassword,
+                    name,
+                    role:UserRole.USER,
+                    verificationToken: token,
+                }
+            })
+
+            await sendEmail({
+                email:email,
+                subject:'Email verification',
+                mailGenContent: mailVerificationMailGenContent(
+            name,
+            `${process.env.BASE_URI}/api/v1/auth/verifyMail/${token}`,
+        ),
+        });
+
+    const accessToken = generateAccessToken(user);
+        const refreshToken = generateRefreshToken(user);
+
+        await db.user.update({
+        where: {
+            id: user.id,
+        },
+        data: {
+            accessToken,
+            refreshToken,
+            image: avatar,
+        },
+        });
+
+    
+        const AccessCookieOptions = {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        maxAge: 1000 * 60 * 15, // 15 minutes
+        domain: 'http://localhost:5173',
+        };
+
+        const RefreshCookieOptions = {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        domain: 'http://localhost:5173',
+        };
+
+        res.cookie('accessToken', accessToken, AccessCookieOptions);
+        res.cookie('refreshToken', refreshToken, RefreshCookieOptions);
+
+
+
+            res.status(201).json({
+                success:true,
+                message:"User created successfully",
+                user:{
+                    id:newUser.id,
+                    emil:newUser.email,
+                    name:newUser.name,
+                    role:newUser.role,
+                    image:newUser.image,
+                    accessToken: user.accessToken,
+                }
+            })
+
+
+
+
+        }catch(error){
+        
+            console.error("Error creating a User",error)
+            res.status(500).json({
+                message:"Error creating a user"
+            })
+
+        }
+    }
+
+    export const verifyUser = async (req,res) => {
+        const token = req.params.token;
+        console.log(token);
+        if(!token) {
             return res.status(400).json({
-                message: "User already exist"
+                message:"Verification failed",
+                success:false,
             })
         }
-        const hashedPassword = await bcrypt.hash(password,10);
+        try{
+            const user = await db.user.findFirst({
+                where:{
+                    verificationToken:token,
+                },
+            });
+            if(!user) {
+            return res.status(400).json({
+                message:"User not found",
+                success:false,
+            })
+            };
 
-        const newUser = await db.user.create({
-            data:{
-                email,
-                password:hashedPassword,
-                name,
-                role:UserRole.USER,
-            }
-        })
+            console.log(user.id);
+            await db.user.user.update({
+                where:{
+                    id:user.id,
+                },
+                data:{
+                    isVerified:true,
+                    verificationToken:null,
+                },
+            });
 
-        const token = jwt.sign({id:newUser.id} , process.env.JWT_SECRET, {
-            expiresIn :"7d",
-        })
-
-        res.cookie("jwt" , token, {
-            httpOnly:true,
-            sameSite:"strict",
-            secure:process.env.NODE_ENV !=="development",
-            maxAge : 1000*60*60*24*7,//7days
-
-        })
-        res.status(201).json({
-            success:true,
-            message:"User created successfully",
-            user:{
-                id:newUser.id,
-                emil:newUser.email,
-                name:newUser.name,
-                role:newUser.role,
-                image:newUser.image,
-            }
-        })
-
-
-
-
-    }catch(error){
-    
-        console.error("Error creating a User",error)
-        res.status(500).json({
-            message:"Error creating a user"
-        })
-
-    }
-}
-
-
-export const login = async (req , res ) => {
-    const {email,password} = req.body;
-    try{
-        const user =await db.user.findUnique({
-            where:{
-                email
-            }
-        })
-        if(!user){
-            return res.status(401).json({
-                message:"User not Found"
+            console.log(user);
+            res.status(200).json({
+                message:"User verified successfully",
+                success:true
+            })
+        }catch(error){
+            console.log(error);
+            return res.status(400).json({
+                message:"Internal server ERROR in User Verification ",
+                success:false,
             })
         }
-        const isMatch = await bcrypt.compare(password, user.password);
+    }
 
-        if(!isMatch){
-            return res.status(401).json({
-          error:"Invalid credentials",
+    export const login = async (req , res ) => {
+        const {email,password} = req.body;
+        try{
+            const user =await db.user.findUnique({
+                where:{
+                    email
+                }
+            })
+            if(!user){
+                return res.status(401).json({
+                    message:"User not Found"
+                })
+            }
+            const isMatch = await bcrypt.compare(password, user.password);
+
+            if(!isMatch){
+                return res.status(401).json({
+            error:"Invalid credentials",
+                })
+            }
+
+            if (!user.isVerified){
+                res.status(401).json({
+                    message:'User is not verified',
+                    success:false,
+                })        
+            }
+
+            const today = dayjs().startOf('day');
+
+        const lastlogin = user.lastloginDate
+        ? dayjs(user.lastloginDate).startOf('day')
+        : null;
+        const todayStr = dayjs().format('YYYY-MM-DD');
+        const loginMap = user.loginMap || {};
+
+        let streakCount = 1;
+        let longestStreak = user.longestCount || 0;
+
+        const oneYearAgo = dayjs().subtract(365, 'day').format('YYYY-MM-DD');
+        const newLoginMap = Object.fromEntries(
+        Object.entries(loginMap).filter(([date]) => date >= oneYearAgo),
+        );
+
+        // User today's login
+        newLoginMap[todayStr] = true;
+
+        if (lastlogin) {
+        const diff = today.diff(lastlogin, 'day');
+        if (diff === 1) {
+            streakCount = user.streakCount + 1;
+            longestStreak = Math.max(longestStreak, streakCount);
+        } else if (diff === 0) {
+            streakCount = user.streakCount;
+            longestStreak = user.longestCount;
+        }
+        }
+
+
+            const accessToken = generateAccessToken(user);
+            const refreshToken = generateRefreshToken(user);
+
+                const updatedUser = await db.user.update({
+        where: {
+            id: user.id,
+        },
+        data: {
+            accessToken,
+            refreshToken,
+            lastloginDate: new Date(),
+            streakCount,
+            longestCount: longestStreak,
+            loginMap: newLoginMap,
+        },
+        });
+
+        const AccessCookieOptions = {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        maxAge: 1000 * 60 * 15, // 15 minutes
+        domain: 'http://localhost:5173',
+        };
+
+        const RefreshCookieOptions = {
+        httpOnly: true,
+        sameSite: 'none',
+        secure: true,
+        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+        domain: 'http://localhost:5173',
+        };
+
+        res.cookie('accessToken', accessToken, AccessCookieOptions);
+        res.cookie('refreshToken', refreshToken, RefreshCookieOptions);
+
+        console.log(user);
+
+
+            res.status(200).json({
+                success:true,
+                message:"User loggedIn successfully",
+                user:{
+                    id:user.id,
+                    email:user.email,
+                    name:user.name,
+                    role:user.role,
+                    image:user.image,
+                    image: updatedUser.image,
+                    accessToken: user.accessToken,
+                    streakCount: updatedUser.streakCount,
+                    longestCount: updatedUser.longestCount,
+                }
+            })
+
+
+
+        }catch(error) {
+            console.error("Error creating a User",error)
+            res.status(500).json({
+                message:"Error login user"
             })
         }
-        const token =jwt.sign({id:user.id} ,process.env.JWT_SECRET,{
-            expiresIn:"7d",
-        })
-        res.cookie("jwt" , token, {
-            httpOnly:true,
-            sameSite:"strict",
-            secure:process.env.NODE_ENV !=="development",
-            maxAge : 1000*60*60*24*7,//7days
+    }
 
-        })
-        res.status(200).json({
-            success:true,
-            message:"User loggedIn successfully",
-            user:{
-                id:user.id,
-                email:user.email,
-                name:user.name,
-                role:user.role,
-                image:user.image,
+    export const refreshToken = async (req,res) =>{
+        try{
+            console.log(req.cookies);
+            const refreshToken = req.cookies?.refreshToken;
+
+        console.log("Refresh Token found", refreshToken ?'Yes':'No');
+            if(!refreshToken) {
+                return res.status(400).json({
+                    message:"Refreah Token not found",
+                    success:false,
+                })
+            };
+
+            const user = await db.user.findFirst({
+                where:{
+                    refreshToken,
+                },
+            });
+            if(!user){
+                return res.status(403).json({
+                    message:"Invalid refresh Token",
+                    success:false,
+                });
             }
-        })
+            const decodedData = jwt.verify(
+                refreshToken,
+                process.env.JWT_REFERSH_TOKEN_SECRET,
+            );
+            console.log(decodedData);
 
+            if(!decodedData){
+                return res.status(403).json({
+                message: 'Refersh Token Expired',
+                success:false,
+                });
+            };
 
+    const newAccessToken = generateAccessToken(user);
+    const newRefreshToken = generateRefreshToken(user);
 
-    }catch(error) {
-        console.error("Error creating a User",error)
-        res.status(500).json({
-            message:"Error login user"
-        })
+    await db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        accessToken: newAccessToken,
+        refreshToken: newRefreshToken,
+      },
+    });
+
+    const AccessCookieOptions = {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      maxAge: 1000 * 60 * 15, // 15 minutes
+      domain: 'http://localhost:5173',
+    };
+
+    const RefreshCookieOptions = {
+      httpOnly: true,
+      sameSite: 'none',
+      secure: true,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      domain: 'http://localhost:5173',
+    };
+
+    res.cookie('accessToken', newAccessToken, AccessCookieOptions);
+    res.cookie('refreshToken', newRefreshToken, RefreshCookieOptions);
+            res.status(200).json({
+                success: true,
+                message: "Token refreshed successfully",
+                user: {
+                    id: user.id,
+                    email: user.email,
+                    name: user.name,
+                    role: user.role,
+                    image: user.image,
+                    accessToken: user.accessToken,
+                    refreshToken: user.refreshToken,
+                }
+            });
+
+        }catch(error){
+            console.log("Error refreshing token ", error);
+            res.status(500).json({
+                message:"Error refreshing token",
+                success:false,
+            })
+        }
     }
-}
 
-export const logout = async (req , res ) => {
-    try{
-        res.clearCookie("jwt" ,{
-            httpOnly:true,
-            sameSite:"strict",
-            secure:process.env.NODE_ENV !=="development",
+    export const logout = async (req , res ) => {
+        try{
+            res.clearCookie('accessToken', {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            domain: '.codeleap.in',
+        });
+        res.clearCookie('refreshToken', {
+            httpOnly: true,
+            sameSite: 'none',
+            secure: true,
+            domain: '.codeleap.in',
+        });
+            res.status(200).json({
+                success:true,
+                message:"User Logged out successfully",
+            })
 
-        })
-        res.status(200).json({
-            success:true,
-            message:"User Logged out successfully",
-        })
 
 
+        }catch(error){
+            console.error("Error logging out User",error)
+            res.status(500).json({
+                message:"Error logging out user"
+            })
 
-    }catch(error){
-        console.error("Error logging out User",error)
-        res.status(500).json({
-            message:"Error logging out user"
-        })
-
+        }
     }
-}
 
-export const check = async (req , res ) => {
-    try{
-        res.status(200).json({
-            succes:true,
-            message:"User authenticated successfully",
-            user:req.user
-        })
+    export const check = async (req , res ) => {
+        try{
+            res.status(200).json({
+                succes:true,
+                message:"User authenticated successfully",
+                user:req.user
+            })
 
-    }catch(error){
-        console.error("Error checking user",error)
-        res.status(500).json({
-            message:"Error checking the user"
-        })
+        }catch(error){
+            console.error("Error checking user",error)
+            res.status(500).json({
+                message:"Error checking the user"
+            })
 
+        }
     }
-}
