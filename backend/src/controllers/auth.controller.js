@@ -1,9 +1,12 @@
     import bcrypt from "bcryptjs"
     import {db} from "../libs/db.js"
+    import dayjs from 'dayjs';
     import jwt from "jsonwebtoken";
     import { UserRole } from "../generated/prisma/index.js";
+    import crypto from "crypto"
 import { mailVerificationMailGenContent,sendEmail } from "../utils/verificationMail.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateToken.js";
+import { uploadRandomAvatar } from '../utils/avatar.js'
 
 
 
@@ -15,7 +18,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
         try{
             const existingUser =await db.user.findUnique({
                 where:{
-                    email
+                    email,
                 }
             })
             if(existingUser){
@@ -33,6 +36,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
                     name,
                     role:UserRole.USER,
                     verificationToken: token,
+                    
                 }
             })
 
@@ -45,12 +49,12 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
         ),
         });
 
-    const accessToken = generateAccessToken(user);
-        const refreshToken = generateRefreshToken(user);
-
-        await db.user.update({
+            const accessToken = generateAccessToken(newUser);
+            const refreshToken = generateRefreshToken(newUser);
+            
+            const avatar = await uploadRandomAvatar(newUser.id);        await db.user.update({
         where: {
-            id: user.id,
+            id: newUser.id,
         },
         data: {
             accessToken,
@@ -65,7 +69,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
         sameSite: 'none',
         secure: true,
         maxAge: 1000 * 60 * 15, // 15 minutes
-        domain: 'http://localhost:5173',
+        domain: 'localhost',
         };
 
         const RefreshCookieOptions = {
@@ -73,7 +77,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
         sameSite: 'none',
         secure: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        domain: 'http://localhost:5173',
+        domain: 'localhost',
         };
 
         res.cookie('accessToken', accessToken, AccessCookieOptions);
@@ -86,11 +90,11 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
                 message:"User created successfully",
                 user:{
                     id:newUser.id,
-                    emil:newUser.email,
+                    email:newUser.email,
                     name:newUser.name,
                     role:newUser.role,
                     image:newUser.image,
-                    accessToken: user.accessToken,
+                    accessToken: accessToken,
                 }
             })
 
@@ -101,7 +105,8 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
         
             console.error("Error creating a User",error)
             res.status(500).json({
-                message:"Error creating a user"
+                message:"Error creating a user",
+                success:false,
             })
 
         }
@@ -130,7 +135,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
             };
 
             console.log(user.id);
-            await db.user.user.update({
+            await db.user.update({
                 where:{
                     id:user.id,
                 },
@@ -164,21 +169,23 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
             })
             if(!user){
                 return res.status(401).json({
-                    message:"User not Found"
+                    message:"User not Found",
+                    success:false,
                 })
             }
             const isMatch = await bcrypt.compare(password, user.password);
 
             if(!isMatch){
                 return res.status(401).json({
-            error:"Invalid credentials",
+                    message: "Invalid credentials",
+                    success: false
                 })
             }
 
             if (!user.isVerified){
-                res.status(401).json({
-                    message:'User is not verified',
-                    success:false,
+                return res.status(401).json({
+                    message: 'User is not verified',
+                    success: false
                 })        
             }
 
@@ -235,7 +242,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
         sameSite: 'none',
         secure: true,
         maxAge: 1000 * 60 * 15, // 15 minutes
-        domain: 'http://localhost:5173',
+        domain: 'localhost',
         };
 
         const RefreshCookieOptions = {
@@ -243,7 +250,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
         sameSite: 'none',
         secure: true,
         maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        domain: 'http://localhost:5173',
+        domain: 'localhost',
         };
 
         res.cookie('accessToken', accessToken, AccessCookieOptions);
@@ -252,7 +259,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
         console.log(user);
 
 
-            res.status(200).json({
+           return res.status(200).json({
                 success:true,
                 message:"User loggedIn successfully",
                 user:{
@@ -262,7 +269,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
                     role:user.role,
                     image:user.image,
                     image: updatedUser.image,
-                    accessToken: user.accessToken,
+                    accessToken,
                     streakCount: updatedUser.streakCount,
                     longestCount: updatedUser.longestCount,
                 }
@@ -272,8 +279,74 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
 
         }catch(error) {
             console.error("Error creating a User",error)
-            res.status(500).json({
+          return  res.status(500).json({
                 message:"Error login user"
+            })
+        }
+    }
+
+    export const googleLogin = async (req,res) =>{
+        const user = req.user
+        try{
+              console.log('=== GOOGLE LOGIN DEBUG ===');
+             console.log('User from req.user:', user);
+              console.log('Session ID:', req.sessionID);
+             console.log('Session before:', req.session);
+
+             if(!user){
+                res.status(401).json({
+                    message: "User not found",
+                    success: false,
+                })
+             };
+             const accessToken = generateAccessToken(user);
+             const refreshToken = generateRefreshToken(user);
+await db.user.update({
+      where: {
+        id: user.id,
+      },
+      data: {
+        accessToken,
+        refreshToken,
+      },
+    });
+
+    req.session.userId = user.id;
+    req.session.isLoggedIn = true;
+
+    const isProduction = process.env.NODE_ENV === 'production';
+
+    const AccessCookieOptions = {
+      httpOnly: true,
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction,
+      maxAge: 1000 * 60 * 15, // 15 minutes
+      domain: 'localhost',
+    };
+
+    const RefreshCookieOptions = {
+      httpOnly: true,
+      sameSite: isProduction ? 'none' : 'lax',
+      secure: isProduction,
+      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
+      domain: 'localhost',
+    };
+
+    res.cookie('accessToken', accessToken, AccessCookieOptions);
+    res.cookie('refreshToken', refreshToken, RefreshCookieOptions);
+
+    console.log('Session after:', req.session);
+    console.log(
+      'Cookies set, redirecting to:',
+      `${process.env.FONTEND_URL}/problems`,
+    );
+
+    res.redirect(`${process.env.FONTEND_URL}/problems`);
+
+        }catch(error){
+            return res.status(400).json({
+                message:'Internal error occured whihle login',
+                success: false,
             })
         }
     }
@@ -333,7 +406,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
       sameSite: 'none',
       secure: true,
       maxAge: 1000 * 60 * 15, // 15 minutes
-      domain: 'http://localhost:5173',
+      domain: 'localhost',
     };
 
     const RefreshCookieOptions = {
@@ -341,7 +414,7 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
       sameSite: 'none',
       secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      domain: 'http://localhost:5173',
+      domain: 'localhost',
     };
 
     res.cookie('accessToken', newAccessToken, AccessCookieOptions);
@@ -375,13 +448,13 @@ import { generateAccessToken, generateRefreshToken } from "../utils/generateToke
             httpOnly: true,
             sameSite: 'none',
             secure: true,
-            domain: '.codeleap.in',
+            domain: 'localhostn',
         });
         res.clearCookie('refreshToken', {
             httpOnly: true,
             sameSite: 'none',
             secure: true,
-            domain: '.codeleap.in',
+            domain: 'localhost',
         });
             res.status(200).json({
                 success:true,

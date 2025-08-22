@@ -1,7 +1,7 @@
 import React , {useState} from 'react'
 import {useForm} from "react-hook-form"
 import {zodResolver} from "@hookform/resolvers/zod"
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom' // Add useNavigate
 import {
   Code,
   Eye,
@@ -13,6 +13,7 @@ import {
 
 import {z} from "zod";
 import { useAuthStore } from "../store/useAuthStore";
+import google from "./assets/google.svg";
 
 const SignUpSchema = z.object({
   email:z.string().email("Enter a valid email"),
@@ -23,6 +24,7 @@ const SignUpSchema = z.object({
 const SignUpPage = () => {
 
   const [showPassword , setShowPassword] = useState(false);
+  const navigate = useNavigate(); // Add this
 
   const {signup,isSigninUp} = useAuthStore()
 
@@ -38,6 +40,8 @@ const SignUpPage = () => {
    try {
     await signup(data)
     console.log("signup data" , data)
+    // Redirect to home page after successful signup
+    navigate('/');
    } catch (error) {
      console.error("SignUp failed:", error);
    }
@@ -150,10 +154,26 @@ const SignUpPage = () => {
               Loading...
             </>
           ) : (
-            "Sign in"
+            "Sign Up"
           )}
         </button>
+        <button
+              type="button"
+              onClick={() =>
+                (window.location.href =
+                  "http://localhost:8080/oauth2/redirect/google")
+              }
+              className="w-full py-2 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-600/80 transition flex items-center justify-center gap-2 cursor-pointer"
+            >
+              <img
+                src={google}
+                alt="Google logo"
+                className="w-6 h-6 bg-white"
+              />
+              Continue with Google
+            </button>
       </form>
+
 
       {/* Footer */}
       <div className="text-center">
