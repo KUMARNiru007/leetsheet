@@ -182,12 +182,6 @@ import { uploadRandomAvatar } from '../utils/avatar.js'
                 })
             }
 
-            if (!user.isVerified){
-                return res.status(401).json({
-                    message: 'User is not verified',
-                    success: false
-                })        
-            }
 
             const today = dayjs().startOf('day');
 
