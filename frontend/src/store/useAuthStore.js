@@ -9,23 +9,28 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: false,
 
   checkAuth: async () => {
-    const token = localStorage.getItem("token");
-    if (!token) {
-      // No user logged in, exit early
-      set({ authUser: null });
-      return;
-    }
-
     set({ isCheckingAuth: true });
     try {
-      const response = await axiosInstance.get("/auth/check", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const response = await axiosInstance.get("/auth/check");
       set({ authUser: response.data.user });
+      set({ isLoggedOut: false });
       console.log("Auth user: ", response.data);
     } catch (error) {
       console.log("Error checking auth:", error);
-      set({ authUser: null });
+      if (error.response?.status === 401) {
+        // Token expired, try to refresh
+        try {
+          await axiosInstance.get("/auth/refreshTokens");
+          const newResponse = await axiosInstance.get("/auth/check");
+          set({ authUser: newResponse.data.user });
+          set({ isLoggedOut: false });
+        } catch (refreshError) {
+          console.log("Error refreshing token:", refreshError);
+          set({ authUser: null });
+        }
+      } else {
+        set({ authUser: null });
+      }
     } finally {
       set({ isCheckingAuth: false });
     }
@@ -36,6 +41,9 @@ export const useAuthStore = create((set) => ({
     try {
       const response = await axiosInstance.post("/auth/register", data);
       set({ authUser: response.data.user });
+       set({isLoggedOut : false})
+
+            set({token : response.data.user.tokens});
       toast.success(response.data.message);
     } catch (error) {
       console.log("Error while signing up: ", error);
@@ -47,14 +55,14 @@ export const useAuthStore = create((set) => ({
 
   login: async (data) => {
     set({ isLoggingIn: true });
-    console.log(data);
     try {
       const response = await axiosInstance.post("/auth/login", data);
       set({ authUser: response.data.user });
+      set({ isLoggedOut: false });
       toast.success(response.data.message);
     } catch (error) {
       console.log("Error while logging in user: ", error);
-      toast.error("Error while logging in user");
+      toast.error(error.response?.data?.message || "Error while logging in user");
     } finally {
       set({ isLoggingIn: false });
     }
@@ -64,14 +72,14 @@ export const useAuthStore = create((set) => ({
     try {
       await axiosInstance.post("/auth/logout");
       set({ authUser: null });
-      localStorage.removeItem("token"); // Remove token
-      toast.success("User logged out successfully");
+      set({ isLoggedOut: true });
+      toast.success("Logout successful");
     } catch (error) {
       console.log("Error while logging out user: ", error);
       // Even if the request fails, we should still clear the local state
       set({ authUser: null });
-      localStorage.removeItem("token");
-      toast.success("Logged out successfully");
+      set({ isLoggedOut: true });
+      toast.error("Error while logging out");
     }
   },
 

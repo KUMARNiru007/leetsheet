@@ -14,18 +14,17 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="navbar sticky top-0 z-50 w-4/5 mx-auto py-5 bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-gray-200/10 rounded-2xl">
-  <div className="navbar-container max-w-6xl mx-auto flex justify-between items-center px-6">
+    <nav className="sticky top-2 z-60 w-4/5 mx-auto py-5 bg-black/15 shadow-lg shadow-neutral-600/5 backdrop-blur-lg border border-gray-200/10 rounded-2xl">
+  <div className="max-w-6xl mx-auto flex justify-between items-center px-6">
     
-    {/* Brand (Left) */}
     <Link to="/" className="flex items-center gap-3">
       <img
-        src="/leetlab.svg"
+        src="/leetsheet.svg"
         className="h-12 w-12 bg-primary/20 text-primary border-none px-2 py-2 rounded-full"
         alt="Logo"
       />
       <span className="text-xl md:text-2xl font-bold tracking-tight text-white hidden md:block">
-        LeetLab
+        LeetSheet
       </span>
     </Link>
 
@@ -41,7 +40,7 @@ const Navbar = () => {
           className="navbar-link dropdown-toggle"
           onClick={() => toggleDropdown("sheets")}
         >
-          Sheets ▼
+          Sheets <i class="ri-arrow-down-s-line"></i>
         </button>
         {openDropdown === "sheets" && (
           <div className="dropdown-menu absolute top-full left-0 mt-2 bg-base-100 rounded-xl shadow-lg flex flex-col">
@@ -61,7 +60,7 @@ const Navbar = () => {
           className="navbar-link dropdown-toggle"
           onClick={() => toggleDropdown("resources")}
         >
-          Resources ▼
+          Resources <i class="ri-arrow-down-s-line"></i>
         </button>
         {openDropdown === "resources" && (
           <div className="dropdown-menu absolute top-full left-0 mt-2 bg-base-100 rounded-xl shadow-lg flex flex-col space-y-1">
