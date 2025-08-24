@@ -16,7 +16,7 @@ import {
 import { useAuthStore } from "../store/useAuthStore";
 import { useProblemStore } from "../store/useProblemStore.js";
 import { useSubmissionStore } from "../store/useSubmissionStore.js";
-import LoginHeatmap from "../componenets/LoginHeatmap.jsx";
+import LoginHeatmap from "../components/LoginHeatmap.jsx";
 import profile from "./assets/avatar1.webp";
 
 import {

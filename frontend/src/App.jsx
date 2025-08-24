@@ -15,6 +15,8 @@ import AdminRoute from "./components/AdminRoute.jsx";
 import ProblemPage from "./pages/ProblemPage.jsx";
 import AllProblems from "./pages/Problems.jsx"
 import Playlists from "./pages/PlaylistsPage.jsx";
+import PlaylistDetailpage from "./pages/PlaylistDetailpage.jsx";
+import Profile from "./pages/Profile.jsx";
 import FAQ from "./pages/FAQ.jsx"
 import About from "./pages/About.jsx"
 import Pricing from "./pages/Pricing.jsx"
@@ -52,13 +54,16 @@ const App = () => {
             <Route element={<Layout />}>
               <Route path="/problems" element={<AllProblems />} />
               <Route path="/" element={<Home />} />
+              <Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/login" />} />
+               <Route path="/pricing" element={<Pricing/>} />
+               <Route path="/about" element={<About/>} />
+            <Route path="/faq" element={<FAQ/>} />
             </Route>
 
             <Route path="/login" element={!authUser ?<LoginPage/> : <Navigate to={"/"}/>} />
             <Route path="/signup" element={<SignUpPage/>} />
-            <Route path="/about" element={<About/>} />
-            <Route path="/faq" element={<FAQ/>} />
-            <Route path="/pricing" element={<Pricing/>} />
+            
+           
 
             <Route path="/problem/:id" element={authUser ? <ProblemPage/> : <Navigate to={"/login"}/>}
             />
@@ -68,9 +73,15 @@ const App = () => {
             path="/add-problem"
             element={authUser ? <AddProblem /> : <Navigate to="/" />}/>
             </Route>
-           <Route
-             path="/companies-sheets"
-            element={authUser ? <Playlists /> : <Navigate to="/" />}>          
+            <Route element={<Layout />}>
+              <Route
+                path="/playlist"
+                element={authUser ? <Playlists /> : <Navigate to="/" />}
+              />
+              <Route
+                path="/playlist/:id"
+                element={authUser ? <PlaylistDetailpage /> : <Navigate to="/" />}
+              />
             </Route>
 
             
