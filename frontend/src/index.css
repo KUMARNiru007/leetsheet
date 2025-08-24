@@ -1,7 +1,527 @@
 @import "tailwindcss";
 @plugin "daisyui";
 
+/* LeetCode Dark Mode Color Variables */
+:root {
+  /* Primary Colors - LeetCode Orange */
+  --leetsheet-orange: #ffa116;
+  --leetsheet-orange-hover: #ff8c00;
+  --leetsheet-orange-light: #ffb74d;
+  
+  /* Background Colors */
+  --leetsheet-bg-primary: #1a1a1a;
+  --leetsheet-bg-secondary: #2d2d2d;
+  --leetsheet-bg-tertiary: #3c3c3c;
+  --leetsheet-bg-elevated: #404040;
+  --leetsheet-bg-overlay: rgba(0, 0, 0, 0.8);
+  
+  /* Text Colors */
+  --leetsheet-text-primary: #ffffff;
+  --leetsheet-text-secondary: #b3b3b3;
+  --leetsheet-text-muted: #8c8c8c;
+  --leetsheet-text-disabled: #666666;
+  
+  /* Border Colors */
+  --leetsheet-border-primary: #404040;
+  --leetsheet-border-secondary: #525252;
+  --leetsheet-border-accent: #ffa116;
+  
+  /* Status Colors */
+  --leetsheet-success: #00b8a3;
+  --leetsheet-error: #ff4d4f;
+  --leetsheet-warning: #faad14;
+  --leetsheet-info: #1890ff;
+  
+  /* Code Editor Colors */
+  --leetsheet-code-bg: #1e1e1e;
+  --leetsheet-code-text: #d4d4d4;
+  --leetsheet-code-comment: #6a9955;
+  --leetsheet-code-keyword: #569cd6;
+  --leetsheet-code-string: #ce9178;
+  --leetsheet-code-number: #b5cea8;
+  
+  /* Button Colors */
+  --leetsheet-btn-primary: #ffa116;
+  --leetsheet-btn-primary-hover: #ff8c00;
+  --leetsheet-btn-secondary: #404040;
+  --leetsheet-btn-secondary-hover: #525252;
+  --leetsheet-btn-danger: #ff4d4f;
+  --leetsheet-btn-danger-hover: #ff7875;
+  
+  /* Font Weights */
+  --font-weight-light: 300;
+  --font-weight-normal: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+  
+  /* Font Sizes */
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 1.875rem;
+  --font-size-h1: 2.25rem;
+  --font-size-h2: 1.875rem;
+  
+  /* Font Families */
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
+  --font-mono: 'SF Mono', Monaco, 'Cascadia Code', 'Roboto Mono', Consolas, 'Courier New', monospace;
+}
 
+/* Global Dark Theme */
+body {
+  background-color: var(--leetsheet-bg-primary);
+  color: var(--leetsheet-text-primary);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+}
+
+/* LeetCode-style Button Classes */
+.btn-leetsheet-primary {
+  background-color: var(--leetsheet-btn-primary);
+  color: var(--leetsheet-bg-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-leetsheet-primary:hover {
+  background-color: var(--leetsheet-btn-primary-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(255, 161, 22, 0.3);
+}
+
+.btn-leetsheet-secondary {
+  background-color: var(--leetsheet-btn-secondary);
+  color: var(--leetsheet-text-primary);
+  border: 1px solid var(--leetsheet-border-primary);
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-leetsheet-secondary:hover {
+  background-color: var(--leetsheet-btn-secondary-hover);
+  border-color: var(--leetsheet-border-secondary);
+  transform: translateY(-1px);
+}
+
+.btn-leetsheet-danger {
+  background-color: var(--leetsheet-btn-danger);
+  color: var(--leetsheet-text-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: var(--font-weight-medium);
+  font-size: var(--font-size-sm);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.btn-leetsheet-danger:hover {
+  background-color: var(--leetsheet-btn-danger-hover);
+  transform: translateY(-1px);
+}
+
+/* LeetCode-style Input Classes */
+.input-leetsheet {
+  background-color: var(--leetsheet-bg-secondary);
+  border: 1px solid var(--leetsheet-border-primary);
+  color: var(--leetsheet-text-primary);
+  padding: 0.75rem 1rem;
+  border-radius: 0.375rem;
+  font-size: var(--font-size-sm);
+  transition: all 0.2s ease-in-out;
+  width: 100%;
+}
+
+.input-leetsheet:focus {
+  outline: none;
+  border-color: var(--leetsheet-border-accent);
+  box-shadow: 0 0 0 2px rgba(255, 161, 22, 0.2);
+}
+
+.input-leetsheet::placeholder {
+  color: var(--leetsheet-text-muted);
+}
+
+/* LeetCode-style Card Classes */
+.card-leetsheet {
+  background-color: var(--leetsheet-bg-secondary);
+  border: 1px solid var(--leetsheet-border-primary);
+  border-radius: 0.5rem;
+  padding: 1.5rem;
+  transition: all 0.2s ease-in-out;
+}
+
+.card-leetsheet:hover {
+  border-color: var(--leetsheet-border-secondary);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+}
+
+/* LeetCode-style Navigation */
+.nav-leetsheet {
+  background-color: var(--leetsheet-bg-secondary);
+  border-bottom: 1px solid var(--leetsheet-border-primary);
+  backdrop-filter: blur(10px);
+}
+
+.nav-link-leetsheet {
+  color: var(--leetsheet-text-secondary);
+  transition: color 0.2s ease-in-out;
+  font-weight: var(--font-weight-medium);
+}
+
+.nav-link-leetsheet:hover {
+  color: var(--leetsheet-orange);
+}
+
+.nav-link-leetsheet.active {
+  color: var(--leetsheet-orange);
+}
+
+/* LeetCode-style Code Block */
+.code-block-leetsheet {
+  background-color: var(--leetsheet-code-bg);
+  color: var(--leetsheet-code-text);
+  border: 1px solid var(--leetsheet-border-primary);
+  border-radius: 0.375rem;
+  padding: 1rem;
+  font-family: var(--font-mono);
+  font-size: var(--font-size-sm);
+  line-height: 1.5;
+  overflow-x: auto;
+}
+
+/* LeetCode-style Table */
+.table-leetsheet {
+  background-color: var(--leetsheet-bg-secondary);
+  border: 1px solid var(--leetsheet-border-primary);
+  border-radius: 0.5rem;
+  overflow: hidden;
+}
+
+.table-leetsheet th {
+  background-color: var(--leetsheet-bg-tertiary);
+  color: var(--leetsheet-text-primary);
+  font-weight: var(--font-weight-semibold);
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--leetsheet-border-primary);
+}
+
+.table-leetsheet td {
+  padding: 1rem;
+  border-bottom: 1px solid var(--leetsheet-border-primary);
+  color: var(--leetsheet-text-secondary);
+}
+
+.table-leetsheet tr:hover {
+  background-color: var(--leetsheet-bg-tertiary);
+}
+
+/* LeetCode-style Badge */
+.badge-leetsheet {
+  background-color: var(--leetsheet-bg-tertiary);
+  color: var(--leetsheet-text-secondary);
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-medium);
+  border: 1px solid var(--leetsheet-border-primary);
+}
+
+.badge-leetsheet.success {
+  background-color: rgba(0, 184, 163, 0.1);
+  color: var(--leetsheet-success);
+  border-color: var(--leetsheet-success);
+}
+
+.badge-leetsheet.error {
+  background-color: rgba(255, 77, 79, 0.1);
+  color: var(--leetsheet-error);
+  border-color: var(--leetsheet-error);
+}
+
+.badge-leetsheet.warning {
+  background-color: rgba(250, 173, 20, 0.1);
+  color: var(--leetsheet-warning);
+  border-color: var(--leetsheet-warning);
+}
+
+/* === Scrollbar === */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--leetsheet-bg-primary);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--leetsheet-border-primary);
+  border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--leetsheet-border-secondary);
+}
+
+/* === Footer === */
+.footer {
+  background-color: var(--leetsheet-bg-secondary);
+  border-top: 1px solid var(--leetsheet-border-primary);
+  color: var(--leetsheet-text-primary);
+  padding: 3rem 0 1rem;
+  position: relative;
+  overflow: hidden;
+}
+
+.footer-top {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.footer-logo {
+  font-size: 2rem;
+  font-weight: var(--font-weight-bold);
+  margin-bottom: 1rem;
+}
+
+.logo-leet {
+  color: var(--leetsheet-orange);
+}
+
+.logo-labs {
+  color: var(--leetsheet-text-primary);
+}
+
+.footer-tagline {
+  color: var(--leetsheet-text-secondary);
+  font-size: var(--font-size-lg);
+  max-width: 600px;
+  margin: 0 auto;
+}
+
+.footer-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  margin-bottom: 3rem;
+}
+
+.footer-section h4 {
+  color: var(--leetsheet-text-primary);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-semibold);
+  margin-bottom: 1rem;
+}
+
+.footer-description {
+  color: var(--leetsheet-text-secondary);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.footer-links {
+  list-style: none;
+  padding: 0;
+}
+
+.footer-links li {
+  margin-bottom: 0.5rem;
+}
+
+.footer-link {
+  color: var(--leetsheet-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.footer-link:hover {
+  color: var(--leetsheet-orange);
+}
+
+.contact-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.contact-item {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--leetsheet-text-secondary);
+}
+
+.contact-icon {
+  color: var(--leetsheet-orange);
+  font-size: 1.2rem;
+}
+
+.newsletter-form {
+  display: flex;
+  gap: 0.5rem;
+  margin-top: 1rem;
+}
+
+.newsletter-input {
+  flex: 1;
+  padding: 0.5rem 1rem;
+  border: 1px solid var(--leetsheet-border-primary);
+  border-radius: 0.375rem;
+  background-color: var(--leetsheet-bg-primary);
+  color: var(--leetsheet-text-primary);
+}
+
+.newsletter-input:focus {
+  outline: none;
+  border-color: var(--leetsheet-border-accent);
+  box-shadow: 0 0 0 2px rgba(255, 161, 22, 0.2);
+}
+
+.newsletter-btn {
+  background-color: var(--leetsheet-btn-primary);
+  color: var(--leetsheet-bg-primary);
+  border: none;
+  padding: 0.5rem 1rem;
+  border-radius: 0.375rem;
+  font-weight: var(--font-weight-medium);
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+}
+
+.newsletter-btn:hover {
+  background-color: var(--leetsheet-btn-primary-hover);
+  transform: translateY(-1px);
+}
+
+.footer-bottom {
+  border-top: 1px solid var(--leetsheet-border-primary);
+  padding-top: 2rem;
+}
+
+.footer-bottom-content {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.social-media {
+  display: flex;
+  gap: 1rem;
+}
+
+.social-icon {
+  color: var(--leetsheet-text-secondary);
+  font-size: 1.5rem;
+  transition: color 0.2s ease-in-out;
+}
+
+.social-icon:hover {
+  color: var(--leetsheet-orange);
+}
+
+.footer-legal {
+  display: flex;
+  align-items: center;
+  gap: 2rem;
+  flex-wrap: wrap;
+}
+
+.footer-copyright {
+  color: var(--leetsheet-text-secondary);
+}
+
+.legal-links {
+  display: flex;
+  gap: 1rem;
+}
+
+.legal-link {
+  color: var(--leetsheet-text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease-in-out;
+}
+
+.legal-link:hover {
+  color: var(--leetsheet-orange);
+}
+
+.footer-watermark {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 8rem;
+  font-weight: var(--font-weight-bold);
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 0;
+}
+
+.watermark-leet {
+  color: var(--leetsheet-orange);
+}
+
+.watermark-labs {
+  color: var(--leetsheet-text-primary);
+}
+
+@media (max-width: 768px) {
+  .footer-container {
+    grid-template-columns: 1fr;
+    text-align: center;
+  }
+  
+  .footer-bottom-content {
+    flex-direction: column;
+    text-align: center;
+  }
+  
+  .footer-legal {
+    flex-direction: column;
+    gap: 1rem;
+  }
+  
+  .newsletter-form {
+    flex-direction: column;
+  }
+}
+
+/* Animations */
 @keyframes blink {
     0%,
     100% {

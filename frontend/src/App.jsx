@@ -37,6 +37,14 @@ const App = () => {
   }
 
   return (
+<div className="min-h-screen w-full relative bg-[#1a1a1a]">
+  {/* LeetCode Dark Theme Background */}
+  <div
+    className="absolute inset-0 z-0"
+    style={{
+      background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
+    }}
+  />
       <div className="relative z-10">
         <div className="flex flex-col items-center justify-start">
           <Toaster/>
@@ -68,6 +76,7 @@ const App = () => {
             
           </Routes>
         </div>
+      </div>
       </div>
   );
 };

@@ -49,17 +49,17 @@ const SignUpPage = () => {
 
 
   return (
-   <div className='h-screen grid lg:grid-cols-2'>
+   <div className='h-screen grid lg:grid-cols-2 bg-[#1a1a1a]'>
   <div className="flex flex-col justify-center items-center p-6 sm:p-12">
     <div className="w-full max-w-md space-y-8">
       {/* Logo */}
       <div className="text-center mb-8">
         <div className="flex flex-col items-center gap-2 group">
-          <div className="w-12 h-12 rounded-xl bg-[var(--color-secondary-bg)] flex items-center justify-center group-hover:bg-[var(--color-secondary-hover-bg)] transition-colors">
-            <Code className="w-6 h-6 text-[var(--color-accent)]" />
+          <div className="w-12 h-12 rounded-xl bg-[#ffa116]/10 flex items-center justify-center group-hover:bg-[#ffa116]/20 transition-colors">
+            <Code className="w-6 h-6 text-[#ffa116]" />
           </div>
-          <h1 className="text-4xl font-bold mt-2">Welcome</h1>
-          <p className="text-[#9BA8C7]">Sign Up to your account</p>
+          <h1 className="text-4xl font-bold mt-2 text-white">Welcome</h1>
+          <p className="text-[#b3b3b3]">Sign Up to your account</p>
         </div>
       </div>
 
@@ -68,63 +68,63 @@ const SignUpPage = () => {
         {/* Name */}
         <div className="form-control">
           <label className="label">
-            <span className="label-text font-medium text-[#FFFFFF]">Name</span>
+            <span className="label-text font-medium text-white">Name</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Code className="h-5 w-5 text-[#5F6E8B]" />
+              <Code className="h-5 w-5 text-[#8c8c8c]" />
             </div>
             <input
               type="text"
               {...register("name")}
-              className={`input bg-[#0F172A] border-[var(--color-text-muted)] text-white w-full pl-10 ${
-                errors.name ? "input-error" : ""
+              className={`input-leetsheet w-full pl-10 ${
+                errors.name ? "border-[#ff4d4f]" : ""
               }`}
               placeholder="John Doe"
             />
           </div>
           {errors.name && (
-            <p className="text-red-400 text-sm mt-1">{errors.name.message}</p>
+            <p className="text-[#ff4d4f] text-sm mt-1">{errors.name.message}</p>
           )}
         </div>
 
         {/* Email */}
         <div className="form-control">
           <label className="label">
-            <span className="label-text font-medium text-[#FFFFFF]">Email</span>
+            <span className="label-text font-medium text-white">Email</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Mail className="h-5 w-5 text-[#5F6E8B]" />
+              <Mail className="h-5 w-5 text-[#8c8c8c]" />
             </div>
             <input
               type="email"
               {...register("email")}
-              className={`input bg-[#0F172A] border-[var(--color-text-muted)] text-white w-full pl-10 ${
-                errors.email ? "input-error" : ""
+              className={`input-leetsheet w-full pl-10 ${
+                errors.email ? "border-[#ff4d4f]" : ""
               }`}
               placeholder="you@example.com"
             />
           </div>
           {errors.email && (
-            <p className="text-red-400 text-sm mt-1">{errors.email.message}</p>
+            <p className="text-[#ff4d4f] text-sm mt-1">{errors.email.message}</p>
           )}
         </div>
 
         {/* Password */}
         <div className="form-control">
           <label className="label">
-            <span className="label-text font-medium text-[#FFFFFF]">Password</span>
+            <span className="label-text font-medium text-white">Password</span>
           </label>
           <div className="relative">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <Lock className="h-5 w-5 text-[#5F6E8B]" />
+              <Lock className="h-5 w-5 text-[#8c8c8c]" />
             </div>
             <input
               type={showPassword ? "text" : "password"}
               {...register("password")}
-              className={`input bg-[#0F172A] border-[var(--color-text-muted)] text-white w-full pl-10 ${
-                errors.password ? "input-error" : ""
+              className={`input-leetsheet w-full pl-10 ${
+                errors.password ? "border-[#ff4d4f]" : ""
               }`}
               placeholder="••••••••"
             />
@@ -132,20 +132,20 @@ const SignUpPage = () => {
               onClick={() => setShowPassword(!showPassword)}
             >
               {showPassword ? (
-                <EyeOff className="h-5 w-5 text-[#5F6E8B]" />
+                <EyeOff className="h-5 w-5 text-[#8c8c8c]" />
               ) : (
-                <Eye className="h-5 w-5 text-[#5F6E8B]" />
+                <Eye className="h-5 w-5 text-[#8c8c8c]" />
               )}
             </button>
           </div>
           {errors.password && (
-            <p className="text-red-400 text-sm mt-1">{errors.password.message}</p>
+            <p className="text-[#ff4d4f] text-sm mt-1">{errors.password.message}</p>
           )}
         </div>
 
         {/* Submit */}
         <button type="submit"
-          className="w-full bg-[var(--color-accent)] text-white py-2 rounded-md font-medium hover:bg-[var(--color-accent-hover)]"
+          className="btn-leetsheet-primary w-full"
           disabled={isSigninUp}
         >
           {isSigninUp ? (
@@ -163,7 +163,7 @@ const SignUpPage = () => {
                 (window.location.href =
                   "http://localhost:8080/oauth2/redirect/google")
               }
-              className="w-full py-2 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-600/80 transition flex items-center justify-center gap-2 cursor-pointer"
+              className="w-full py-2 rounded-lg font-semibold text-white bg-[#4285f4] hover:bg-[#3367d6] transition flex items-center justify-center gap-2 cursor-pointer"
             >
               <img
                 src={google}
@@ -177,9 +177,9 @@ const SignUpPage = () => {
 
       {/* Footer */}
       <div className="text-center">
-        <p className="text-[#9BA8C7]">
+        <p className="text-[#b3b3b3]">
           Already have an account?{" "}
-          <Link to="/login" className="text-[var(--color-accent)] hover:text-[var(--color-accent-border)]">
+          <Link to="/login" className="text-[#ffa116] hover:text-[#ff8c00] transition-colors">
             Login
           </Link>
         </p>
