@@ -438,21 +438,35 @@ await db.user.update({
 
     export const logout = async (req , res ) => {
         try{
+            const user = req.user;
+            if (user) {
+                // Clear tokens in database
+                await db.user.update({
+                    where: { id: user.id },
+                    data: {
+                        accessToken: null,
+                        refreshToken: null
+                    }
+                });
+            }
+
+            // Clear cookies
             res.clearCookie('accessToken', {
-            httpOnly: true,
-            sameSite: 'none',
-            secure: true,
-            domain: 'localhostn',
-        });
-        res.clearCookie('refreshToken', {
-            httpOnly: true,
-            sameSite: 'none',
-            secure: true,
-            domain: 'localhost',
-        });
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+                domain: 'localhost',
+            });
+            res.clearCookie('refreshToken', {
+                httpOnly: true,
+                sameSite: 'none',
+                secure: true,
+                domain: 'localhost',
+            });
+            
             res.status(200).json({
-                success:true,
-                message:"User Logged out successfully",
+                success: true,
+                message: "User Logged out successfully",
             })
 
 

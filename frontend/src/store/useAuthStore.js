@@ -9,7 +9,11 @@ export const useAuthStore = create((set) => ({
   isCheckingAuth: false,
 
   checkAuth: async () => {
-    set({ isCheckingAuth: true });
+    let isLoggedOut;
+    set((state) => {
+      isLoggedOut = state.isLoggedOut;
+      return { isCheckingAuth: true };
+    });
     try {
       const response = await axiosInstance.get("/auth/check");
       set({ authUser: response.data.user });
@@ -17,8 +21,8 @@ export const useAuthStore = create((set) => ({
       console.log("Auth user: ", response.data);
     } catch (error) {
       console.log("Error checking auth:", error);
-      if (error.response?.status === 401) {
-        // Token expired, try to refresh
+      if (error.response?.status === 401 && !isLoggedOut) {
+        // Only try to refresh if we haven't explicitly logged out
         try {
           await axiosInstance.get("/auth/refreshTokens");
           const newResponse = await axiosInstance.get("/auth/check");
