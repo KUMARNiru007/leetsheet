@@ -14,7 +14,7 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-60 w-full mx-auto py-2.5 nav-leetsheet shadow-xl shadow-black/20 backdrop-blur-lg border border-[var(--leetsheet-border-primary)] rounded-b-2xl">
+    <nav className="sticky top-3 z-60 w-full mx-auto py-1 nav-leetsheet shadow-xl shadow-black/20 backdrop-blur-lg border border-[var(--leetsheet-border-primary)] rounded-2xl">
       <div className="max-w-6xl mx-auto flex justify-between items-center px-6">
         
         {/* Logo (Left) */}
@@ -122,7 +122,7 @@ const Navbar = () => {
               className="flex items-center gap-2 p-2 rounded-full hover:bg-[var(--leetsheet-bg-tertiary)] transition-colors duration-200"
               onClick={() => toggleDropdown("user")}
             >
-              <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[var(--leetsheet-border-primary)]">
+              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[var(--leetsheet-border-primary)]">
                 <img
                   src={
                     authUser.image ||
@@ -135,9 +135,9 @@ const Navbar = () => {
             </button>
             {openDropdown === "user" && (
               
-              <div className="dropdown-menu absolute top-full right-0 mt-3 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[220px] py-2 z-50">
-                <div className="px-4 py-3">
-                  <p className="flex items-center hover:bg-[var(--leetsheet-bg-tertiary)] px-3 py-2 text-[var(--leetsheet-text-primary)] font-semibold text-sm rounded-md cursor-pointer">
+              <div className="dropdown-menu absolute top-full right-0 mt-2 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[220px] py-2 z-50">
+                <div className="">
+                  <p className="flex items-center hover:bg-[var(--leetsheet-bg-tertiary)] px-3 py-2 text-[var(--leetsheet-text-primary)] font-semibold text-sm  cursor-pointer">
                  {authUser.name}</p>
 
                 </div>
@@ -160,11 +160,11 @@ const Navbar = () => {
                   </Link>
                 )}
                 <div className="mt-1 pt-1">
-  <LogoutButton className="dropdown-item flex items-center gap-3 w-full justify-start">
-    <LogOut className="w-4 h-4" />
-    Logout
-  </LogoutButton>
-</div>
+         <LogoutButton className="dropdown-item flex items-center gap-3 w-full justify-start">
+          <LogOut className="w-4 h-4" />
+          Logout
+          </LogoutButton>
+         </div>
               </div>
             )}
           </div>
