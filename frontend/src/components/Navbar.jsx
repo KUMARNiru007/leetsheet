@@ -14,17 +14,17 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-0 z-60 w-full mx-auto py-2.5 bg-gray-900/95 shadow-xl shadow-black/20 backdrop-blur-lg border border-gray-700/50 rounded-b-2xl">
+    <nav className="sticky top-0 z-60 w-full mx-auto py-2.5 nav-leetsheet shadow-xl shadow-black/20 backdrop-blur-lg border border-[var(--leetsheet-border-primary)] rounded-b-2xl">
       <div className="max-w-6xl mx-auto flex justify-between items-center px-6">
         
         {/* Logo (Left) */}
         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <img
             src="/leetsheet.svg"
-            className="h-12 w-12 bg-[#7df9ff]/20 text-[#7df9ff] border border-[#7df9ff]/30 px-2 py-2 rounded-full"
+            className="h-12 w-12 bg-[var(--leetsheet-orange)]/20 text-[var(--leetsheet-orange)] border border-[var(--leetsheet-orange)]/30 px-2 py-2 rounded-full"
             alt="Logo"
           />
-          <span className="text-xl md:text-2xl font-bold tracking-tight text-gray-100 hidden md:block">
+          <span className="text-xl md:text-2xl font-bold tracking-tight text-[var(--leetsheet-text-primary)] hidden md:block">
             LeetSheet
           </span>
         </Link>
@@ -33,7 +33,7 @@ const Navbar = () => {
         <div className="navbar-menu flex items-center gap-8">
           <Link 
             to="/" 
-            className="text-gray-300 hover:text-[#7df9ff] transition-colors duration-200 text-sm font-medium"
+            className="nav-link-leetsheet text-sm font-medium"
           >
             Home
           </Link>
@@ -41,7 +41,7 @@ const Navbar = () => {
           {/* Sheets dropdown */}
           <div className="dropdown relative">
             <button
-              className="text-gray-300 hover:text-[#7df9ff] transition-colors duration-200 text-sm font-medium flex items-center gap-1"
+              className="nav-link-leetsheet text-sm font-medium flex items-center gap-1"
               onClick={() => toggleDropdown("sheets")}
             >
               Sheets 
@@ -50,17 +50,17 @@ const Navbar = () => {
               </svg>
             </button>
             {openDropdown === "sheets" && (
-              <div className="dropdown-menu absolute top-full left-0 mt-3 bg-gray-900/95 border border-gray-700/50 rounded-xl shadow-2xl min-w-[180px] py-2 z-50">
+              <div className="dropdown-menu absolute top-full left-0 mt-3 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[180px] py-2 z-50">
                 <Link 
                   to="/playlist" 
-                  className="block px-4 py-3 text-gray-200 hover:text-[#7df9ff]  transition-colors duration-150 text-sm"
+                  className="dropdown-item block px-4 py-3 text-sm"
                   onClick={() => setOpenDropdown(null)}
                 >
                   Company Sheets
                 </Link>
                 <Link 
                   to="/problems" 
-                  className="block px-4 py-3 text-gray-200 hover:text-[#7df9ff]  transition-colors duration-150 text-sm"
+                  className="dropdown-item block px-4 py-3 text-sm"
                   onClick={() => setOpenDropdown(null)}
                 >
                   All Problems
@@ -72,7 +72,7 @@ const Navbar = () => {
           {/* Resources dropdown */}
           <div className="dropdown relative">
             <button
-              className="text-gray-300 hover:text-[#7df9ff] transition-colors duration-200 text-sm font-medium flex items-center gap-1"
+              className="nav-link-leetsheet text-sm font-medium flex items-center gap-1"
               onClick={() => toggleDropdown("resources")}
             >
               Resources 
@@ -81,31 +81,31 @@ const Navbar = () => {
               </svg>
             </button>
             {openDropdown === "resources" && (
-              <div className="dropdown-menu absolute top-full left-0 mt-3 bg-gray-900/95 border border-gray-700/50 rounded-xl shadow-2xl min-w-[180px] py-2 z-50">
+              <div className="dropdown-menu absolute top-full left-0 mt-3 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[180px] py-2 z-50">
                 <Link 
                   to="/about" 
-                  className="block px-4 py-3 text-gray-200 hover:text-[#7df9ff]  transition-colors duration-150 text-sm"
+                  className="dropdown-item block px-4 py-3 text-sm"
                   onClick={() => setOpenDropdown(null)}
                 >
                   About
                 </Link>
                 <Link 
                   to="/FAQ" 
-                  className="block px-4 py-3 text-gray-200 hover:text-[#7df9ff]  transition-colors duration-150 text-sm"
+                  className="dropdown-item block px-4 py-3 text-sm"
                   onClick={() => setOpenDropdown(null)}
                 >
                   FAQ
                 </Link>
                 <Link 
                   to="/blog" 
-                  className="block px-4 py-3 text-gray-200 hover:text-[#7df9ff]  transition-colors duration-150 text-sm"
+                  className="dropdown-item block px-4 py-3 text-sm"
                   onClick={() => setOpenDropdown(null)}
                 >
                   Blog
                 </Link>
                 <Link 
                   to="/support" 
-                  className="block px-4 py-3 text-gray-200 hover:text-[#7df9ff]  transition-colors duration-150 text-sm"
+                  className="dropdown-item block px-4 py-3 text-sm"
                   onClick={() => setOpenDropdown(null)}
                 >
                   Support
@@ -116,7 +116,7 @@ const Navbar = () => {
 
           <Link 
             to="/pricing" 
-            className="text-gray-300 hover:text-[#7df9ff] transition-colors duration-200 text-sm font-medium"
+            className="nav-link-leetsheet text-sm font-medium"
           >
             Pricing
           </Link>
@@ -126,10 +126,10 @@ const Navbar = () => {
         {authUser ? (
           <div className="relative">
             <button 
-              className="flex items-center gap-2 p-2 rounded-full hover:bg-[#536878] transition-colors duration-200"
+              className="flex items-center gap-2 p-2 rounded-full hover:bg-[var(--leetsheet-bg-tertiary)] transition-colors duration-200"
               onClick={() => toggleDropdown("user")}
             >
-              <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-700/50">
+              <div className="w-8 h-8 rounded-full overflow-hidden border-2 border-[var(--leetsheet-border-primary)]">
                 <img
                   src={
                     authUser.image ||
@@ -142,15 +142,15 @@ const Navbar = () => {
             </button>
             {openDropdown === "user" && (
               
-              <div className="dropdown-menu absolute top-full right-0 mt-3 bg-gray-900/95 border border-gray-700/50 rounded-xl shadow-2xl min-w-[220px] py-2 z-50">
+              <div className="dropdown-menu absolute top-full right-0 mt-3 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[220px] py-2 z-50">
                 <div className="px-4 py-3">
-                  <p className="flex items-center hover:bg-[#536878] px-3 py-2 text-white font-semibold text-sm rounded-md cursor-pointer">
+                  <p className="flex items-center hover:bg-[var(--leetsheet-bg-tertiary)] px-3 py-2 text-[var(--leetsheet-text-primary)] font-semibold text-sm rounded-md cursor-pointer">
                  {authUser.name}</p>
 
                 </div>
                 <Link
                   to="/profile"
-                  className="flex items-center gap-3 px-4 py-3 text-gray-200 hover:text-[#7df9ff]  transition-colors duration-150 text-sm"
+                  className="dropdown-item flex items-center gap-3 px-4 py-3 text-sm"
                   onClick={() => setOpenDropdown(null)}
                 >
                   <User className="w-4 h-4" />
@@ -159,7 +159,7 @@ const Navbar = () => {
                 {authUser.role === "ADMIN" && (
                   <Link
                     to="/add-problem"
-                    className="flex items-center gap-3 px-4 py-3 text-gray-200 hover:text-[#7df9ff]  transition-colors duration-150 text-sm"
+                    className="dropdown-item flex items-center gap-3 px-4 py-3 text-sm"
                     onClick={() => setOpenDropdown(null)}
                   >
                     <Code className="w-4 h-4" />
@@ -167,7 +167,7 @@ const Navbar = () => {
                   </Link>
                 )}
                 <div className="mt-1 pt-1">
-  <LogoutButton className="flex items-center gap-3 w-full justify-start">
+  <LogoutButton className="dropdown-item flex items-center gap-3 w-full justify-start">
     <LogOut className="w-4 h-4" />
     Logout
   </LogoutButton>
@@ -179,13 +179,13 @@ const Navbar = () => {
           <div className="flex items-center gap-4">
             <Link 
               to="/login" 
-              className="text-gray-300 hover:text-[#7df9ff] transition-colors duration-200 text-sm font-medium px-4 py-2"
+              className="nav-link-leetsheet text-sm font-medium px-4 py-2"
             >
               Log In
             </Link>
             <Link 
               to="/signup" 
-              className="bg-[#2c75ff] hover:bg-[#3137fd] text-white px-4 py-2 rounded-3xl text-sm font-medium transition-colors duration-200 border border-[#2c75ff] hover:border-[#3137fd]"
+              className="btn-leetsheet-primary px-4 py-2 rounded-3xl text-sm font-medium"
             >
               Sign Up
             </Link>

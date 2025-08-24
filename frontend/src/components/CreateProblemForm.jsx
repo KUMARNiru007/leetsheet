@@ -583,7 +583,7 @@ const CreateProblemForm = () => {
               </div>
               <button
                 type="button"
-                className="btn btn-secondary gap-2"
+                className="btn-leetsheet-secondary gap-2"
                 onClick={loadSampleData}
               >
                 <Download className="w-4 h-4" />
@@ -669,7 +669,7 @@ const CreateProblemForm = () => {
                 </h3>
                 <button
                   type="button"
-                  className="btn btn-primary btn-sm"
+                  className="btn-leetsheet-primary btn-sm"
                   onClick={() => appendTag("")}
                 >
                   <Plus className="w-4 h-4 mr-1" /> Add Tag
@@ -686,11 +686,11 @@ const CreateProblemForm = () => {
                     />
                     <button
                       type="button"
-                      className="btn btn-ghost btn-square btn-sm"
+                      className="btn-leetsheet-secondary btn-square btn-sm"
                       onClick={() => removeTag(index)}
                       disabled={tagFields.length === 1}
                     >
-                      <Trash2 className="w-4 h-4 text-error" />
+                      <Trash2 className="w-4 h-4 text-[#ff4d4f]" />
                     </button>
                   </div>
                 ))}
@@ -713,7 +713,7 @@ const CreateProblemForm = () => {
                 </h3>
                 <button
                   type="button"
-                  className="btn btn-primary btn-sm"
+                  className="btn-leetsheet-primary btn-sm"
                   onClick={() => appendTestCase({ input: "", output: "" })}
                 >
                   <Plus className="w-4 h-4 mr-1" /> Add Test Case
@@ -729,7 +729,7 @@ const CreateProblemForm = () => {
                         </h4>
                         <button
                           type="button"
-                          className="btn btn-ghost btn-sm text-error"
+                          className="btn-leetsheet-secondary btn-sm text-[#ff4d4f]"
                           onClick={() => removeTestCase(index)}
                           disabled={testCaseFields.length === 1}
                         >
@@ -998,7 +998,7 @@ const CreateProblemForm = () => {
             </div>
 
             <div className="card-actions justify-end pt-4 border-t">
-              <button type="submit" className="btn btn-primary btn-lg gap-2">
+              <button type="submit" className="btn-leetsheet-primary btn-lg gap-2">
                 {isLoading ? (
                   <span className="loading loading-spinner text-white"></span>
                 ) : (

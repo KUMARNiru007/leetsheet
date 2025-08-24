@@ -15,7 +15,7 @@ const LogoutButton = ({ children, className }) => {
   return (
     <button
       className={clsx(
-        "flex items-center  text-gray-200 text-base font-semibold hover:bg-[#7df9ff]/80 px-4 py-1 rounded-md hover:text-white ",
+        "flex items-center text-[#b3b3b3] text-base font-semibold hover:bg-[#3c3c3c] px-4 py-1 rounded-md hover:text-[#ffa116] transition-colors",
         className
       )}
       onClick={onLogout}

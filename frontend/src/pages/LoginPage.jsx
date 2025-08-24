@@ -46,17 +46,17 @@ const LoginPage = () => {
 
 
   return (
-    <div className='h-screen grid lg:grid-cols-2'>
+    <div className='h-screen grid lg:grid-cols-2 bg-[#1a1a1a]'>
         <div className="flex flex-col justify-center items-center p-6 sm:p-12">
         <div className="w-full max-w-md space-y-8">
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center group-hover:bg-primary/20 transition-colors">
-                <Code className="w-6 h-6 text-primary" />
+              <div className="w-12 h-12 rounded-xl bg-[#ffa116]/10 flex items-center justify-center group-hover:bg-[#ffa116]/20 transition-colors">
+                <Code className="w-6 h-6 text-[#ffa116]" />
               </div>
-              <h1 className="text-2xl font-bold mt-2">Welcome Back</h1>
-              <p className="text-base-content/60">Login to your account</p>
+              <h1 className="text-2xl font-bold mt-2 text-white">Welcome Back</h1>
+              <p className="text-[#b3b3b3]">Login to your account</p>
             </div>
           </div>
 
@@ -69,40 +69,40 @@ const LoginPage = () => {
             {/* Email */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Email</span>
+                <span className="label-text font-medium text-white">Email</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-base-content/40" />
+                  <Mail className="h-5 w-5 text-[#8c8c8c]" />
                 </div>
                 <input
                   type="email"
                   {...register("email")}
-                  className={`input input-bordered w-full pl-10 ${
-                    errors.email ? "input-error" : ""
+                  className={`input-leetsheet w-full pl-10 ${
+                    errors.email ? "border-[#ff4d4f]" : ""
                   }`}
                   placeholder="you@example.com"
                 />
               </div>
               {errors.email && (
-                <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                <p className="text-[#ff4d4f] text-sm mt-1">{errors.email.message}</p>
               )}
             </div>
 
             {/* Password */}
             <div className="form-control">
               <label className="label">
-                <span className="label-text font-medium">Password</span>
+                <span className="label-text font-medium text-white">Password</span>
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-base-content/40" />
+                  <Lock className="h-5 w-5 text-[#8c8c8c]" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
                   {...register("password")}
-                  className={`input input-bordered w-full pl-10 ${
-                    errors.password ? "input-error" : ""
+                  className={`input-leetsheet w-full pl-10 ${
+                    errors.password ? "border-[#ff4d4f]" : ""
                   }`}
                   placeholder="••••••••"
                 />
@@ -112,21 +112,21 @@ const LoginPage = () => {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-5 w-5 text-base-content/40" />
+                    <EyeOff className="h-5 w-5 text-[#8c8c8c]" />
                   ) : (
-                    <Eye className="h-5 w-5 text-base-content/40" />
+                    <Eye className="h-5 w-5 text-[#8c8c8c]" />
                   )}
                 </button>
               </div>
               {errors.password && (
-                <p className="text-red-500 text-sm mt-1">{errors.password.message}</p>
+                <p className="text-[#ff4d4f] text-sm mt-1">{errors.password.message}</p>
               )}
             </div>
 
             {/* Submit Button */}
             <button
               type="submit"
-              className="btn btn-primary w-full"
+              className="btn-leetsheet-primary w-full"
               disabled={isLoggingIn}
             >
                {isLoggingIn ? (
@@ -142,7 +142,7 @@ const LoginPage = () => {
             <div className="flex items-center justify-center">
               <a
                 href={`http://localhost:8080/oauth2/redirect/google`}
-                className="w-full py-2 rounded-lg font-semibold text-white bg-blue-600 hover:bg-blue-600/80 transition flex items-center justify-center gap-2 cursor-pointer"
+                className="w-full py-2 rounded-lg font-semibold text-white bg-[#4285f4] hover:bg-[#3367d6] transition flex items-center justify-center gap-2 cursor-pointer"
               >
                 <img
                   src={google}
@@ -156,9 +156,9 @@ const LoginPage = () => {
 
           {/* Footer */}
           <div className="text-center">
-            <p className="text-base-content/60">
+            <p className="text-[#b3b3b3]">
               Don't have an account?{" "}
-              <Link to="/signup" className="link link-primary">
+              <Link to="/signup" className="text-[#ffa116] hover:text-[#ff8c00] transition-colors">
                 Sign up
               </Link>
             </p>
