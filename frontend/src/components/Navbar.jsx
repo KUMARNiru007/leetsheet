@@ -97,13 +97,6 @@ const Navbar = () => {
                   FAQ
                 </Link>
                 <Link 
-                  to="/blog" 
-                  className="dropdown-item block px-4 py-3 text-sm"
-                  onClick={() => setOpenDropdown(null)}
-                >
-                  Blog
-                </Link>
-                <Link 
                   to="/support" 
                   className="dropdown-item block px-4 py-3 text-sm"
                   onClick={() => setOpenDropdown(null)}
