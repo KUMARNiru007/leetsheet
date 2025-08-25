@@ -188,7 +188,7 @@ const Reviews = () => {
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
-          className="max-w-3xl mx-auto"
+          className="w-full"
         >
           <span className="text-[#F4FF54] text-sm font-semibold tracking-wider uppercase mb-4 block">
             WHAT DEVELOPERS ARE SAYING
@@ -196,7 +196,7 @@ const Reviews = () => {
           <h1 className="text-4xl md:text-5xl font-bold mb-6 bg-gradient-to-r from-white to-gray-300 bg-clip-text text-transparent">
             Loved by developers worldwide
           </h1>
-          <p className="text-gray-400 text-lg max-w-2xl mx-auto">
+          <p className="text-gray-400 text-lg w-full">
             Join thousands of developers who are already using CodeLeap to
             master their coding skills
           </p>

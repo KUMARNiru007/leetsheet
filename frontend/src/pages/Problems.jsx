@@ -24,7 +24,7 @@ function AllProblems() {
   }
 
   return (
-    <div className="min-h-screen flex flex-col items-center mt-32 px-4">
+    <div className="min-h-screen flex flex-col items-center mt-32">
       <h1 className="text-5xl md:text-6xl font-extrabold text-white animate-fade-in">
         Hi, {authUser?.name}
         <span className="block text-[#F4FF54]">Welcome to LeetSheet </span>

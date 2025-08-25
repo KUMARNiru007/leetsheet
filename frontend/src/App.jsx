@@ -39,56 +39,30 @@ const App = () => {
   }
 
   return (
-<div className="min-h-screen w-full relative bg-[#1a1a1a]">
-  {/* LeetCode Dark Theme Background */}
-  <div
-    className="absolute inset-0 z-0"
-    style={{
-      background: "linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)",
-    }}
-  />
-      <div className="relative z-10">
-        <div className="flex flex-col items-center justify-start">
-          <Toaster/>
-          <Routes>
-            <Route element={<Layout />}>
-              <Route path="/problems" element={<AllProblems />} />
-              <Route path="/" element={<Home />} />
-              <Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/login" />} />
-               <Route path="/pricing" element={<Pricing/>} />
-               <Route path="/about" element={<About/>} />
-            <Route path="/faq" element={<FAQ/>} />
-            </Route>
+    <>
+      <Toaster/>
+      <Routes>
+        <Route element={<Layout />}>
+          <Route path="/problems" element={<AllProblems />} />
+          <Route path="/" element={<Home />} />
+          <Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/login" />} />
+          <Route path="/pricing" element={<Pricing/>} />
+          <Route path="/about" element={<About/>} />
+          <Route path="/faq" element={<FAQ/>} />
+          <Route path="/playlist" element={authUser ? <Playlists /> : <Navigate to="/" />} />
+          <Route path="/playlist/:id" element={authUser ? <PlaylistDetailpage /> : <Navigate to="/" />} />
+        </Route>
 
-            <Route path="/login" element={!authUser ?<LoginPage/> : <Navigate to={"/"}/>} />
-            <Route path="/signup" element={<SignUpPage/>} />
-            
-           
+        <Route path="/login" element={!authUser ?<LoginPage/> : <Navigate to={"/"}/>} />
+        <Route path="/signup" element={<SignUpPage/>} />
+        
+        <Route path="/problem/:id" element={authUser ? <ProblemPage/> : <Navigate to={"/login"}/>} />
 
-            <Route path="/problem/:id" element={authUser ? <ProblemPage/> : <Navigate to={"/login"}/>}
-            />
-
-            <Route element={<AdminRoute />}>
-             <Route
-            path="/add-problem"
-            element={authUser ? <AddProblem /> : <Navigate to="/" />}/>
-            </Route>
-            <Route element={<Layout />}>
-              <Route
-                path="/playlist"
-                element={authUser ? <Playlists /> : <Navigate to="/" />}
-              />
-              <Route
-                path="/playlist/:id"
-                element={authUser ? <PlaylistDetailpage /> : <Navigate to="/" />}
-              />
-            </Route>
-
-            
-          </Routes>
-        </div>
-      </div>
-      </div>
+        <Route element={<AdminRoute />}>
+          <Route path="/add-problem" element={authUser ? <AddProblem /> : <Navigate to="/" />}/>
+        </Route>
+      </Routes>
+    </>
   );
 };
 

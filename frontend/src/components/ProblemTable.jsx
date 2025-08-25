@@ -69,7 +69,7 @@ const ProblemsTable = ({ problems }) => {
   };
 
   return (
-    <div className="w-full max-w-6xl mx-auto mt-10">
+    <div className="w-full mt-10">
       {/* Header with Create Playlist Button */}
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-2xl font-bold text-white">Problems</h2>
@@ -83,16 +83,16 @@ const ProblemsTable = ({ problems }) => {
       </div>
 
       {/* Filters */}
-      <div className="flex flex-wrap justify-between items-center mb-6 gap-4">
+      <div className="flex justify-between items-center mb-6 gap-4">
         <input
           type="text"
           placeholder="Search by title"
-          className="input-leetsheet w-full md:w-1/3"
+          className="input-leetsheet flex-1"
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <select
-          className="input-leetsheet"
+          className="input-leetsheet flex-1"
           value={difficulty}
           onChange={(e) => setDifficulty(e.target.value)}
         >
@@ -104,7 +104,7 @@ const ProblemsTable = ({ problems }) => {
           ))}
         </select>
         <select
-          className="input-leetsheet"
+          className="input-leetsheet flex-1"
           value={selectedTag}
           onChange={(e) => setSelectedTag(e.target.value)}
         >
@@ -142,7 +142,7 @@ const ProblemsTable = ({ problems }) => {
                         type="checkbox"
                         checked={isSolved}
                         readOnly
-                        className="w-4 h-4 text-[#ffa116] bg-[#2d2d2d] border-[#404040] rounded"
+                        className="w-4 h-4 text-[#ffa116] bg-[#2d2d2d] border-[#404040] rounded-full"
                       />
                     </td>
                     <td>

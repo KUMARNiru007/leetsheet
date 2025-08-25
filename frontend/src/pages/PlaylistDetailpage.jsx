@@ -70,8 +70,8 @@ const PlaylistDetailsPage = () => {
       <Loader2 className="animate-spin" /> Loading
     </div>
   ) : (
-    <div className="min-h-screen py-20 px-4 text-white mt-10">
-      <div className="max-w-6xl mx-auto space-y-5">
+    <div className="min-h-screen py-20 text-white mt-10">
+      <div className="w-full space-y-5">
         {/* Header */}
         <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-6">
           <div>
