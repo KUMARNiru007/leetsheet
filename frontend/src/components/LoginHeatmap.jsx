@@ -10,7 +10,7 @@ import {
 } from "date-fns";
 import clsx from "clsx";
 
-const LoginHeatmap = ({ loginMap = {} }) => {
+const LoginHeatmap = ({ loginMap = {}, usersByDate }) => {
   const today = startOfToday();
   const startDate = subDays(today, 364); // 365 days total including today
 
@@ -86,34 +86,54 @@ const LoginHeatmap = ({ loginMap = {} }) => {
     };
   });
 
+  const maxCount = Math.max(1, ...Object.values(loginMap || {}));
+
   const getDayIntensity = (dateStr) => {
     const loginCount = loginMap[dateStr] || 0;
-    if (loginCount === 0) return 0;
-    return 4;
+    if (loginCount <= 0) return 0;
+    const ratio = Math.min(1, loginCount / maxCount);
+    if (ratio > 0.75) return 4;
+    if (ratio > 0.5) return 3;
+    if (ratio > 0.25) return 2;
+    return 1;
   };
 
-  const getIntensityColor = (intensity) => {
-    switch (intensity) {
-      case 0:
-        return "bg-gray-800";
-      case 4:
-        return "bg-green-400";
-      default:
-        return "bg-gray-800";
+  const hexToRgba = (hex, alpha) => {
+    const sanitized = hex.replace('#', '');
+    const bigint = parseInt(sanitized, 16);
+    const r = (bigint >> 16) & 255;
+    const g = (bigint >> 8) & 255;
+    const b = bigint & 255;
+    return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+  };
+
+  const getCellStyle = (intensity) => {
+    const border = `1px solid var(--leetsheet-border-primary)`;
+    if (intensity === 0) {
+      return {
+        backgroundColor: 'var(--leetsheet-bg-tertiary)',
+        border,
+      };
     }
+    const success = getComputedStyle(document.documentElement)
+      .getPropertyValue('--leetsheet-orange-light')
+      .trim() || '#00b8a3';
+    const alphaMap = { 1: 0.25, 2: 0.45, 3: 0.7, 4: 1 };
+    return {
+      backgroundColor: hexToRgba(success, alphaMap[intensity] || 0.25),
+      border,
+    };
   };
 
   return (
-    <div className="p-6 bg-black text-white mt-10 rounded-xl">
-      <h2 className="mb-4 text-xl font-semibold">Login Activity</h2>
-
+    <div className="mt-2">
       <div className="relative">
         {/* Month Labels */}
-        <div className="flex mb-2">
+        <div className="flex mb-2" style={{ color: "var(--leetsheet-text-secondary)" }}>
           {monthLabels.map((month, i) => (
             <div
               key={i}
-              className={clsx("text-xs text-gray-400", {
+              className={clsx("text-xs", {
                 "ml-2": month.show && i > 0,
               })}
               style={{ width: "15px", marginRight: "2px" }}
@@ -124,7 +144,7 @@ const LoginHeatmap = ({ loginMap = {} }) => {
         </div>
 
         {/* Day labels (Sun, Mon, etc.) */}
-        <div className="absolute left-0 top-6 flex flex-col text-xs text-gray-400">
+        <div className="absolute left-0 top-6 flex flex-col text-xs" style={{ color: "var(--leetsheet-text-secondary)" }}>
           <div className="h-3 mb-1">Sun</div>
           <div className="h-3 mb-1"></div>
           <div className="h-3 mb-1">Tue</div>
@@ -150,19 +170,32 @@ const LoginHeatmap = ({ loginMap = {} }) => {
 
                 const dateStr = format(day, "yyyy-MM-dd");
                 const loginCount = loginMap[dateStr] || 0;
+                const dayUsers = usersByDate?.[dateStr] || null;
                 const intensity = getDayIntensity(dateStr);
+
+                const userNames = dayUsers
+                  ? dayUsers.map((u) => u?.name || u?.email).filter(Boolean)
+                  : [];
+                const maxNames = 5;
+                const shownNames = userNames.slice(0, maxNames).join(", ");
+                const remaining = Math.max(0, userNames.length - maxNames);
+
+                const baseTitle = `${format(
+                  day,
+                  "MMM d, yyyy"
+                )} - ${loginCount} login${loginCount !== 1 ? "s" : ""}`;
+                const usersTitle = dayUsers && userNames.length
+                  ? `\nUsers: ${shownNames}${remaining ? `, +${remaining} more` : ""}`
+                  : "";
 
                 return (
                   <div
                     key={dayIdx}
-                    title={`${format(
-                      day,
-                      "MMM d, yyyy"
-                    )} - ${loginCount} login${loginCount !== 1 ? "s" : ""}`}
-                    className={clsx(
-                      "w-3 h-3 rounded-sm",
-                      getIntensityColor(intensity)
-                    )}
+                    title={`${baseTitle}${usersTitle}`}
+                    className={clsx("w-3 h-3 rounded-sm transition-transform duration-150")}
+                    style={getCellStyle(intensity)}
+                    onMouseEnter={(e) => (e.currentTarget.style.outline = `1px solid var(--leetsheet-border-accent)`)}
+                    onMouseLeave={(e) => (e.currentTarget.style.outline = "none")}
                   />
                 );
               })}
