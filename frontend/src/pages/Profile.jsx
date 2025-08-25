@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo } from "react";
 import {
   Mail,
   BookOpenCheck,
@@ -31,7 +31,7 @@ import {
 } from "react-circular-progressbar";
 import "react-circular-progressbar/dist/styles.css";
 
-const Profile = ({ user }) => {
+const Profile = () => {
   const { authUser, checkAuth } = useAuthStore();
   const {
     solvedProblems,

@@ -1,3 +1,4 @@
+import React from "react";
 import {
   CheckCircle2,
   XCircle,
@@ -6,38 +7,36 @@ import {
   Calendar,
 } from "lucide-react";
 
-const SubmissionsList = ({ submissions, isLoading }) => {
-  // Helper function to safely parse JSON strings
+const SubmissionList = ({ submissions, isLoading }) => {
   const safeParse = (data) => {
     try {
       return JSON.parse(data);
     } catch (error) {
-      console.error("Error parsing data:", error);
+      console.error("Error Parsing Data: ",error);
       return [];
     }
   };
 
-  // Helper function to calculate average memory usage
   const calculateAverageMemory = (memoryData) => {
     const memoryArray = safeParse(memoryData).map((m) =>
       parseFloat(m.split(" ")[0])
     );
+
     if (memoryArray.length === 0) return 0;
     return (
       memoryArray.reduce((acc, curr) => acc + curr, 0) / memoryArray.length
     );
   };
 
-  // Helper function to calculate average runtime
   const calculateAverageTime = (timeData) => {
     const timeArray = safeParse(timeData).map((t) =>
       parseFloat(t.split(" ")[0])
     );
+
     if (timeArray.length === 0) return 0;
     return timeArray.reduce((acc, curr) => acc + curr, 0) / timeArray.length;
   };
 
-  // Loading state
   if (isLoading) {
     return (
       <div className="flex justify-center items-center p-8">
@@ -46,68 +45,79 @@ const SubmissionsList = ({ submissions, isLoading }) => {
     );
   }
 
-  // No submissions state
   if (!submissions?.length) {
     return (
-      <div className="text-center p-8">
-        <div className="text-base-content/70">No submissions yet</div>
+      <div className="text-center p-8 ">
+        <div className="text-base-content/70">No Sumissions Found</div>
       </div>
     );
   }
 
   return (
-    <div className="space-y-4">
-      {submissions.map((submission) => {
-        const avgMemory = calculateAverageMemory(submission.memory);
-        const avgTime = calculateAverageTime(submission.time);
-
-        return (
-          <div
-            key={submission.id}
-            className="card bg-base-200 shadow-lg hover:shadow-xl transition-shadow rounded-lg"
-          >
-            <div className="card-body p-4">
-              <div className="flex items-center justify-between">
-                {/* Left Section: Status and Language */}
-                <div className="flex items-center gap-4">
-                  {submission.status === "Accepted" ? (
-                    <div className="flex items-center gap-2 text-success">
-                      <CheckCircle2 className="w-6 h-6" />
-                      <span className="font-semibold">Accepted</span>
-                    </div>
-                  ) : (
-                    <div className="flex items-center gap-2 text-error">
-                      <XCircle className="w-6 h-6" />
-                      <span className="font-semibold">{submission.status}</span>
-                    </div>
-                  )}
-                  <div className="badge badge-neutral">{submission.language}</div>
-                </div>
-
-                {/* Right Section: Runtime, Memory, and Date */}
-                <div className="flex items-center gap-4 text-base-content/70">
-                  <div className="flex items-center gap-1">
-                    <Clock className="w-4 h-4" />
-                    <span>{avgTime.toFixed(3)} s</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Memory className="w-4 h-4" />
-                    <span>{avgMemory.toFixed(0)} KB</span>
-                  </div>
-                  <div className="flex items-center gap-1">
-                    <Calendar className="w-4 h-4" />
-                    <span>
-                      {new Date(submission.createdAt).toLocaleDateString()}
-                    </span>
-                  </div>
-                </div>
+    <div className="overflow-x-auto rounded-xl border border-zinc-700">
+      <table className="table w-full text-sm text-white">
+        <thead className="bg-zinc-800 text-zinc-400 uppercase text-xs">
+          <tr>
+            <th className="py-3 px-4">#</th>
+            <th>Status</th>
+            <th>Language</th>
+            <th>
+              <div className="flex items-center gap-1">
+                <Clock className="w-4 h-4" />
+                Runtime
               </div>
-            </div>
-          </div>
-        );
-      })}
+            </th>
+            <th>
+              <div className="flex items-center gap-1">
+                <Memory className="w-4 h-4" />
+                Memory
+              </div>
+            </th>
+            <th>
+              <div className="flex items-center gap-1">
+                <Calendar className="w-4 h-4" />
+                Date
+              </div>
+            </th>
+          </tr>
+        </thead>
+        <tbody>
+          {[...submissions].reverse().map((submission, index) => {
+            const avgMemory = calculateAverageMemory(submission.memory);
+            const avgTime = calculateAverageTime(submission.time);
+            const statusColor =
+              submission.status === "Accepted"
+                ? "text-green-400"
+                : submission.status === "Compile Error"
+                ? "text-red-500"
+                : "text-red-400";
+
+            return (
+              <tr
+                key={submission.id}
+                className="border-b border-zinc-700 hover:bg-zinc-800 transition"
+              >
+                <td className="py-3 px-4">{submissions.length - index}</td>
+                <td className={`font-semibold ${statusColor}`}>
+                  {submission.status}
+                </td>
+                <td>
+                  <span className="bg-zinc-700 px-2 py-1 rounded text-xs">
+                    {submission.language}
+                  </span>
+                </td>
+                <td>{avgTime !== null ? `${avgTime.toFixed(0)} ms` : "N/A"}</td>
+                <td>
+                  {avgMemory !== null ? `${avgMemory.toFixed(1)} MB` : "N/A"}
+                </td>
+                <td>{new Date(submission.createdAt).toLocaleDateString()}</td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
     </div>
   );
 };
 
-export default SubmissionsList;
+export default SubmissionList;

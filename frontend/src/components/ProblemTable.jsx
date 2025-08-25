@@ -70,51 +70,52 @@ const ProblemsTable = ({ problems }) => {
 
   return (
     <div className="w-full mt-10">
-      {/* Header with Create Playlist Button */}
-      <div className="flex justify-between items-center mb-6">
-        <h2 className="text-2xl font-bold text-white">Problems</h2>
-        <button
-          className="btn-leetsheet-primary gap-2"
-          onClick={() => setIsCreateModalOpen(true)}
-        >
-          <Plus className="w-4 h-4" />
-          Create Playlist
-        </button>
-      </div>
+      {/* Header and Filters */}
+      <div className="card-leetsheet mb-6">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+          <h2 className="h2">Problems</h2>
+          <button
+            className="btn-leetsheet-primary gap-2"
+            onClick={() => setIsCreateModalOpen(true)}
+          >
+            <Plus className="w-4 h-4" />
+            Create Playlist
+          </button>
+        </div>
 
-      {/* Filters */}
-      <div className="flex justify-between items-center mb-6 gap-4">
-        <input
-          type="text"
-          placeholder="Search by title"
-          className="input-leetsheet flex-1"
-          value={search}
-          onChange={(e) => setSearch(e.target.value)}
-        />
-        <select
-          className="input-leetsheet flex-1"
-          value={difficulty}
-          onChange={(e) => setDifficulty(e.target.value)}
-        >
-          <option value="ALL">All Difficulties</option>
-          {difficulties.map((diff) => (
-            <option key={diff} value={diff}>
-              {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
-            </option>
-          ))}
-        </select>
-        <select
-          className="input-leetsheet flex-1"
-          value={selectedTag}
-          onChange={(e) => setSelectedTag(e.target.value)}
-        >
-          <option value="ALL">All Tags</option>
-          {allTags.map((tag) => (
-            <option key={tag} value={tag}>
-              {tag}
-            </option>
-          ))}
-        </select>
+        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
+          <input
+            type="text"
+            placeholder="Search by title"
+            className="input-leetsheet"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <select
+            className="input-leetsheet"
+            value={difficulty}
+            onChange={(e) => setDifficulty(e.target.value)}
+          >
+            <option value="ALL">All Difficulties</option>
+            {difficulties.map((diff) => (
+              <option key={diff} value={diff}>
+                {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
+              </option>
+            ))}
+          </select>
+          <select
+            className="input-leetsheet"
+            value={selectedTag}
+            onChange={(e) => setSelectedTag(e.target.value)}
+          >
+            <option value="ALL">All Tags</option>
+            {allTags.map((tag) => (
+              <option key={tag} value={tag}>
+                {tag}
+              </option>
+            ))}
+          </select>
+        </div>
       </div>
 
       {/* Table */}
@@ -146,7 +147,7 @@ const ProblemsTable = ({ problems }) => {
                       />
                     </td>
                     <td>
-                      <Link to={`/problem/${problem.id}`} className="font-semibold hover:underline text-white hover:text-[#ffa116] transition-colors">
+                      <Link to={`/problem/${problem.id}`} className="font-semibold nav-link-leetsheet hover:underline hover:text-[var(--leetsheet-orange)] transition-colors">
                         {problem.title}
                       </Link>
                     </td>
