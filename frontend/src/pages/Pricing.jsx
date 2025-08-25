@@ -36,7 +36,7 @@ const Pricing = () => {
   };
 
   return (
-    <div className="w-full max-w-7xl mx-auto text-center px-4 sm:px-6 mb-8 md:mb-12 lg:mb-16 mt-30 text-white">
+    <div className="w-full text-center mb-8 md:mb-12 lg:mb-16 mt-30 text-white">
       <h1 className="inter-bold text-4xl md:text-6xl font-bold mb-5">
         Pricing
       </h1>
@@ -45,7 +45,7 @@ const Pricing = () => {
       </span>
 
       {/* Pricing Cards */}
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full max-w-7xl mx-auto px-4 sm:px-6 mb-12 sm:mb-16 mt-8">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 w-full mb-12 sm:mb-16 mt-8">
         {/* Free Plan */}
         <div className="border border-gray-200 rounded-lg p-6 sm:p-8 flex flex-col bg-gradient-to-r from-orange-400 to-yellow-300 tracking-wide shadow">
           <h2 className="inter-bold text-2xl sm:text-4xl font-bold mb-1">

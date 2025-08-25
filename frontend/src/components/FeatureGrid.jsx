@@ -52,7 +52,7 @@ const item = {
 const FeatureGrid = () => {
   return (
     <div className="flex items-center justify-center p-6 min-h-screen">
-      <div className="flex flex-col w-full max-w-6xl mt-4">
+      <div className="flex flex-col w-full mt-4">
         <motion.div
           initial={{ opacity: 0, y: -60 }}
           whileInView={{ opacity: 1, y: 0 }}

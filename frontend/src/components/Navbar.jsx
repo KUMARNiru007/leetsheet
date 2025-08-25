@@ -14,14 +14,14 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="sticky top-3 z-60 w-full mx-auto py-1 nav-leetsheet shadow-xl shadow-black/20 backdrop-blur-lg border border-[var(--leetsheet-border-primary)] rounded-2xl">
+    <nav className="sticky top-0 z-60 w-full mx-auto py-1 nav-leetsheet border-[var(--leetsheet-bg-secondary)]">
       <div className="max-w-6xl mx-auto flex justify-between items-center px-6">
         
         {/* Logo (Left) */}
         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <img
             src="/leetsheet.svg"
-            className="h-12 w-12 bg-[var(--leetsheet-orange)]/20 text-[var(--leetsheet-orange)] border border-[var(--leetsheet-orange)]/30 px-2 py-2 rounded-full"
+            className="h-10 w-10 bg-[var(--leetsheet-orange)]/20 text-[var(--leetsheet-orange)] border border-[var(--leetsheet-orange)]/30 px-2 py-2 rounded-full"
             alt="Logo"
           />
           <span className="text-xl md:text-2xl font-bold tracking-tight text-[var(--leetsheet-text-primary)] hidden md:block">
@@ -122,7 +122,7 @@ const Navbar = () => {
               className="flex items-center gap-2 p-2 rounded-full hover:bg-[var(--leetsheet-bg-tertiary)] transition-colors duration-200"
               onClick={() => toggleDropdown("user")}
             >
-              <div className="w-12 h-12 rounded-full overflow-hidden border-2 border-[var(--leetsheet-border-primary)]">
+              <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[var(--leetsheet-border-primary)]">
                 <img
                   src={
                     authUser.image ||

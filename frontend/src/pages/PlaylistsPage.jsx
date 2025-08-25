@@ -77,7 +77,7 @@ const Playlists = () => {
   }
 
   return (
-    <div className="min-h-screen py-16 px-6 bg-gradient-to-br from-black via-zinc-900 to-black text-white mt-10">
+    <div className="min-h-screen py-16 bg-gradient-to-br from-black via-zinc-900 to-black text-white mt-10">
       {/* Heading */}
       <div className="flex flex-row items-center justify-center w-full mb-8 space-x-4">
         <Code2Icon className="w-12 h-12 text-white bg-zinc-800 rounded-xl p-2" />
@@ -86,7 +86,7 @@ const Playlists = () => {
         </h1>
       </div>
 
-      <div className="text-2xl font-semibold text-center mb-12 mx-auto max-w-3xl text-gray-300">
+      <div className="text-2xl font-semibold text-center mb-12 w-full text-gray-300">
         Master Data Structures & Algorithms with curated problem sets. From
         beginner-friendly challenges to advanced company-specific questions.
       </div>
@@ -100,7 +100,7 @@ const Playlists = () => {
         <>
           {/* === User Playlists === */}
           {userPlaylists.length > 0 && (
-            <div className="max-w-6xl mx-auto mb-16">
+            <div className="w-full mb-16">
               <div className="text-4xl font-bold mb-8 text-white flex items-center gap-3">
                 <Users className="w-8 h-8 text-yellow-400" />
                 Your Sheets
@@ -177,7 +177,7 @@ const Playlists = () => {
 
           {/* === Admin Public Playlists === */}
           {adminPlaylists.length > 0 && (
-            <div className="max-w-6xl mx-auto mb-16">
+            <div className="w-full mb-16">
               <div className="text-4xl font-bold mb-8 text-white flex items-center gap-3">
                 <Building2 className="w-8 h-8 text-blue-400" />
                 Company Based Sheets
