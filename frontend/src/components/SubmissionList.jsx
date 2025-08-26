@@ -7,7 +7,7 @@ import {
   Calendar,
 } from "lucide-react";
 
-const SubmissionList = ({ submissions, isLoading }) => {
+const SubmissionList = ({ submissions, isLoading, onSubmissionSelect }) => {
   const safeParse = (data) => {
     try {
       return JSON.parse(data);
@@ -93,7 +93,21 @@ const SubmissionList = ({ submissions, isLoading }) => {
                 : "badge-leetsheet warning";
 
             return (
-              <tr key={submission.id}>
+              <tr 
+                key={submission.id}
+                onClick={() => onSubmissionSelect && onSubmissionSelect(submission)}
+                className="cursor-pointer hover:bg-opacity-80 transition-colors"
+                style={{ 
+                  backgroundColor: 'var(--leetsheet-bg-secondary)',
+                  cursor: 'pointer'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--leetsheet-bg-tertiary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--leetsheet-bg-secondary)';
+                }}
+              >
                 <td>{submissions.length - index}</td>
                 <td>
                   <span className={statusClass}>{submission.status}</span>

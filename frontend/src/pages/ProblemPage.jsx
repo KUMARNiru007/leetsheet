@@ -47,6 +47,7 @@ const ProblemPage = () => {
   const [cooldown, setCooldown] = useState(0);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
   const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
+  const [selectedSubmission, setSelectedSubmission] = useState(null);
 
   const { executeCode, submission, isExecuting, clearSubmission } = useExecutionStore();
 
@@ -77,7 +78,7 @@ const ProblemPage = () => {
 
   useEffect(() => {
     if (problem) {
-      const availableLanguages = Object.keys(problem.codeSnippet || {});
+      const availableLanguages = Object.keys(problem.codeSnippets || {});
       const defaultLanguage = availableLanguages.includes("JAVASCRIPT")
         ? "JAVASCRIPT"
         : availableLanguages[0] || "JAVASCRIPT";
@@ -90,7 +91,7 @@ const ProblemPage = () => {
         setSelectedLanguage(defaultLanguage);
       }
 
-      const currentCode = problem.codeSnippet?.[selectedLanguage] || "";
+      const currentCode = problem.codeSnippets?.[selectedLanguage] || "";
       setCode(currentCode);
 
       setTestCases(
@@ -104,7 +105,7 @@ const ProblemPage = () => {
 
   useEffect(() => {
     if (problem && !code) {
-      const availableLanguages = Object.keys(problem.codeSnippet || {});
+      const availableLanguages = Object.keys(problem.codeSnippets || {});
       if (availableLanguages.includes("JAVASCRIPT")) {
         setSelectedLanguage("JAVASCRIPT");
       } else if (availableLanguages.length > 0) {
@@ -122,6 +123,7 @@ const ProblemPage = () => {
   useEffect(() => {
     return () => {
       setActiveResultTab("testcases");
+      setSelectedSubmission(null);
       useExecutionStore.getState().clearSubmission();
     };
   }, [id]);
@@ -135,7 +137,7 @@ const ProblemPage = () => {
   const handleLanguageChange = (e) => {
     const language = e.target.value;
     setSelectedLanguage(language);
-    setCode(problem.codeSnippet?.[language] || "");
+    setCode(problem.codeSnippets?.[language] || "");
   };
 
   const handleRunCode = (e) => {
@@ -455,6 +457,10 @@ const ProblemPage = () => {
               <SubmissionList
                 submissions={submissions}
                 isLoading={isSubmissionsLoading}
+                onSubmissionSelect={(submission) => {
+                  setSelectedSubmission(submission);
+                  setActiveResultTab("results");
+                }}
               />
             )}
 
@@ -530,14 +536,22 @@ const ProblemPage = () => {
             </div>
 
             {/* Editor - Takes available space */}
-            <div className="flex-1">
+            <div className="h-[1200px] w-full">
               <Editor
                 height="100%"
-                language={selectedLanguage.toLowerCase() === 'javascript' ? 'javascript' : selectedLanguage.toLowerCase()}
+                language={selectedLanguage.toLowerCase()}
                 theme="vs-dark"
                 value={code}
                 onChange={(value) => setCode(value || "")}
-                options={{ fontSize: 12, minimap: { enabled: false } }}
+                options={{
+                    minimap: { enabled: false },
+                    fontSize: 15,
+                    lineNumbers: "on",
+                    roundedSelection: false,
+                    scrollBeyondLastLine: false,
+                    readOnly: false,
+                    automaticLayout: true,
+                  }}
               />
             </div>
           </div>
@@ -580,9 +594,9 @@ const ProblemPage = () => {
             {/* Content Area - Scrollable */}
             <div className="flex-1 p-2 overflow-y-auto">
               {activeResultTab === "results" ? (
-                submission ? (
+                (submission || selectedSubmission) ? (
                   <div className="h-full">
-                    <SubmissionResults submission={submission} />
+                    <SubmissionResults submission={submission || selectedSubmission} />
                   </div>
                 ) : (
                   <div className="h-full flex items-center justify-center text-center text-sm" style={{ color: 'var(--leetsheet-text-muted)' }}>
