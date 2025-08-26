@@ -39,42 +39,42 @@ const SubmissionList = ({ submissions, isLoading }) => {
 
   if (isLoading) {
     return (
-      <div className="flex justify-center items-center p-8">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+      <div className="p-8" style={{ display: "flex", justifyContent: "center", alignItems: "center" }}>
+        <span className="loading">Loading...</span>
       </div>
     );
   }
 
   if (!submissions?.length) {
     return (
-      <div className="text-center p-8 ">
-        <div className="text-base-content/70">No Sumissions Found</div>
+      <div className="p-8" style={{ textAlign: "center", }}>
+        <div style={{ color: "var(--leetsheet-text-secondary)" }}>No Submissions Found</div>
       </div>
     );
   }
 
   return (
-    <div className="overflow-x-auto rounded-xl border border-zinc-700">
-      <table className="table w-full text-sm text-white">
-        <thead className="bg-zinc-800 text-zinc-400 uppercase text-xs">
+    <div className="overflow-x-auto" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+      <table className="table-leetsheet" style={{ width: "100%", fontSize: "var(--font-size-sm)" }}>
+        <thead>
           <tr>
-            <th className="py-3 px-4">#</th>
-            <th>Status</th>
-            <th>Language</th>
-            <th>
-              <div className="flex items-center gap-1">
+            <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>#</th>
+            <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>Status</th>
+            <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>Language</th>
+            <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
                 <Clock className="w-4 h-4" />
                 Runtime
               </div>
             </th>
-            <th>
-              <div className="flex items-center gap-1">
+            <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
                 <Memory className="w-4 h-4" />
                 Memory
               </div>
             </th>
-            <th>
-              <div className="flex items-center gap-1">
+            <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>
+              <div style={{ display: "flex", alignItems: "center", gap: "0.25rem" }}>
                 <Calendar className="w-4 h-4" />
                 Date
               </div>
@@ -85,31 +85,24 @@ const SubmissionList = ({ submissions, isLoading }) => {
           {[...submissions].reverse().map((submission, index) => {
             const avgMemory = calculateAverageMemory(submission.memory);
             const avgTime = calculateAverageTime(submission.time);
-            const statusColor =
+            const statusClass =
               submission.status === "Accepted"
-                ? "text-green-400"
+                ? "badge-leetsheet success"
                 : submission.status === "Compile Error"
-                ? "text-red-500"
-                : "text-red-400";
+                ? "badge-leetsheet error"
+                : "badge-leetsheet warning";
 
             return (
-              <tr
-                key={submission.id}
-                className="border-b border-zinc-700 hover:bg-zinc-800 transition"
-              >
-                <td className="py-3 px-4">{submissions.length - index}</td>
-                <td className={`font-semibold ${statusColor}`}>
-                  {submission.status}
+              <tr key={submission.id}>
+                <td>{submissions.length - index}</td>
+                <td>
+                  <span className={statusClass}>{submission.status}</span>
                 </td>
                 <td>
-                  <span className="bg-zinc-700 px-2 py-1 rounded text-xs">
-                    {submission.language}
-                  </span>
+                  <span className="badge-leetsheet">{submission.language}</span>
                 </td>
                 <td>{avgTime !== null ? `${avgTime.toFixed(0)} ms` : "N/A"}</td>
-                <td>
-                  {avgMemory !== null ? `${avgMemory.toFixed(1)} MB` : "N/A"}
-                </td>
+                <td>{avgMemory !== null ? `${avgMemory.toFixed(1)} MB` : "N/A"}</td>
                 <td>{new Date(submission.createdAt).toLocaleDateString()}</td>
               </tr>
             );
