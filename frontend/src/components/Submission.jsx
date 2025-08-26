@@ -28,38 +28,37 @@ const SubmissionResults = ({ submission }) => {
           {
             label: "Status",
             value: submission.status,
-            color:
-              submission.status === "Accepted"
-                ? "text-green-600"
-                : "text-red-600",
+            style: {
+              color:
+                submission.status === "Accepted"
+                  ? "var(--leetsheet-success)"
+                  : "var(--leetsheet-error)",
+            },
           },
           {
             label: "Success Rate",
             value: `${successRate.toFixed(1)}%`,
-            color: "text-blue-600",
+            style: { color: "var(--leetsheet-info)" },
           },
           {
             label: "Avg. Runtime",
             value: `${avgTime.toFixed(3)} s`,
-            color: "text-purple-600",
+            style: { color: "var(--leetsheet-warning)" },
             icon: <Clock className="w-4 h-4" />,
           },
           {
             label: "Avg. Memory",
             value: `${avgMemory.toFixed(0)} KB`,
-            color: "text-orange-600",
+            style: { color: "var(--leetsheet-orange)" },
             icon: <Memory className="w-4 h-4" />,
           },
         ].map((card, idx) => (
-          <div
-            key={idx}
-            className="bg-white dark:bg-base-200 border border-gray-200 dark:border-base-300 rounded-2xl shadow-md p-5 hover:shadow-xl transition-all duration-300"
-          >
-            <h3 className="text-sm font-semibold text-gray-500 mb-1 flex items-center gap-2">
+          <div key={idx} className="card-leetsheet">
+            <h3 className="text-sm font-semibold mb-1" style={{ color: "var(--leetsheet-text-secondary)", display: "flex", alignItems: "center", gap: "0.5rem" }}>
               {card.icon}
               {card.label}
             </h3>
-            <div className={`text-xl font-bold ${card.color}`}>
+            <div className="text-xl font-bold" style={card.style}>
               {card.value}
             </div>
           </div>
@@ -67,33 +66,25 @@ const SubmissionResults = ({ submission }) => {
       </div>
 
       {/* Test Cases Results */}
-      <div className="bg-white dark:bg-base-100 rounded-2xl shadow-xl p-6">
-        <h2 className="text-xl font-semibold mb-4 text-gray-800 dark:text-white">
-          Test Case Results
-        </h2>
+      <div className="card-leetsheet" style={{ padding: "1.5rem" }}>
+        <h2 className="h2" style={{ marginBottom: "1rem" }}>Test Case Results</h2>
 
-        <div className="overflow-x-auto">
-          <table className="table w-full table-auto text-sm">
+        <div className="overflow-x-auto" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+          <table className="table-leetsheet" style={{ width: "100%", fontSize: "var(--font-size-sm)" }}>
             <thead>
-              <tr className="bg-base-200 text-gray-600 dark:text-gray-300">
-                <th>Status</th>
-                <th>Expected Output</th>
-                <th>Your Output</th>
-                <th>Memory</th>
-                <th>Time</th>
+              <tr>
+                <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>Status</th>
+                <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>Expected Output</th>
+                <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>Your Output</th>
+                <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>Memory</th>
+                <th style={{ backgroundColor: 'var(--leetsheet-bg-primary)'}}>Time</th>
               </tr>
             </thead>
             <tbody>
               {submission.testcases.map((testCase) => (
-                <tr key={testCase.id} className="hover:bg-base-100 transition">
+                <tr key={testCase.id}>
                   <td>
-                    <span
-                      className={`inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium ${
-                        testCase.passed
-                          ? "bg-green-100 text-green-700"
-                          : "bg-red-100 text-red-700"
-                      }`}
-                    >
+                    <span className={testCase.passed ? "badge-leetsheet success" : "badge-leetsheet error"} style={{ display: "inline-flex", alignItems: "center", gap: "0.25rem" }}>
                       {testCase.passed ? (
                         <>
                           <CheckCircle2 className="w-4 h-4" />

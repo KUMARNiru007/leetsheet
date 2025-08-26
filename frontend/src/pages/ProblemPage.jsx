@@ -4,18 +4,18 @@ import Editor from "@monaco-editor/react";
 import {
   Play,
   FileText,
-  MessageSquare,
   Lightbulb,
   Bookmark,
   Share2,
   BookOpen,
-  Terminal,
   Code2,
-  BugPlayIcon,
   CheckCircle,
   XCircle,
   Clock,
   ArrowRight,
+  Code,
+  Send,
+  CloudUpload,
 } from "lucide-react";
 import { toast } from "react-hot-toast";
 
@@ -46,11 +46,9 @@ const ProblemPage = () => {
   const [activeResultTab, setActiveResultTab] = useState("testcases");
   const [cooldown, setCooldown] = useState(0);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
-  const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] =
-    useState(false);
+  const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
 
-  const { executeCode, submission, isExecuting, clearSubmission } =
-    useExecutionStore();
+  const { executeCode, submission, isExecuting, clearSubmission } = useExecutionStore();
 
   useEffect(() => {
     getProblemById(id);
@@ -79,7 +77,6 @@ const ProblemPage = () => {
 
   useEffect(() => {
     if (problem) {
-      // Set default language to JAVASCRIPT if it exists in codeSnippet
       const availableLanguages = Object.keys(problem.codeSnippet || {});
       const defaultLanguage = availableLanguages.includes("JAVASCRIPT")
         ? "JAVASCRIPT"
@@ -105,7 +102,6 @@ const ProblemPage = () => {
     }
   }, [problem, selectedLanguage]);
 
-  // Separate useEffect to handle initial language setup
   useEffect(() => {
     if (problem && !code) {
       const availableLanguages = Object.keys(problem.codeSnippet || {});
@@ -135,8 +131,6 @@ const ProblemPage = () => {
       setActiveResultTab("results");
     }
   }, [submission]);
-
-  console.log("Submission: ", submissions);
 
   const handleLanguageChange = (e) => {
     const language = e.target.value;
@@ -194,71 +188,124 @@ const ProblemPage = () => {
 
   if (isProblemLoading || !problem) {
     return (
-      <div className="min-h-screen flex items-center justify-center">
-        <span className="loading loading-spinner loading-lg text-primary"></span>
+      <div className="h-screen w-screen flex items-center justify-center" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+        <span className="loading loading-spinner loading-md" style={{ color: 'var(--leetsheet-orange)' }}></span>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen text-white px-6">
-      <nav className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 py-4 border-b border-zinc-700">
+    <div className="h-screen w-screen flex flex-col overflow-hidden" style={{ backgroundColor: 'var(--leetsheet-bg-primary)', color: 'var(--leetsheet-text-primary)' }}>
+      {/* Navigation - Fixed height */}
+      <nav className="flex-shrink-0 flex flex-col md:flex-row justify-between items-start md:items-center py-1 px-2 border-b" style={{ borderColor: 'var(--leetsheet-border-primary)' }}>
         {/* Problem Title */}
-        <div className="flex items-center gap-3">
-          <FileText className="w-6 h-6 text-[#F4FF54]" />
-          <h1 className="text-2xl font-bold tracking-wide text-white">
-            {problem.title}
-          </h1>
+        <div className="flex items-center gap-2">
+          {/* Logo (Left) */}
+          <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+            <img
+              src="/leetsheet.svg"
+              className="h-7 w-7 border px-1 py-1 rounded-full"
+              style={{ 
+                backgroundColor: 'var(--leetsheet-orange)/20',
+                color: 'var(--leetsheet-orange)',
+                borderColor: 'var(--leetsheet-orange)/30'
+              }}
+              alt="Logo"
+            />
+          </Link>
+          <span className="text-lg md:text-xl font-bold tracking-tight text-[var(--leetsheet-text-primary)] hidden md:block">
+            LeetSheet
+          </span>
+        </div>
+
+        <div className="flex gap-2 ml-4">
+          <button
+            onClick={handleRunCode}
+            className="btn btn-base px-3 py-1 rounded-md text-xs font-medium flex items-center gap-1 transition-all"
+            style={{
+              backgroundColor: '',
+              color: 'var(--leetsheet-orange)',
+              borderColor: 'var(--leetsheet-border-accent)'
+            }}
+            disabled={isExecuting || cooldown > 0}
+          >
+            {isExecuting ? (
+              "Running..."
+            ) : cooldown > 0 ? (
+              `Wait ${cooldown}s`
+            ) : (
+              <>
+                <Play className="w-4 h-3" />
+                Run Code
+              </>
+            )}
+          </button>
+          <button
+            onClick={handleSubmitCode}
+            className="btn btn-base px-4 py-1 rounded-md text-xs font-medium flex items-center gap-1 transition-all"
+            style={{
+              backgroundColor: 'var(--leetsheet-submit)/80',
+              color: 'var(--leetsheet-submit)',
+              borderColor: 'var(--leetsheet-submit)'
+            }}
+            disabled={isExecuting || cooldown > 0}
+          >
+            {isExecuting ? (
+              "Submitting..."
+            ) : cooldown > 0 ? (
+              `Wait ${cooldown}s`
+            ) : (
+              <>
+                <CloudUpload className="w-4 h-4" /> Submit
+              </>
+            )}
+          </button>
         </div>
 
         {/* Right Options */}
-        <div className="flex flex-wrap items-center gap-3">
+        <div className="flex flex-wrap items-center gap-1">
           {/* Bookmark Button */}
           <button
             onClick={() => {
               handleBookmark(problem.id);
               setIsBookmarked(!isBookmarked);
             }}
-            className={`rounded-lg px-3 py-2 text-sm font-medium flex items-center gap-2 transition-all ${
+            className={`rounded-md px-2 py-1 text-xs font-medium flex items-center gap-1 transition-all ${
               isBookmarked
-                ? "bg-yellow-400/20 text-yellow-300 border border-yellow-300"
-                : "hover:bg-zinc-700 text-zinc-300 border border-transparent"
+                ? "border"
+                : "hover:bg-zinc-700 border border-transparent"
             }`}
+            style={{
+              backgroundColor: isBookmarked ? 'var(--leetsheet-warning)/20' : 'transparent',
+              color: isBookmarked ? 'var(--leetsheet-warning)' : 'var(--leetsheet-text-secondary)',
+              borderColor: isBookmarked ? 'var(--leetsheet-warning)' : 'transparent'
+            }}
           >
-            <Bookmark className="w-4 h-4" />
+            <Bookmark className="w-3 h-3" />
             {isBookmarked ? "Bookmarked" : "Bookmark"}
           </button>
 
           {/* Share Button */}
           <button
             onClick={handleShare}
-            className="rounded-lg px-3 py-2 text-sm font-medium flex items-center gap-2 hover:bg-zinc-700 text-zinc-300 transition-all"
+            className="rounded-md px-2 py-1 text-xs font-medium flex items-center gap-1 hover:bg-zinc-700 transition-all"
+            style={{ 
+              color: 'var(--leetsheet-text-secondary)',
+              backgroundColor: 'transparent'
+            }}
           >
-            <Share2 className="w-4 h-4" />
+            <Share2 className="w-3 h-3" />
             Share
           </button>
-
-          {/* Language Selector */}
-          <div className="relative">
-            <select
-              value={selectedLanguage}
-              onChange={handleLanguageChange}
-              className="select select-bordered bg-zinc-800 border-zinc-600 text-white text-sm px-3 py-2 rounded-lg pr-10"
-            >
-              {Object.keys(problem.codeSnippet || {}).map((lang) => (
-                <option key={lang} value={lang}>
-                  {lang.toUpperCase()}
-                </option>
-              ))}
-            </select>
-          </div>
         </div>
       </nav>
 
-      <div className="grid grid-cols-1 lg:grid-cols-2 gap-6 mt-6">
-        {/* Problem Description Section */}
-        <div className="bg-zinc-800 rounded-xl p-6 shadow-lg">
-          <div className="relative flex justify-between mb-4 border-b border-zinc-700 pb-2 w-full">
+      {/* Main content area - Takes remaining height */}
+      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+        {/* Problem Description Section - Scrollable content */}
+        <div className="flex flex-col p-2 shadow-lg overflow-hidden" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+          {/* Tab navigation - Fixed */}
+          <div className="flex-shrink-0 relative flex justify-between mb-2 border-b pb-1 w-full" style={{ borderColor: 'var(--leetsheet-border-primary)' }}>
             {["description", "submissions", "discussion", "hints"].map(
               (tab, index) => {
                 const Icon =
@@ -274,12 +321,13 @@ const ProblemPage = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`relative flex-1 text-sm text-center font-medium py-2 transition-colors duration-300 ${
-                      activeTab === tab ? "text-[#F4FF54]" : "text-zinc-400"
-                    }`}
+                    className={`relative flex-1 text-xs text-center font-medium py-1 transition-colors duration-300`}
+                    style={{
+                      color: activeTab === tab ? 'var(--leetsheet-orange)' : 'var(--leetsheet-text-secondary)'
+                    }}
                   >
                     <div className="flex justify-center items-center gap-1">
-                      <Icon className="w-4 h-4" />
+                      <Icon className="w-3 h-3" />
                       <span className="uppercase">{tab}</span>
                     </div>
                   </button>
@@ -289,9 +337,10 @@ const ProblemPage = () => {
 
             {/* Bubble underline */}
             <div
-              className="absolute bottom-0 h-1 bg-[#F4FF54] rounded-full transition-all duration-300"
+              className="absolute bottom-0 h-0.5 rounded-full transition-all duration-300"
               style={{
                 width: "25%",
+                backgroundColor: 'var(--leetsheet-orange)',
                 transform: `translateX(${
                   ["description", "submissions", "discussion", "hints"].indexOf(
                     activeTab
@@ -301,39 +350,101 @@ const ProblemPage = () => {
             />
           </div>
 
-          <div className="max-h-96 overflow-y-auto">
+          {/* Tab content - Scrollable */}
+          <div className="flex-1 overflow-y-auto p-2 rounded-none">
             {activeTab === "description" && (
-              <div className="prose prose-invert max-w-none">
-                <h3 className="text-lg frot-semibold mb-1">Description:</h3>
-                <p>{problem.description}</p>
+              <div className="prose prose-invert max-w-none space-y-3">
+                {/* Title */}
+                <h1
+                  className="text-2xl font-bold tracking-wide mb-2 leading-tight"
+                  style={{ color: "var(--leetsheet-text-primary)" }}
+                >
+                  {problem.title}
+                </h1>
+
+                {/* Description */}
+                <div>
+                  <h3
+                    className="text-lg font-semibold mb-1"
+                    style={{ color: "var(--leetsheet-text-primary)" }}
+                  >
+                    Description
+                  </h3>
+                  <p
+                    className="text-sm leading-relaxed"
+                    style={{ color: "var(--leetsheet-text-primary)" }}
+                  >
+                    {problem.description}
+                  </p>
+                </div>
+
+                {/* Examples */}
                 {problem.examples && (
-                  <div className="mt-4">
-                    <h3 className="text-lg frot-semibold mb-2">Examples:</h3>
-                    {Object.entries(problem.examples).map(([lang, ex], idx) => (
-                      <div
-                        key={idx}
-                        className="bg-zinc-700 p-4 rounded-lg mb-4"
-                      >
-                        <p>
-                          <strong>Input:</strong> <code>{ex.input}</code>
-                        </p>
-                        <p>
-                          <strong>Output:</strong> <code>{ex.output}</code>
-                        </p>
-                        {ex.explanation && (
-                          <p>
-                            <strong>Explanation:</strong> {ex.explanation}
+                  <div>
+                    <h3
+                      className="text-lg font-semibold mb-2"
+                      style={{ color: "var(--leetsheet-text-primary)" }}
+                    >
+                      Examples
+                    </h3>
+
+                    <div className="space-y-2">
+                      {Object.entries(problem.examples).map(([lang, ex], idx) => (
+                        <div
+                          key={idx}
+                          className="p-2 rounded-md space-y-1"
+                          style={{ backgroundColor: "var(--leetsheet-bg-secondary)" }}
+                        >
+                          <p
+                            className="text-sm leading-snug"
+                            style={{ color: "var(--leetsheet-text-primary)" }}
+                          >
+                            <strong>Input:</strong>{" "}
+                            <code className="px-1 py-0.5 rounded text-xs" style={{ color: "var(--leetsheet-code-text)" }}>
+                              {ex.input}
+                            </code>
                           </p>
-                        )}
-                      </div>
-                    ))}
+
+                          <p
+                            className="text-sm leading-snug"
+                            style={{ color: "var(--leetsheet-text-primary)" }}
+                          >
+                            <strong>Output:</strong>{" "}
+                            <code className="px-1 py-0.5 rounded text-xs" style={{ color: "var(--leetsheet-code-text)" }}>
+                              {ex.output}
+                            </code>
+                          </p>
+
+                          {ex.explanation && (
+                            <p
+                              className="text-xs leading-relaxed"
+                              style={{ color: "var(--leetsheet-text-primary)" }}
+                            >
+                              <strong>Explanation:</strong> {ex.explanation}
+                            </p>
+                          )}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
+
+                {/* Constraints */}
                 {problem.constraints && (
-                  <div className="mt-4">
-                    <h3>Constraints:</h3>
-                    <p>
-                      <code>{problem.constraints}</code>
+                  <div>
+                    <h3
+                      className="text-lg font-semibold mb-1"
+                      style={{ color: "var(--leetsheet-text-primary)" }}
+                    >
+                      Constraints
+                    </h3>
+                    <p
+                      className="text-sm leading-relaxed"
+                      style={{ color: "var(--leetsheet-text-primary)" }}
+                    >
+                      <code className="block px-2 py-1 rounded text-xs" style={{ color: "var(--leetsheet-code-text)" }}>
+                        {problem.constraints}
+                      </code>
                     </p>
                   </div>
                 )}
@@ -348,21 +459,24 @@ const ProblemPage = () => {
             )}
 
             {activeTab === "discussion" && (
-              <div className="p-4 text-center text-base-content/70">
+              <div className="p-2 text-center text-sm" style={{ color: 'var(--leetsheet-text-muted)' }}>
                 No discussions yet
               </div>
             )}
 
             {activeTab === "hints" && (
-              <div className="p-4">
+              <div className="p-2">
                 {problem?.hints ? (
-                  <div className="bg-base-200 p-6 rounded-xl">
-                    <span className="bg-black/90 px-4 py-1 rounded-lg font-semibold text-white text-lg">
+                  <div className="p-3 rounded-lg" style={{ backgroundColor: 'var(--leetsheet-bg-tertiary)' }}>
+                    <span className="px-2 py-1 rounded-md font-semibold text-sm" style={{ 
+                      backgroundColor: 'rgba(0, 0, 0, 0.9)',
+                      color: 'var(--leetsheet-text-primary)'
+                    }}>
                       {problem.hints}
                     </span>
                   </div>
                 ) : (
-                  <div className="text-center text-base-content/70">
+                  <div className="text-center text-sm" style={{ color: 'var(--leetsheet-text-muted)' }}>
                     No hints available
                   </div>
                 )}
@@ -372,61 +486,71 @@ const ProblemPage = () => {
         </div>
 
         {/* Right Side - Code Editor and Test Cases/Results */}
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col overflow-hidden">
           {/* Code Editor Section */}
-          <div className="bg-zinc-800 rounded-xl overflow-hidden shadow-lg">
-            <div className="bg-zinc-700 px-4 py-2 flex justify-between items-center">
-              <h2 className="text-lg font-semibold flex items-center gap-2">
-                <Terminal className="w-5 h-5" /> Code Editor
+          <div className="flex-1 flex flex-col overflow-hidden shadow-lg" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+            {/* Editor Header - Fixed */}
+            <div className="flex-shrink-0 px-2 py-1 flex justify-between items-center border-b" style={{ 
+              backgroundColor: 'var(--leetsheet-bg-primary)',
+              borderColor: 'var(--leetsheet-bg-tertiary)'
+            }}>
+              <h2 className="text-sm font-semibold flex items-center gap-1" style={{ color: 'var(--leetsheet-text-primary)' }}>
+                <Code className="w-4 h-4" /> Code Editor
               </h2>
-              <div className="flex gap-2">
-                <button
-                  onClick={handleRunCode}
-                  className="btn btn-base bg-[#F4FF54] text-black hover:bg-[#F4FF54]/80"
-                  disabled={isExecuting || cooldown > 0}
+              
+              {/* Language Selector  */}
+              <div className="relative min-w-[100px]">
+                <select
+                  value={selectedLanguage}
+                  onChange={handleLanguageChange}
+                  className="w-full text-xs px-2 py-1 pr-2 rounded-md border cursor-pointer focus:outline-none focus:ring-1 transition-all"
+                  style={{
+                    backgroundColor: 'var(--leetsheet-bg-secondary)',
+                    borderColor: 'var(--leetsheet-border-primary)',
+                    color: 'var(--leetsheet-text-primary)'
+                  }}
                 >
-                  {isExecuting ? (
-                    "Running..."
-                  ) : cooldown > 0 ? (
-                    `Wait ${cooldown}s`
-                  ) : (
-                    <>
-                      <Play className="w-4 h-4 mr-1" />
-                      Run Code
-                    </>
-                  )}
-                </button>
-                <button
-                  onClick={handleSubmitCode}
-                  className="btn btn-base btn-success"
-                  disabled={isExecuting || cooldown > 0}
-                >
-                  {isExecuting ? (
-                    "Submitting..."
-                  ) : cooldown > 0 ? (
-                    `Wait ${cooldown}s`
-                  ) : (
-                    <>
-                      <BugPlayIcon className="w-5 h-5 mr-1" /> Submit
-                    </>
-                  )}
-                </button>
+                  {Object.keys(problem.codeSnippet || {}).map((lang) => (
+                    <option 
+                      key={lang} 
+                      value={lang}
+                      style={{
+                        backgroundColor: 'var(--leetsheet-bg-secondary)',
+                        color: 'var(--leetsheet-text-primary)'
+                      }}
+                    >
+                      {lang.toUpperCase()}
+                    </option>
+                  ))}
+                </select>
+                {/* Custom dropdown arrow */}
+                <div className="absolute inset-y-0 right-0 flex items-center px-1 pointer-events-none">
+                  <svg className="w-3 h-3" style={{ color: 'var(--leetsheet-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                  </svg>
+                </div>
               </div>
             </div>
 
-            <Editor
-              height="350px"
-              language={selectedLanguage.toLowerCase()}
-              theme="vs-dark"
-              value={code}
-              onChange={(value) => setCode(value || "")}
-              options={{ fontSize: 18, minimap: { enabled: false } }}
-            />
+            {/* Editor - Takes available space */}
+            <div className="flex-1">
+              <Editor
+                height="100%"
+                language={selectedLanguage.toLowerCase() === 'javascript' ? 'javascript' : selectedLanguage.toLowerCase()}
+                theme="vs-dark"
+                value={code}
+                onChange={(value) => setCode(value || "")}
+                options={{ fontSize: 12, minimap: { enabled: false } }}
+              />
+            </div>
           </div>
-
-          <div className="bg-zinc-800 rounded-xl shadow-lg">
-            {/* Stylish Tab Header */}
-            <div className="bg-gradient-to-r from-zinc-700 to-zinc-600 px-4 py-3 relative">
+          
+          {/* Test Cases/Results Section - Fixed height */}
+          <div className="flex-shrink-0 h-80 flex flex-col rounded-lg shadow-lg" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+            {/* Stylish Tab  */}
+            <div className="flex-shrink-0 px-2 py-2 relative" style={{ 
+              background: 'var(--leetsheet-bg-secondary)'
+            }}>
               <div className="flex gap-2">
                 {[
                   { key: "testcases", label: "Test Cases", icon: Code2 },
@@ -435,77 +559,100 @@ const ProblemPage = () => {
                   <button
                     key={key}
                     onClick={() => setActiveResultTab(key)}
-                    className={`px-4 py-2 rounded-lg text-sm font-medium transition-all duration-300 flex items-center gap-2 ${
+                    className={`px-2 py-1 rounded-md text-xs font-medium transition-all duration-300 flex items-center gap-1 ${
                       activeResultTab === key
-                        ? "bg-[#F4FF54] text-black shadow-lg transform scale-105"
-                        : "bg-zinc-600/50 text-white hover:bg-zinc-500/50 hover:scale-102"
+                        ? "shadow-md transform scale-105"
+                        : "hover:scale-102"
                     }`}
+                    style={{
+                      backgroundColor: activeResultTab === key 
+                        ? 'var(--leetsheet-orange)' 
+                        : 'var(--leetsheet-bg-elevated)',
+                      color: activeResultTab === key 
+                        ? 'var(--leetsheet-bg-primary)' 
+                        : 'var(--leetsheet-text-primary)'
+                    }}
                   >
-                    <Icon className="w-4 h-4" />
+                    <Icon className="w-3 h-3" />
                     {label}
                   </button>
                 ))}
               </div>
             </div>
 
-            {/* Content Area */}
-            <div className="p-4 h-80">
+            {/* Content Area - Scrollable */}
+            <div className="flex-1 p-2 overflow-y-auto">
               {activeResultTab === "results" ? (
                 submission ? (
-                  <div className="h-full overflow-y-auto">
+                  <div className="h-full">
                     <SubmissionResults submission={submission} />
                   </div>
                 ) : (
-                  <div className="h-full overflow-y-auto flex items-center justify-center text-center text-zinc-400">
+                  <div className="h-full flex items-center justify-center text-center text-sm" style={{ color: 'var(--leetsheet-text-muted)' }}>
                     <p>Please run or submit the code first to see results.</p>
                   </div>
                 )
               ) : (
                 <div className="h-full flex flex-col">
                   {/* Enhanced Test Case Selector */}
-                  <div className="flex gap-2 mb-4 pb-3 border-b border-zinc-700 flex-shrink-0">
+                  <div className="flex gap-1 mb-2 pb-2  flex-shrink-0" style={{ borderColor: 'var(--leetsheet-border-primary)'}}>
                     <div className="flex gap-2 flex-wrap flex-1">
                       {testCases.map((_, idx) => (
                         <button
                           key={idx}
                           onClick={() => setActiveTestCase(idx)}
-                          className={`px-3 py-2 rounded-lg text-sm font-semibold transition-all duration-200 flex items-center gap-2 ${
+                          className={`px-2 py-1 rounded-md text-xs font-semibold transition-all duration-200 flex items-center gap-1 ${
                             activeTestCase === idx
-                              ? "bg-gradient-to-r from-[#F4FF54] to-yellow-300 text-black shadow-md transform scale-105"
-                              : "bg-zinc-700 text-white hover:bg-zinc-600 hover:scale-102"
+                              ? "shadow-sm transform scale-105"
+                              : "hover:scale-102"
                           }`}
+                          style={{
+                            backgroundColor: activeTestCase === idx
+                              ? 'var(--leetsheet-orange)'
+                              : 'var(--leetsheet-bg-tertiary)',
+                            color: activeTestCase === idx
+                              ? 'var(--leetsheet-bg-primary)'
+                              : 'var(--leetsheet-text-primary)'
+                          }}
                         >
                           <div
-                            className={`w-2 h-2 rounded-full ${
-                              activeTestCase === idx
-                                ? "bg-black/30"
-                                : "bg-white/50"
-                            }`}
+                            className="w-1.5 h-1.5 rounded-full"
+                            style={{
+                              backgroundColor: activeTestCase === idx
+                                ? 'rgba(0, 0, 0, 0.3)'
+                                : 'rgba(255, 255, 255, 0.5)'
+                            }}
                           />
                           Case {idx + 1}
                         </button>
                       ))}
                     </div>
-                    <div className="text-sm text-zinc-400 flex items-center flex-shrink-0">
+                    <div className="text-xs flex items-center flex-shrink-0" style={{ color: 'var(--leetsheet-text-muted)' }}>
                       {testCases.length} test{testCases.length !== 1 ? "s" : ""}
                     </div>
                   </div>
 
                   {/* Enhanced Test Case Display */}
                   {testCases[activeTestCase] && (
-                    <div className="flex-1 bg-gradient-to-br from-zinc-900 to-zinc-800 rounded-xl p-4 space-y-4 border border-zinc-700/50 overflow-y-auto">
+                    <div className="flex-1 rounded-lg p-2 space-y-2 border overflow-y-auto" style={{
+                      background: 'var(--leetsheet-bg-primary)',
+                      borderColor: 'var(--leetsheet-bg-tertiary)'
+                    }}>
                       {/* Input Section */}
                       <div className="group">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="w-6 h-6 rounded-full bg-emerald-500/20 flex items-center justify-center flex-shrink-0">
-                            <ArrowRight className="w-3 h-3 text-emerald-400" />
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--leetsheet-success)/20' }}>
+                            <ArrowRight className="w-3 h-3" style={{ color: 'var(--leetsheet-success)' }} />
                           </div>
-                          <span className="font-semibold text-emerald-400">
+                          <span className="font-semibold text-xs p-2" style={{ color: 'var(--leetsheet-success)' }}>
                             Input
                           </span>
                         </div>
-                        <div className="bg-zinc-800/80 backdrop-blur-sm p-3 rounded-lg border border-emerald-500/20 group-hover:border-emerald-500/40 transition-colors">
-                          <code className="text-white font-mono text-sm break-all">
+                        <div className="p-2 rounded-md border transition-colors" style={{
+                          backgroundColor: 'var(--leetsheet-bg-secondary)',
+                          borderColor: 'var(--leetsheet-bg-tertiary)'
+                        }}>
+                          <code className="font-mono text-xs break-all" style={{ color: 'var(--leetsheet-text-primary)' }}>
                             {testCases[activeTestCase]?.input}
                           </code>
                         </div>
@@ -513,16 +660,19 @@ const ProblemPage = () => {
 
                       {/* Output Section */}
                       <div className="group">
-                        <div className="flex items-center gap-3 mb-2">
-                          <div className="w-6 h-6 rounded-full bg-blue-500/20 flex items-center justify-center flex-shrink-0">
-                            <CheckCircle className="w-3 h-3 text-blue-400" />
+                        <div className="flex items-center gap-2 mb-1">
+                          <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--leetsheet-info)/20' }}>
+                            <CheckCircle className="w-4 h-4" style={{ color: 'var(--leetsheet-info)' }} />
                           </div>
-                          <span className="font-semibold text-blue-400">
+                          <span className="font-semibold text-xs p-2" style={{ color: 'var(--leetsheet-info)' }}>
                             Expected Output
                           </span>
                         </div>
-                        <div className="bg-zinc-800/80 backdrop-blur-sm p-3 rounded-lg border border-blue-500/20 group-hover:border-blue-500/40 transition-colors">
-                          <code className="text-white font-mono text-sm break-all">
+                        <div className=" p-2 rounded-md border transition-colors" style={{
+                          backgroundColor: 'var(--leetsheet-bg-secondary)',
+                          borderColor: 'var(--leetsheet-bg-tertiary)'
+                        }}>
+                          <code className="font-mono text-xs break-all" style={{ color: 'var(--leetsheet-text-primary)' }}>
                             {testCases[activeTestCase]?.output}
                           </code>
                         </div>
@@ -531,16 +681,19 @@ const ProblemPage = () => {
                       {/* Explanation Section */}
                       {testCases[activeTestCase]?.explanation && (
                         <div className="group">
-                          <div className="flex items-center gap-3 mb-2">
-                            <div className="w-6 h-6 rounded-full bg-purple-500/20 flex items-center justify-center flex-shrink-0">
-                              <Lightbulb className="w-3 h-3 text-purple-400" />
+                          <div className="flex items-center gap-2 mb-1">
+                            <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--leetsheet-warning)/20' }}>
+                              <Lightbulb className="w-2 h-2" style={{ color: 'var(--leetsheet-warning)' }} />
                             </div>
-                            <span className="font-semibold text-purple-400">
+                            <span className="font-semibold text-xs" style={{ color: 'var(--leetsheet-warning)' }}>
                               Explanation
                             </span>
                           </div>
-                          <div className="bg-zinc-800/80 backdrop-blur-sm p-3 rounded-lg border border-purple-500/20 group-hover:border-purple-500/40 transition-colors">
-                            <p className="text-white text-sm leading-relaxed">
+                          <div className="p-2 rounded-md border transition-colors" style={{
+                            backgroundColor: 'var(--leetsheet-bg-secondary)/80',
+                            borderColor: 'var(--leetsheet-warning)/20'
+                          }}>
+                            <p className="text-xs leading-relaxed" style={{ color: 'var(--leetsheet-text-primary)' }}>
                               {testCases[activeTestCase].explanation}
                             </p>
                           </div>
@@ -554,6 +707,7 @@ const ProblemPage = () => {
           </div>
         </div>
       </div>
+      
       <AddtoPlaylist
         isOpen={isAddToPlaylistModalOpen}
         onClose={() => setIsAddToPlaylistModalOpen(false)}

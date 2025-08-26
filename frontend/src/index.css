@@ -28,6 +28,7 @@
   
   /* Status Colors */
   --leetsheet-success: #00b8a3;
+  --leetsheet-submit:#289D55;
   --leetsheet-error: #ff4d4f;
   --leetsheet-warning: #faad14;
   --leetsheet-info: #1890ff;
