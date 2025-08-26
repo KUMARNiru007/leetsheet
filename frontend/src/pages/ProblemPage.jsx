@@ -502,7 +502,8 @@ const ProblemPage = () => {
 
           {/* Vertical resize handle */}
           <div
-            className="w-2 cursor-col-resize absolute right-0 top-0 bottom-0 z-10"
+            className="w-1 cursor-col-resize absolute right-0 top-0 bottom-0 z-10 "style={{ 
+                      backgroundColor: 'rgba(0, 0, 0, 0.9)'}}
             onMouseDown={(e) => {
               e.preventDefault();
               const startX = e.clientX;
@@ -600,7 +601,9 @@ const ProblemPage = () => {
 
             {/* Horizontal resize handle */}
             <div
-              className="h-2 cursor-row-resize absolute bottom-0 left-0 right-0 z-10"
+              className="h-1 cursor-row-resize absolute bottom-0 left-0 right-0 z-10"
+              style={{ 
+                      backgroundColor: 'rgba(0, 0, 0, 0.9)'}}
               onMouseDown={(e) => {
                 e.preventDefault();
                 const startY = e.clientY;
