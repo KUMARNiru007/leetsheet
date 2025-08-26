@@ -499,30 +499,27 @@ const ProblemPage = () => {
               </h2>
               
               {/* Language Selector  */}
-              <div className="relative min-w-[100px]">
+              <div className=" min-w-[100px]">
                 <select
-                  value={selectedLanguage}
-                  onChange={handleLanguageChange}
-                  className="w-full text-xs px-2 py-1 pr-2 rounded-md border cursor-pointer focus:outline-none focus:ring-1 transition-all"
-                  style={{
+            className=" w-full select-bordered text-xs px-2 py-1 rounded-md border cursor-pointer focus:outline-none  " style={{
                     backgroundColor: 'var(--leetsheet-bg-secondary)',
                     borderColor: 'var(--leetsheet-border-primary)',
                     color: 'var(--leetsheet-text-primary)'
                   }}
-                >
-                  {Object.keys(problem.codeSnippet || {}).map((lang) => (
-                    <option 
-                      key={lang} 
-                      value={lang}
-                      style={{
+            value={selectedLanguage}
+            onChange={handleLanguageChange}
+          >
+            {Object.keys(problem.codeSnippets || {}).map((lang) => (
+              <option key={lang} value={lang} 
+              style={{
                         backgroundColor: 'var(--leetsheet-bg-secondary)',
                         color: 'var(--leetsheet-text-primary)'
-                      }}
-                    >
-                      {lang.toUpperCase()}
-                    </option>
-                  ))}
-                </select>
+                      }}>
+                {lang.charAt(0).toUpperCase() + lang.slice(1).toLowerCase()}
+                
+              </option>
+            ))}
+          </select>
                 {/* Custom dropdown arrow */}
                 <div className="absolute inset-y-0 right-0 flex items-center px-1 pointer-events-none">
                   <svg className="w-3 h-3" style={{ color: 'var(--leetsheet-text-secondary)' }} fill="none" stroke="currentColor" viewBox="0 0 24 24">
