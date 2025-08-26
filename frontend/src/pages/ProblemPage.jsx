@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useParams, Link, useFetcher } from "react-router-dom";
+import { useParams, Link } from "react-router-dom";
 import Editor from "@monaco-editor/react";
 import {
   Play,
@@ -48,6 +48,10 @@ const ProblemPage = () => {
   const [selectedProblemId, setSelectedProblemId] = useState(null);
   const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
   const [selectedSubmission, setSelectedSubmission] = useState(null);
+  
+  // New state for panel sizes
+  const [leftPanelWidth, setLeftPanelWidth] = useState(50);
+  const [editorHeight, setEditorHeight] = useState(70);
 
   const { executeCode, submission, isExecuting, clearSubmission } = useExecutionStore();
 
@@ -272,7 +276,7 @@ const ProblemPage = () => {
               handleBookmark(problem.id);
               setIsBookmarked(!isBookmarked);
             }}
-            className={`rounded-md px-2 py-1 text-xs font-medium flex items-center gap-1 transition-all ${
+            className={`rounded-md px-2 py-1 text-xs font-medium flex items-center gap-1 transition-all cursor-pointer ${
               isBookmarked
                 ? "border"
                 : "hover:bg-zinc-700 border border-transparent"
@@ -290,7 +294,7 @@ const ProblemPage = () => {
           {/* Share Button */}
           <button
             onClick={handleShare}
-            className="rounded-md px-2 py-1 text-xs font-medium flex items-center gap-1 hover:bg-zinc-700 transition-all"
+            className="rounded-md px-2 py-1 text-xs font-medium flex items-center gap-1 hover:bg-zinc-700 transition-all cursor-pointer"
             style={{ 
               color: 'var(--leetsheet-text-secondary)',
               backgroundColor: 'transparent'
@@ -303,9 +307,15 @@ const ProblemPage = () => {
       </nav>
 
       {/* Main content area - Takes remaining height */}
-      <div className="flex-1 grid grid-cols-1 lg:grid-cols-2 overflow-hidden">
+      <div className="flex-1 flex overflow-hidden">
         {/* Problem Description Section - Scrollable content */}
-        <div className="flex flex-col p-2 shadow-lg overflow-hidden" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+        <div 
+          className="flex flex-col p-2 shadow-lg overflow-hidden relative" 
+          style={{ 
+            backgroundColor: 'var(--leetsheet-bg-primary)',
+            width: `${leftPanelWidth}%`
+          }}
+        >
           {/* Tab navigation - Fixed */}
           <div className="flex-shrink-0 relative flex justify-between mb-2 border-b pb-1 w-full" style={{ borderColor: 'var(--leetsheet-border-primary)' }}>
             {["description", "submissions", "discussion", "hints"].map(
@@ -323,7 +333,7 @@ const ProblemPage = () => {
                   <button
                     key={tab}
                     onClick={() => setActiveTab(tab)}
-                    className={`relative flex-1 text-xs text-center font-medium py-1 transition-colors duration-300`}
+                    className={`relative flex-1 text-xs text-center font-medium py-1 transition-colors duration-300 cursor-pointer`}
                     style={{
                       color: activeTab === tab ? 'var(--leetsheet-orange)' : 'var(--leetsheet-text-secondary)'
                     }}
@@ -489,12 +499,45 @@ const ProblemPage = () => {
               </div>
             )}
           </div>
+
+          {/* Vertical resize handle */}
+          <div
+            className="w-2 cursor-col-resize absolute right-0 top-0 bottom-0 z-10"
+            onMouseDown={(e) => {
+              e.preventDefault();
+              const startX = e.clientX;
+              const startWidth = leftPanelWidth;
+              
+              const onMouseMove = (e) => {
+                const delta = ((e.clientX - startX) / window.innerWidth) * 100;
+                const newWidth = Math.min(Math.max(30, startWidth + delta), 70);
+                setLeftPanelWidth(newWidth);
+              };
+              
+              const onMouseUp = () => {
+                document.removeEventListener('mousemove', onMouseMove);
+                document.removeEventListener('mouseup', onMouseUp);
+              };
+              
+              document.addEventListener('mousemove', onMouseMove);
+              document.addEventListener('mouseup', onMouseUp);
+            }}
+          />
         </div>
 
         {/* Right Side - Code Editor and Test Cases/Results */}
-        <div className="flex flex-col overflow-hidden">
+        <div 
+          className="flex flex-col overflow-hidden relative"
+          style={{ width: `${100 - leftPanelWidth}%` }}
+        >
           {/* Code Editor Section */}
-          <div className="flex-1 flex flex-col overflow-hidden shadow-lg" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+          <div 
+            className="flex flex-col overflow-hidden shadow-lg relative" 
+            style={{ 
+              backgroundColor: 'var(--leetsheet-bg-primary)',
+              height: `${editorHeight}%`
+            }}
+          >
             {/* Editor Header - Fixed */}
             <div className="flex-shrink-0 px-2 py-1 flex justify-between items-center border-b" style={{ 
               backgroundColor: 'var(--leetsheet-bg-primary)',
@@ -536,7 +579,7 @@ const ProblemPage = () => {
             </div>
 
             {/* Editor - Takes available space */}
-            <div className="h-[1200px] w-full">
+            <div className="flex-1 w-full">
               <Editor
                 height="100%"
                 language={selectedLanguage.toLowerCase()}
@@ -554,10 +597,40 @@ const ProblemPage = () => {
                   }}
               />
             </div>
+
+            {/* Horizontal resize handle */}
+            <div
+              className="h-2 cursor-row-resize absolute bottom-0 left-0 right-0 z-10"
+              onMouseDown={(e) => {
+                e.preventDefault();
+                const startY = e.clientY;
+                const startHeight = editorHeight;
+                
+                const onMouseMove = (e) => {
+                  const delta = ((e.clientY - startY) / window.innerHeight) * 100;
+                  const newHeight = Math.min(Math.max(30, startHeight + delta), 85);
+                  setEditorHeight(newHeight);
+                };
+                
+                const onMouseUp = () => {
+                  document.removeEventListener('mousemove', onMouseMove);
+                  document.removeEventListener('mouseup', onMouseUp);
+                };
+                
+                document.addEventListener('mousemove', onMouseMove);
+                document.addEventListener('mouseup', onMouseUp);
+              }}
+            />
           </div>
           
-          {/* Test Cases/Results Section - Fixed height */}
-          <div className="flex-shrink-0 h-80 flex flex-col rounded-lg shadow-lg" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+          {/* Test Cases/Results Section */}
+          <div 
+            className="flex-shrink-0 flex flex-col rounded-lg shadow-lg" 
+            style={{ 
+              backgroundColor: 'var(--leetsheet-bg-primary)',
+              height: `${100 - editorHeight}%`
+            }}
+          >
             {/* Stylish Tab  */}
             <div className="flex-shrink-0 px-2 py-2 relative" style={{ 
               background: 'var(--leetsheet-bg-secondary)'
