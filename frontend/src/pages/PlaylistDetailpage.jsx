@@ -212,11 +212,11 @@ const PlaylistDetailsPage = () => {
           <div className="card-leetsheet mb-2">
             <div className="flex flex-row items-center  w-full mb-3 space-x-4">
         <BookOpen className="w-12 h-12 rounded-xl p-2" style={{ 
-          color: "var(--leetsheet-text-primary)", 
+          color: "var(--leetsheet-orange)", 
           backgroundColor: "var(--leetsheet-bg-tertiary)" 
         }} />
-        <h1 className="text-5xl font-extrabold" style={{ 
-          color: "var(--leetsheet-orange)", 
+        <h1 className="text-4xl font-extrabold" style={{ 
+          color: "var(--leetsheet-text-primary)", 
           fontWeight: "var(--font-weight-bold)" 
         }}>
           {currentPlaylist.name}
@@ -274,7 +274,7 @@ const PlaylistDetailsPage = () => {
             <h3 className="text-xl font-bold mb-3" style={{ color: "var(--leetsheet-text-primary)" }}>
               Difficulty Breakdown
             </h3>
-            <div className="grid grid-cols-1 sm:grid-cols-3 mb-4">
+            <div className="grid grid-cols-1 sm:grid-cols-3 mb-3 gap-2.5">
               {["EASY", "MEDIUM", "HARD"].map((level) => {
                 const problemsByLevel = filteredProblems.filter(
                   (p) => p.problem?.difficulty === level
