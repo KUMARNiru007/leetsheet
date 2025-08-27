@@ -48,7 +48,7 @@ export const usePlaylistStore = create((set, get) => ({
     try {
       set({ isLoading: true });
       const resposne = await axiosInstance.get(
-        `/playlist/getPlaylistDetails/${playlistId}`
+        `/playlist/${playlistId}`
       );
       set({ currentPlaylist: resposne.data.playList });
     } catch (error) {
@@ -100,12 +100,13 @@ export const usePlaylistStore = create((set, get) => ({
   deletePlaylist: async (playlistId) => {
     try {
       set({ isLoading: true });
-      await axiosInstance.delete(`/playlist/deletePlaylist/${playlistId}`);
-
+      // Change this line from /playlist/deletePlaylist/${playlistId} to /playlist/${playlistId}
+      await axiosInstance.delete(`/playlist/${playlistId}`);
+  
       set((state) => ({
         playlists: state.playlists.filter((p) => p.id !== playlistId),
       }));
-
+  
       toast.success("Playlist deleted successfully");
     } catch (error) {
       console.error("Error deleting playlist: ", error);
