@@ -241,7 +241,7 @@ body {
 }
 
 .table-leetsheet tr:hover {
-  background-color: var(--leetsheet-bg-tertiary);
+  background-color: #323232;
 }
 
 /* LeetCode-style Badge */
@@ -271,6 +271,43 @@ body {
   background-color: rgba(250, 173, 20, 0.1);
   color: var(--leetsheet-warning);
   border-color: var(--leetsheet-warning);
+}
+.table-leetsheet tr {
+  height: 40px !important;
+}
+
+/* Truncate long problem titles */
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+/* Company badge style */
+.badge-leetsheet-company {
+  display: inline-block;
+  padding: 0.25rem 0.75rem;
+  border-radius: 1rem;
+  font-size: 0.75rem;
+  background-color: rgba(250, 173, 20, 0.1);
+  color: var(--leetsheet-warning);
+  border-color: var(--leetsheet-warning);
+}
+
+/* More tags button style */
+.badge-leetsheet-more {
+  display: inline-block;
+ border-radius: 1rem;
+  border-radius: 4px;
+  font-size: 0.75rem;
+  color: #ffa116;
+  cursor: pointer;
+  border: none;
+}
+
+.badge-leetsheet-more:hover {
+  background-color: #3a3a3a;
+  border-radius: 1rem;
 }
 
 /* === Scrollbar === */

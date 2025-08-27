@@ -7,7 +7,7 @@ const Layout = () => {
 
     return (
         <div className="min-h-screen w-full relative bg-[#1a1a1a]">
-            {/* LeetCode Dark Theme Background */}
+            {/* LeetSheet Dark Theme Background */}
             <div
                 className="absolute inset-0 z-0"
                 style={{

@@ -1,12 +1,11 @@
 import React, { useState, useMemo } from "react";
 import { useAuthStore } from "../store/useAuthStore";
 import { Link } from "react-router-dom";
-import { Bookmark, PencilIcon, Trash, TrashIcon, Plus } from "lucide-react";
+import { Bookmark, PencilIcon, TrashIcon, Plus, Search, ChevronDown, ChevronUp, Check } from "lucide-react";
 import { useAction } from "../store/useAction.js";
 import AddToPlaylistModal from "./AddToPlaylist";
 import CreatePlaylistModal from "./CreatePlaylistModal";
 import { usePlaylistStore } from "../store/usePlaylistStore";
-
 
 const ProblemsTable = ({ problems }) => {
   const { authUser } = useAuthStore();
@@ -19,6 +18,10 @@ const ProblemsTable = ({ problems }) => {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [isAddToPlaylistModalOpen, setIsAddToPlaylistModalOpen] = useState(false);
   const [selectedProblemId, setSelectedProblemId] = useState(null);
+  const [expandedRows, setExpandedRows] = useState(new Set());
+
+  // Known company tags
+  const companyTags = ["Google", "Amazon", "Netflix", "Microsoft", "Facebook", "Apple"];
 
   // Extract all unique tags from problems
   const allTags = useMemo(() => {
@@ -68,53 +71,58 @@ const ProblemsTable = ({ problems }) => {
     setIsAddToPlaylistModalOpen(true);
   };
 
+  const toggleRowExpansion = (problemId) => {
+    const newExpandedRows = new Set(expandedRows);
+    if (newExpandedRows.has(problemId)) {
+      newExpandedRows.delete(problemId);
+    } else {
+      newExpandedRows.add(problemId);
+    }
+    setExpandedRows(newExpandedRows);
+  };
+
+  // Function to separate company tags from other tags
+  const separateTags = (tags) => {
+    const companies = [];
+    const otherTags = [];
+    
+    tags.forEach(tag => {
+      if (companyTags.includes(tag)) {
+        companies.push(tag);
+      } else {
+        otherTags.push(tag);
+      }
+    });
+    
+    return { companies, otherTags };
+  };
+
   return (
-    <div className="w-full mt-10">
+    <div className="w-full">
       {/* Header and Filters */}
-      <div className="card-leetsheet mb-6">
-        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
-          <h2 className="h2">Problems</h2>
+      <div className="card-leetsheet mb-2">
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between">
+          <h2 className="h2">Practice Problems</h2>
           <button
             className="btn-leetsheet-primary gap-2"
             onClick={() => setIsCreateModalOpen(true)}
           >
             <Plus className="w-4 h-4" />
-            Create Playlist
+            Create Sheets
           </button>
         </div>
 
-        <div className="mt-4 grid grid-cols-1 md:grid-cols-3 gap-4">
-          <input
-            type="text"
-            placeholder="Search by title"
-            className="input-leetsheet"
-            value={search}
-            onChange={(e) => setSearch(e.target.value)}
-          />
-          <select
-            className="input-leetsheet"
-            value={difficulty}
-            onChange={(e) => setDifficulty(e.target.value)}
-          >
-            <option value="ALL">All Difficulties</option>
-            {difficulties.map((diff) => (
-              <option key={diff} value={diff}>
-                {diff.charAt(0).toUpperCase() + diff.slice(1).toLowerCase()}
-              </option>
-            ))}
-          </select>
-          <select
-            className="input-leetsheet"
-            value={selectedTag}
-            onChange={(e) => setSelectedTag(e.target.value)}
-          >
-            <option value="ALL">All Tags</option>
-            {allTags.map((tag) => (
-              <option key={tag} value={tag}>
-                {tag}
-              </option>
-            ))}
-          </select>
+        <div className="mt-1">
+          <div className="relative w-70">
+            <Search className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400 w-5 h-5 pointer-events-none" />
+            <input
+              type="text"
+              placeholder="Search sheets or tags..."
+              className="w-full h-11 pl-10 pr-4 rounded-lg border border-gray-600 bg-[#1f1f1f] text-gray-200 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-orange-400"
+              value={search}
+              onChange={(e) => setSearch(e.target.value)}
+            />
+          </div>
         </div>
       </div>
 
@@ -123,11 +131,11 @@ const ProblemsTable = ({ problems }) => {
         <table className="table-leetsheet w-full">
           <thead>
             <tr>
-              <th>Solved</th>
-              <th>Title</th>
-              <th>Tags</th>
-              <th>Difficulty</th>
-              <th>Actions</th>
+              <th className="w-0">Status</th>
+              <th>Problems</th>
+              <th className="w-40">Tags</th>
+              <th className="w-28">Difficulty</th>
+              <th className="w-40">Add to Sheets</th>
             </tr>
           </thead>
           <tbody>
@@ -136,31 +144,95 @@ const ProblemsTable = ({ problems }) => {
                 const isSolved = problem.solvedBy.some(
                   (user) => user.userId === authUser?.id
                 );
+                const isExpanded = expandedRows.has(problem.id);
+                const { companies, otherTags } = separateTags(problem.tags || []);
+                
+                // Show only first 2 company tags initially, or all if expanded
+                const visibleCompanies = isExpanded ? companies : companies.slice(0, 2);
+                const hiddenCompaniesCount = companies.length - visibleCompanies.length;
+                
+                // Show only first 2 other tags initially, or all if expanded
+                const visibleOtherTags = isExpanded ? otherTags : otherTags.slice(0, 2);
+                const hiddenOtherTagsCount = otherTags.length - visibleOtherTags.length;
+                
                 return (
-                  <tr key={problem.id}>
-                    <td>
-                      <input
-                        type="checkbox"
-                        checked={isSolved}
-                        readOnly
-                        className="w-4 h-4 text-[#ffa116] bg-[#2d2d2d] border-[#404040] rounded-full"
-                      />
+                  <tr key={problem.id} className="h-8">
+                    <td className="py-1">
+                      <div className={`w-5 h-5 rounded-full flex items-center justify-center ${
+                        isSolved 
+                          ? 'border-2 border-[#404040] bg-[#2d2d2d]' 
+                          : 'border-2 border-[#404040] bg-[#2d2d2d]'
+                      }`}>
+                        {isSolved && <Check className="w-5 h-5 text-green-600" />}
+                      </div>
                     </td>
                     <td>
-                      <Link to={`/problem/${problem.id}`} className="font-semibold nav-link-leetsheet hover:underline hover:text-[var(--leetsheet-orange)] transition-colors">
-                        {problem.title}
-                      </Link>
-                    </td>
-                    <td>
-                      <div className="flex flex-wrap gap-1">
-                        {(problem.tags || []).map((tag, idx) => (
-                          <span
-                            key={idx}
-                            className="badge-leetsheet text-xs font-bold"
+                      <div className="flex flex-col">
+                        <Link 
+                          to={`/problem/${problem.id}`} 
+                          className="font-semibold  
+                          text-[var(--leetsheet-text-primary)] hover:text-[var(--leetsheet-orange)] transition-colors truncate max-w-xs"
+                        >
+                          {problem.title}
+                        </Link>
+                        {companies.length > 0 && (
+                          <div className="flex flex-wrap gap-1 mt-1">
+                            {visibleCompanies.map((company, idx) => (
+                              <span
+                                key={idx}
+                                className="badge-leetsheet-company text-xs font-bold"
+                              >
+                                {company}
+                              </span>
+                            ))}
+                            {!isExpanded && hiddenCompaniesCount > 0 && (
+                              <button
+                                onClick={() => toggleRowExpansion(problem.id)}
+                                className="badge-leetsheet-more text-xs font-bold"
+                              >
+                                +{hiddenCompaniesCount} more
+                              </button>
+                            )}
+                          </div>
+                        )}
+                        {isExpanded && companies.length > 0 && (
+                          <button 
+                            onClick={() => toggleRowExpansion(problem.id)}
+                            className="flex items-center text-xs text-gray-400 mt-1"
                           >
-                            {tag}
-                          </span>
-                        ))}
+                            Show less <ChevronUp className="w-3 h-3 ml-1" />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                    <td>
+                      <div className="flex flex-col">
+                        <div className="flex flex-wrap gap-1">
+                          {visibleOtherTags.map((tag, idx) => (
+                            <span
+                              key={idx}
+                              className="badge-leetsheet text-xs font-bold"
+                            >
+                              {tag}
+                            </span>
+                          ))}
+                          {!isExpanded && hiddenOtherTagsCount > 0 && (
+                            <button
+                              onClick={() => toggleRowExpansion(problem.id)}
+                              className="badge-leetsheet-more text-xs font-bold"
+                            >
+                              +{hiddenOtherTagsCount} more
+                            </button>
+                          )}
+                        </div>
+                        {isExpanded && otherTags.length > 0 && (
+                          <button 
+                            onClick={() => toggleRowExpansion(problem.id)}
+                            className="flex items-center text-xs text-orange-300 mt-1"
+                          >
+                            Show less <ChevronUp className="w-3 h-3 ml-1 text-orange-300" />
+                          </button>
+                        )}
                       </div>
                     </td>
                     <td>
@@ -192,11 +264,12 @@ const ProblemsTable = ({ problems }) => {
                           </div>
                         )}
                         <button
-                          className="btn-leetsheet-secondary btn-sm flex gap-2 items-center"
                           onClick={() => handleAddToPlaylist(problem.id)}
                         >
-                          <Bookmark className="w-4 h-4" />
-                          <span className="hidden sm:inline">Save to Playlist</span>
+                          <Bookmark
+                            className="w-5 h-5 ml-8 text-gray-400 transition-all duration-200 
+                                       hover:text-orange-300 hover:scale-110 cursor-pointer"
+                          />
                         </button>
                       </div>
                     </td>
