@@ -2,7 +2,7 @@ import { db } from "../libs/db.js";
 
 export const createPlayList = async (req, res) => {
   try {
-    const { name, description } = req.body;
+    const { name, description, isPublic } = req.body;
     const userId = req.user.id;
 
     const playList = await db.playlist.create({
@@ -10,6 +10,7 @@ export const createPlayList = async (req, res) => {
         name,
         description,
         userId,
+        isPublic: isPublic || false,
       },
     });
     res.status(200).json({
@@ -27,7 +28,10 @@ export const getPlayListAllDetails = async (req, res) => {
   try {
     const playLists = await db.playlist.findMany({
       where: {
-        userId: req.user.id,
+        OR: [
+          { userId: req.user.id },
+          { isPublic: true }
+        ]
       },
       include: {
         problems: {

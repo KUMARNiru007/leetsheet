@@ -148,6 +148,7 @@ model Playlist {
   name        String
   description String?
   userId      String
+  isPublic    Boolean @default(false)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

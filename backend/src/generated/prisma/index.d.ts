@@ -7684,6 +7684,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     userId: string | null
+    isPublic: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7693,6 +7694,7 @@ export namespace Prisma {
     name: string | null
     description: string | null
     userId: string | null
+    isPublic: boolean | null
     createdAt: Date | null
     updatedAt: Date | null
   }
@@ -7702,6 +7704,7 @@ export namespace Prisma {
     name: number
     description: number
     userId: number
+    isPublic: number
     createdAt: number
     updatedAt: number
     _all: number
@@ -7713,6 +7716,7 @@ export namespace Prisma {
     name?: true
     description?: true
     userId?: true
+    isPublic?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7722,6 +7726,7 @@ export namespace Prisma {
     name?: true
     description?: true
     userId?: true
+    isPublic?: true
     createdAt?: true
     updatedAt?: true
   }
@@ -7731,6 +7736,7 @@ export namespace Prisma {
     name?: true
     description?: true
     userId?: true
+    isPublic?: true
     createdAt?: true
     updatedAt?: true
     _all?: true
@@ -7813,6 +7819,7 @@ export namespace Prisma {
     name: string
     description: string | null
     userId: string
+    isPublic: boolean
     createdAt: Date
     updatedAt: Date
     _count: PlaylistCountAggregateOutputType | null
@@ -7839,6 +7846,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     userId?: boolean
+    isPublic?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     problems?: boolean | Playlist$problemsArgs<ExtArgs>
@@ -7851,6 +7859,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     userId?: boolean
+    isPublic?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -7861,6 +7870,7 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     userId?: boolean
+    isPublic?: boolean
     createdAt?: boolean
     updatedAt?: boolean
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -7871,11 +7881,12 @@ export namespace Prisma {
     name?: boolean
     description?: boolean
     userId?: boolean
+    isPublic?: boolean
     createdAt?: boolean
     updatedAt?: boolean
   }
 
-  export type PlaylistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "userId" | "createdAt" | "updatedAt", ExtArgs["result"]["playlist"]>
+  export type PlaylistOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "description" | "userId" | "isPublic" | "createdAt" | "updatedAt", ExtArgs["result"]["playlist"]>
   export type PlaylistInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     problems?: boolean | Playlist$problemsArgs<ExtArgs>
     user?: boolean | UserDefaultArgs<ExtArgs>
@@ -7899,6 +7910,7 @@ export namespace Prisma {
       name: string
       description: string | null
       userId: string
+      isPublic: boolean
       createdAt: Date
       updatedAt: Date
     }, ExtArgs["result"]["playlist"]>
@@ -8330,6 +8342,7 @@ export namespace Prisma {
     readonly name: FieldRef<"Playlist", 'String'>
     readonly description: FieldRef<"Playlist", 'String'>
     readonly userId: FieldRef<"Playlist", 'String'>
+    readonly isPublic: FieldRef<"Playlist", 'Boolean'>
     readonly createdAt: FieldRef<"Playlist", 'DateTime'>
     readonly updatedAt: FieldRef<"Playlist", 'DateTime'>
   }
@@ -9948,6 +9961,7 @@ export namespace Prisma {
     name: 'name',
     description: 'description',
     userId: 'userId',
+    isPublic: 'isPublic',
     createdAt: 'createdAt',
     updatedAt: 'updatedAt'
   };
@@ -10632,6 +10646,7 @@ export namespace Prisma {
     name?: StringFilter<"Playlist"> | string
     description?: StringNullableFilter<"Playlist"> | string | null
     userId?: StringFilter<"Playlist"> | string
+    isPublic?: BoolFilter<"Playlist"> | boolean
     createdAt?: DateTimeFilter<"Playlist"> | Date | string
     updatedAt?: DateTimeFilter<"Playlist"> | Date | string
     problems?: ProblemInPlaylistListRelationFilter
@@ -10643,6 +10658,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     userId?: SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     problems?: ProblemInPlaylistOrderByRelationAggregateInput
@@ -10658,6 +10674,7 @@ export namespace Prisma {
     name?: StringFilter<"Playlist"> | string
     description?: StringNullableFilter<"Playlist"> | string | null
     userId?: StringFilter<"Playlist"> | string
+    isPublic?: BoolFilter<"Playlist"> | boolean
     createdAt?: DateTimeFilter<"Playlist"> | Date | string
     updatedAt?: DateTimeFilter<"Playlist"> | Date | string
     problems?: ProblemInPlaylistListRelationFilter
@@ -10669,6 +10686,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrderInput | SortOrder
     userId?: SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
     _count?: PlaylistCountOrderByAggregateInput
@@ -10684,6 +10702,7 @@ export namespace Prisma {
     name?: StringWithAggregatesFilter<"Playlist"> | string
     description?: StringNullableWithAggregatesFilter<"Playlist"> | string | null
     userId?: StringWithAggregatesFilter<"Playlist"> | string
+    isPublic?: BoolWithAggregatesFilter<"Playlist"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"Playlist"> | Date | string
     updatedAt?: DateTimeWithAggregatesFilter<"Playlist"> | Date | string
   }
@@ -11323,6 +11342,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemInPlaylistCreateNestedManyWithoutPlaylistInput
@@ -11334,6 +11354,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     userId: string
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemInPlaylistUncheckedCreateNestedManyWithoutPlaylistInput
@@ -11343,6 +11364,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemInPlaylistUpdateManyWithoutPlaylistNestedInput
@@ -11354,6 +11376,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemInPlaylistUncheckedUpdateManyWithoutPlaylistNestedInput
@@ -11364,6 +11387,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     userId: string
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -11372,6 +11396,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -11381,6 +11406,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -12068,6 +12094,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     userId?: SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12077,6 +12104,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     userId?: SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -12086,6 +12114,7 @@ export namespace Prisma {
     name?: SortOrder
     description?: SortOrder
     userId?: SortOrder
+    isPublic?: SortOrder
     createdAt?: SortOrder
     updatedAt?: SortOrder
   }
@@ -13049,6 +13078,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemInPlaylistCreateNestedManyWithoutPlaylistInput
@@ -13058,6 +13088,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     problems?: ProblemInPlaylistUncheckedCreateNestedManyWithoutPlaylistInput
@@ -13197,6 +13228,7 @@ export namespace Prisma {
     name?: StringFilter<"Playlist"> | string
     description?: StringNullableFilter<"Playlist"> | string | null
     userId?: StringFilter<"Playlist"> | string
+    isPublic?: BoolFilter<"Playlist"> | boolean
     createdAt?: DateTimeFilter<"Playlist"> | Date | string
     updatedAt?: DateTimeFilter<"Playlist"> | Date | string
   }
@@ -14163,6 +14195,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
     user: UserCreateNestedOneWithoutPlaylistsInput
@@ -14173,6 +14206,7 @@ export namespace Prisma {
     name: string
     description?: string | null
     userId: string
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14242,6 +14276,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     user?: UserUpdateOneRequiredWithoutPlaylistsNestedInput
@@ -14252,6 +14287,7 @@ export namespace Prisma {
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
     userId?: StringFieldUpdateOperationsInput | string
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
@@ -14351,6 +14387,7 @@ export namespace Prisma {
     id?: string
     name: string
     description?: string | null
+    isPublic?: boolean
     createdAt?: Date | string
     updatedAt?: Date | string
   }
@@ -14487,6 +14524,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemInPlaylistUpdateManyWithoutPlaylistNestedInput
@@ -14496,6 +14534,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     problems?: ProblemInPlaylistUncheckedUpdateManyWithoutPlaylistNestedInput
@@ -14505,6 +14544,7 @@ export namespace Prisma {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
     description?: NullableStringFieldUpdateOperationsInput | string | null
+    isPublic?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
