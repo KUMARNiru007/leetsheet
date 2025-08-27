@@ -25,16 +25,6 @@ function AllProblems() {
 
   return (
     <div className="min-h-screen flex flex-col items-center  px-4">
-      <div className="max-w-6xl w-full flex flex-col items-center text-center">
-        <h1 className="h1">
-          Hi, {authUser?.name}
-          <span className="block text-[var(--leetsheet-orange)]">Welcome to LeetSheet</span>
-        </h1>
-        <p className="text-xl md:text-2xl mt-4 text-[var(--leetsheet-text-secondary)] font-medium tracking-wide">
-          Let's start solving the best coding problems from top organizations
-        </p>
-      </div>
-
       <div className="max-w-6xl w-full mt-10">
         {problems.length > 0 ? (
           <ProblemsTable problems={problems} />
