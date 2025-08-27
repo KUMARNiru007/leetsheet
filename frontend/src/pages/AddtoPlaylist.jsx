@@ -8,12 +8,13 @@ const AddtoPlaylist = ({ isOpen, onClose, problemId }) => {
     usePlaylistStore();
   const { authUser, checkAuth } = useAuthStore();
   const [selectedPlaylist, setSelectedPlaylist] = useState("");
+  const [tags, setTags] = useState(""); // Added missing state
 
   useEffect(() => {
     if (isOpen) {
       getAllPlaylists();
     }
-  }, [isOpen]);
+  }, [isOpen, getAllPlaylists]); // Added getAllPlaylists to dependency array
 
   useEffect(() => {
     checkAuth();
@@ -23,8 +24,18 @@ const AddtoPlaylist = ({ isOpen, onClose, problemId }) => {
     e.preventDefault();
     if (!selectedPlaylist) return;
 
-    await addProblemToPlaylist(selectedPlaylist, [problemId]);
-    onClose();
+    try {
+      await addProblemToPlaylist(selectedPlaylist, [problemId]);
+      
+      // Reset form state
+      setSelectedPlaylist("");
+      setTags("");
+      
+      onClose();
+    } catch (error) {
+      console.error("Error adding problem to playlist:", error);
+      // You might want to show an error message to the user here
+    }
   };
 
   if (!isOpen) return null;
@@ -76,7 +87,7 @@ const AddtoPlaylist = ({ isOpen, onClose, problemId }) => {
               type="text"
               className="w-full px-4 py-2 bg-zinc-800 text-white border border-zinc-700 rounded-lg focus:outline-none focus:ring-2 focus:ring-yellow-400"
               placeholder="e.g. dp, sorting, array"
-              // value={tags}
+              value={tags}
               onChange={(e) => setTags(e.target.value)}
             />
           </div>
@@ -91,7 +102,7 @@ const AddtoPlaylist = ({ isOpen, onClose, problemId }) => {
             </button>
             <button
               type="submit"
-              className="px-5 py-2 text-sm font-semibold bg-yellow-400 text-black rounded-lg hover:bg-yellow-300 transition flex items-center gap-2 cursor-pointer"
+              className="px-5 py-2 text-sm font-semibold bg-yellow-400 text-black rounded-lg hover:bg-yellow-300 transition flex items-center gap-2"
               disabled={!selectedPlaylist || isLoading}
             >
               {isLoading ? (
