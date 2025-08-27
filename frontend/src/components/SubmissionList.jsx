@@ -12,29 +12,9 @@ const SubmissionList = ({ submissions, isLoading, onSubmissionSelect }) => {
     try {
       return JSON.parse(data);
     } catch (error) {
-      console.error("Error Parsing Data: ",error);
+      console.error("Error Parsing Data: ", error);
       return [];
     }
-  };
-
-  const calculateAverageMemory = (memoryData) => {
-    const memoryArray = safeParse(memoryData).map((m) =>
-      parseFloat(m.split(" ")[0])
-    );
-
-    if (memoryArray.length === 0) return 0;
-    return (
-      memoryArray.reduce((acc, curr) => acc + curr, 0) / memoryArray.length
-    );
-  };
-
-  const calculateAverageTime = (timeData) => {
-    const timeArray = safeParse(timeData).map((t) =>
-      parseFloat(t.split(" ")[0])
-    );
-
-    if (timeArray.length === 0) return 0;
-    return timeArray.reduce((acc, curr) => acc + curr, 0) / timeArray.length;
   };
 
   if (isLoading) {
@@ -47,7 +27,7 @@ const SubmissionList = ({ submissions, isLoading, onSubmissionSelect }) => {
 
   if (!submissions?.length) {
     return (
-      <div className="p-8" style={{ textAlign: "center", }}>
+      <div className="p-8" style={{ textAlign: "center" }}>
         <div style={{ color: "var(--leetsheet-text-secondary)" }}>No Submissions Found</div>
       </div>
     );
@@ -83,8 +63,17 @@ const SubmissionList = ({ submissions, isLoading, onSubmissionSelect }) => {
         </thead>
         <tbody>
           {[...submissions].reverse().map((submission, index) => {
-            const avgMemory = calculateAverageMemory(submission.memory);
-            const avgTime = calculateAverageTime(submission.time);
+            const memoryArr = safeParse(submission.memory || "[]");
+            const timeArr = safeParse(submission.time || "[]");
+
+            const avgMemory = memoryArr.length > 0
+              ? memoryArr.map(m => parseFloat(m)).reduce((a, b) => a + b, 0) / memoryArr.length
+              : 0;
+
+            const avgTime = timeArr.length > 0
+              ? timeArr.map(t => parseFloat(t)).reduce((a, b) => a + b, 0) / timeArr.length
+              : 0;
+
             const statusClass =
               submission.status === "Accepted"
                 ? "badge-leetsheet success"
@@ -115,8 +104,8 @@ const SubmissionList = ({ submissions, isLoading, onSubmissionSelect }) => {
                 <td>
                   <span className="badge-leetsheet">{submission.language}</span>
                 </td>
-                <td>{avgTime !== null ? `${avgTime.toFixed(0)} ms` : "N/A"}</td>
-                <td>{avgMemory !== null ? `${avgMemory.toFixed(1)} MB` : "N/A"}</td>
+                <td>{avgTime > 0 ? `${avgTime.toFixed(3)} s` : "N/A"}</td>
+                <td>{avgMemory > 0 ? `${avgMemory.toFixed(0)} KB` : "N/A"}</td>
                 <td>{new Date(submission.createdAt).toLocaleDateString()}</td>
               </tr>
             );
