@@ -157,21 +157,17 @@ const SignUpPage = () => {
             "Sign Up"
           )}
         </button>
-        <button
-              type="button"
-              onClick={() =>
-                (window.location.href =
-                  "http://localhost:8080/oauth2/redirect/google")
-              }
-              className="w-full py-2 rounded-lg font-semibold text-white bg-[#4285f4] hover:bg-[#3367d6] transition flex items-center justify-center gap-2 cursor-pointer"
-            >
-              <img
-                src={google}
-                alt="Google logo"
-                className="w-6 h-6 bg-white"
-              />
-              Continue with Google
-            </button>
+        <a
+  href={`http://localhost:8080/api/v1/auth/google`}
+  className="w-full py-2 rounded-lg font-semibold text-white bg-[#4285f4] hover:bg-[#3367d6] transition flex items-center justify-center gap-2 cursor-pointer"
+>
+  <img
+    src={google}
+    alt="Google"
+    className="w-6 h-6 bg-white mr-2"
+  />
+  Continue with Google
+</a>
       </form>
 
 

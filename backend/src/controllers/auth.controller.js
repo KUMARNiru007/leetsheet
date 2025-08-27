@@ -455,13 +455,13 @@ await db.user.update({
                 httpOnly: true,
                 sameSite: 'none',
                 secure: true,
-                domain: 'localhost',
+                
             });
             res.clearCookie('refreshToken', {
                 httpOnly: true,
                 sameSite: 'none',
                 secure: true,
-                domain: 'localhost',
+                
             });
             
             res.status(200).json({
