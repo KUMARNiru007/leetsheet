@@ -10,7 +10,6 @@ import {
 } from "lucide-react";
 
 const SubmissionResults = ({ submission }) => {
-  const [activeTestCase, setActiveTestCase] = useState(0);
 
   if (!submission) {
     return (
@@ -82,14 +81,6 @@ const SubmissionResults = ({ submission }) => {
             </div>
           </div>
         ))}
-      </div>
-
-      {/* Test Case Results Section */}
-      <div className="flex-1 flex flex-col">
-        {/* Test Case Tabs */}
-
-        {/* Individual Test Case Result Display */}
-        
       </div>
     </div>
   );
