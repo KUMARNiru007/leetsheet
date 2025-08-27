@@ -16,6 +16,10 @@ import { useNavigate } from "react-router-dom";
 import CreatePlaylistModal from "../components/CreatePlaylistModal.jsx";
 import { useAuthStore } from "../store/useAuthStore.js";
 
+import amazonIcon from "./assets/AmazonIcon.webp";
+import googleIcon from "./assets/googleIcon.webp";
+import microsoftIcon from "./assets/microsoftIcon.webp";
+
 const Playlists = () => {
   const navigate = useNavigate();
   const { playlists, getAllPlaylists, deletePlaylist, createPlaylist } =
@@ -77,8 +81,8 @@ const Playlists = () => {
   }
 
   return (
-    <div className="min-h-screen py-20 px-6 md:px-8" style={{ 
-      backgroundColor: "var(--leetsheet-bg-primary)", 
+    <div className="min-h-screen p-3 md:px-8 rounded-2xl m-2" style={{ 
+      backgroundColor: "var(--leetsheet-bg-secondary)", 
       color: "var(--leetsheet-text-primary)",
       backgroundImage: "radial-gradient(circle at 25px 25px, rgba(255, 161, 22, 0.05) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(255, 161, 22, 0.025) 2%, transparent 0%)",
       backgroundSize: "100px 100px"
@@ -86,18 +90,18 @@ const Playlists = () => {
       {/* Heading with improved styling */}
       <div className="flex flex-col items-center justify-center w-full mb-12">
         <div className="flex items-center justify-center space-x-4 mb-4">
-          <div className="w-14 h-14 rounded-xl flex items-center justify-center" style={{ 
+          <div className="w-10 h-10 p-2 rounded-xl flex items-center justify-center" style={{ 
             backgroundColor: "var(--leetsheet-bg-tertiary)",
             boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)"
           }}>
             <Code2Icon className="w-8 h-8" style={{ color: "var(--leetsheet-orange)" }} />
           </div>
-          <h1 className="text-5xl font-extrabold" style={{ 
-            color: "var(--leetsheet-orange)", 
+          <h1 className="text-3xl font-extrabold" style={{ 
+            color: "var(--leetsheet-text-primary)", 
             fontWeight: "var(--font-weight-bold)",
             textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)"
           }}>
-            DSA Sheets
+             Sheets
           </h1>
         </div>
         <p className="text-xl font-medium text-center max-w-3xl mx-auto" style={{ color: "var(--leetsheet-text-secondary)" }}>
@@ -111,8 +115,8 @@ const Playlists = () => {
           backgroundColor: "var(--leetsheet-bg-secondary)",
           border: "1px dashed var(--leetsheet-border-primary)"
         }}>
-          <BookOpen className="mx-auto w-16 h-16 mb-6 opacity-70" style={{ color: "var(--leetsheet-text-muted)" }} />
-          <p className="text-xl font-medium">No sheets found. Start by creating one!</p>
+          <BookOpen className="mx-auto w-10 h-10 mb-3 opacity-70" style={{ color: "var(--leetsheet-text-muted)" }} />
+          <p className="text-xl font-medium">No Sheets found. Start by creating one!</p>
           <button
             onClick={() => setIsCreateModalOpen(true)}
             className="mt-6 btn-leetsheet-primary px-6 py-3 rounded-lg flex items-center mx-auto gap-2 transition-all duration-300"
@@ -122,16 +126,114 @@ const Playlists = () => {
           </button>
         </div>
       ) : (
-        <div className="space-y-20">
-          {/* === User Playlists === */}
-          {userPlaylists.length > 0 && (
+        <div className="space-y-10">
+
+
+          {/* === Admin Public Playlists === */}
+          {adminPlaylists.length > 0 && (
             <div className="w-full">
-              <div className="text-4xl font-bold mb-8 flex items-center gap-3 px-2" style={{ 
+              <div className="text-2xl font-bold mb-8 flex items-center gap-3 px-2" style={{ 
                 color: "var(--leetsheet-text-primary)", 
                 fontWeight: "var(--font-weight-bold)" 
               }}>
-                <Users className="w-8 h-8" style={{ color: "var(--leetsheet-orange)" }} />
-                Your Sheets
+                <Building2 className="w-6 h-6" style={{ color: "var(--leetsheet-orange)" }} />
+                Company Based Sheets
+              </div>
+              <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                {adminPlaylists.map((playlist, index) => (
+                  <div
+                    key={playlist.id}
+                    className="relative rounded-xl p-8 transition-all duration-300 hover:transform hover:scale-[1.02]"
+                    style={{ 
+                      backgroundColor: "var(--leetsheet-bg-secondary)",
+                      borderLeft: "4px solid var(--leetsheet-info)",
+                      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)"
+                    }}
+                  >
+                    <div className="flex items-center gap-2 mb-4">
+                      {index === 0 && (
+                        <img
+                          src={googleIcon}
+                          alt="Google"
+                          className="w-7 h-7 object-contain"
+                        />
+                      )}
+                      {index === 1 && (
+                        <img
+                          src={microsoftIcon}
+                          alt="Microsoft"
+                          className="w-7 h-7 object-contain"
+                        />
+                      )}
+                      {index === 2 && (
+                        <img
+                          src={amazonIcon}
+                          alt="Amazon"
+                          className="w-7 h-7 object-contain"
+                        />
+                      )}
+                      {/* <img
+                        src={flipkartIcon}
+                        alt="Flipkart"
+                        className="w-7 h-7 object-contain"
+                      /> */}
+                      <span className="text-blue-300 text-xl ml-2">
+                        &lt;/&gt;
+                      </span>
+                    </div>
+
+                    <div className="absolute top-6 right-6 text-xs font-bold px-3 py-1 rounded-full" style={{ 
+                      backgroundColor: "#dadada", 
+                      color: "var(--leetsheet-info)",
+                      border: "1px solid var(--leetsheet-border-primary)" 
+                    }}>
+                      Company Sheet
+                    </div>
+                    <h2 className="text-2xl font-bold mb-3 capitalize" style={{ color: "var(--leetsheet-text-primary)" }}>
+                      {playlist.name}
+                    </h2>
+                    <p className="text-base mb-8 leading-relaxed" style={{ color: "var(--leetsheet-text-secondary)" }}>
+                      {playlist.description}
+                    </p>
+                    <div className="mt-auto flex flex-col gap-2">
+                      <button
+                        onClick={() => navigate(`/Playlist/${playlist.id}`)}
+                        className="btn-leetsheet-primary w-full font-semibold py-2 rounded-lg flex justify-center items-center gap-1 transition-all duration-300"
+                      >
+                        Start Learning <span className="text-lg">→</span>
+                      </button>
+                      {isAdmin && (
+                        <button
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            openModal(playlist);
+                          }}
+                          className="w-full font-semibold py-2 rounded-lg flex justify-center items-center gap-1 transition-all duration-300 cursor-pointer"
+                          style={{ 
+                            backgroundColor: "var(--leetsheet-bg-tertiary)", 
+                            color: "var(--leetsheet-text-primary)",
+                            border: "1px solid var(--leetsheet-border-primary)" 
+                          }}
+                        >
+                          <Trash2 className="w-4 h-4" style={{ color: "var(--leetsheet-error)" }} />
+                          Delete
+                        </button>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          )}
+          {/* === User Playlists === */}
+          {userPlaylists.length > 0 && (
+            <div className="w-full">
+              <div className="text-2xl font-bold mb-8 flex items-center gap-3 px-2" style={{ 
+                color: "var(--leetsheet-text-primary)", 
+                fontWeight: "var(--font-weight-bold)" 
+              }}>
+                <Users className="w-6 h-6" style={{ color: "var(--leetsheet-orange)" }} />
+                My Sheets
               </div>
               <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {userPlaylists.map((playlist, index) => (
@@ -144,8 +246,10 @@ const Playlists = () => {
                       boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)"
                     }}
                   >
-                    <div className="text-lg mb-4">
-                      <span style={{ color: "var(--leetsheet-orange)" }} className="text-2xl font-mono">&lt;&gt;</span>
+                    <div className="text-lg mb-2">
+                      <span className="text-blue-300 text-xl">
+                        &lt;/&gt;
+                      </span>
                     </div>
                     <div className="absolute top-6 right-6 text-xs font-bold px-3 py-1 rounded-full" style={{ 
                       backgroundColor: "var(--leetsheet-bg-tertiary)", 
@@ -158,18 +262,12 @@ const Playlists = () => {
                       {playlist.name}
                     </h2>
                     <p className="text-base mb-8 leading-relaxed" style={{ color: "var(--leetsheet-text-secondary)" }}>
-                      {playlist.description?.toLowerCase() ===
-                      "after solving this problem you can able to solve any js problem"
-                        ? "After solving these problems, you'll be able to solve any JS problem"
-                        : playlist.description}
+                      {playlist.description}
                     </p>
-                    <div className="mt-auto flex flex-col gap-4">
+                    <div className="mt-auto flex flex-col gap-2">
                       <button
-                        onClick={(e) => {
-                          e.stopPropagation();
-                          navigate(`/Playlist/${playlist.id}`);
-                        }}
-                        className="btn-leetsheet-primary w-full font-semibold py-3 rounded-lg flex justify-center items-center gap-2 transition-all duration-300"
+                        onClick={() => navigate(`/Playlist/${playlist.id}`)}
+                        className="btn-leetsheet-primary w-full font-semibold py-2 rounded-lg flex justify-center items-center gap-1 transition-all duration-300"
                       >
                         Start Learning <span className="text-lg">→</span>
                       </button>
@@ -178,14 +276,14 @@ const Playlists = () => {
                           e.stopPropagation();
                           openModal(playlist);
                         }}
-                        className="w-full font-semibold py-3 rounded-lg flex justify-center items-center gap-2 transition-all duration-300"
+                        className="w-full font-semibold py-2 rounded-lg flex justify-center items-center gap-1 transition-all duration-300"
                         style={{ 
                           backgroundColor: "var(--leetsheet-bg-tertiary)", 
                           color: "var(--leetsheet-text-primary)",
                           border: "1px solid var(--leetsheet-border-primary)" 
                         }}
                       >
-                        <Trash2 className="w-5 h-5" style={{ color: "var(--leetsheet-error)" }} />
+                        <Trash2 className="w-4 h-4" style={{ color: "var(--leetsheet-error)" }} />
                         Delete
                       </button>
                     </div>
@@ -226,83 +324,7 @@ const Playlists = () => {
             </div>
           )}
 
-          {/* === Admin Public Playlists === */}
-          {adminPlaylists.length > 0 && (
-            <div className="w-full">
-              <div className="text-4xl font-bold mb-8 flex items-center gap-3 px-2" style={{ 
-                color: "var(--leetsheet-text-primary)", 
-                fontWeight: "var(--font-weight-bold)" 
-              }}>
-                <Building2 className="w-8 h-8" style={{ color: "var(--leetsheet-orange)" }} />
-                Company Based Sheets
-              </div>
-              <div className="grid sm:grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                {adminPlaylists.map((playlist, index) => (
-                  <div
-                    key={playlist.id}
-                    className="relative rounded-xl p-8 transition-all duration-300 hover:transform hover:scale-[1.02]"
-                    style={{ 
-                      backgroundColor: "var(--leetsheet-bg-secondary)",
-                      borderLeft: "4px solid var(--leetsheet-info)",
-                      boxShadow: "0 10px 25px rgba(0, 0, 0, 0.2)"
-                    }}
-                  >
-                    {/* Company Icon */}
-                    <div className="flex items-center gap-2 mb-4">
-                      <div className="w-10 h-10 rounded-lg flex items-center justify-center" style={{ 
-                        backgroundColor: "var(--leetsheet-bg-tertiary)", 
-                        border: "1px solid var(--leetsheet-border-primary)" 
-                      }}>
-                        <Building2 className="w-6 h-6" style={{ color: "var(--leetsheet-info)" }} />
-                      </div>
-                      <span style={{ color: "var(--leetsheet-info)" }} className="text-2xl font-mono">
-                        &lt;/&gt;
-                      </span>
-                    </div>
-
-                    <div className="absolute top-6 right-6 text-xs font-bold px-3 py-1 rounded-full" style={{ 
-                      backgroundColor: "var(--leetsheet-bg-tertiary)", 
-                      color: "var(--leetsheet-info)",
-                      border: "1px solid var(--leetsheet-border-primary)" 
-                    }}>
-                      Company Sheet
-                    </div>
-                    <h2 className="text-2xl font-bold mb-3 capitalize" style={{ color: "var(--leetsheet-text-primary)" }}>
-                      {playlist.name}
-                    </h2>
-                    <p className="text-base mb-8 leading-relaxed" style={{ color: "var(--leetsheet-text-secondary)" }}>
-                      {playlist.description}
-                    </p>
-                    <div className="mt-auto flex flex-col gap-4">
-                      <button
-                        onClick={() => navigate(`/Playlist/${playlist.id}`)}
-                        className="btn-leetsheet-primary w-full font-semibold py-3 rounded-lg flex justify-center items-center gap-2 transition-all duration-300"
-                      >
-                        Start Learning <span className="text-lg">→</span>
-                      </button>
-                      {isAdmin && (
-                        <button
-                          onClick={(e) => {
-                            e.stopPropagation();
-                            openModal(playlist);
-                          }}
-                          className="w-full font-semibold py-3 rounded-lg flex justify-center items-center gap-2 transition-all duration-300"
-                          style={{ 
-                            backgroundColor: "var(--leetsheet-bg-tertiary)", 
-                            color: "var(--leetsheet-text-primary)",
-                            border: "1px solid var(--leetsheet-border-primary)" 
-                          }}
-                        >
-                          <Trash2 className="w-5 h-5" style={{ color: "var(--leetsheet-error)" }} />
-                          Delete
-                        </button>
-                      )}
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
+          
         </div>
       )}
 
