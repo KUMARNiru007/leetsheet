@@ -1,5 +1,5 @@
 import React from 'react';
-import { Github, Linkedin, Twitter } from 'lucide-react';
+import { FaXTwitter, FaGithub, FaLinkedin } from "react-icons/fa6";
 
 function BottomFooter() {
   return (
@@ -14,7 +14,7 @@ function BottomFooter() {
             target="_blank"
             aria-label="GitHub"
           >
-            <Github size={20} />
+            <FaGithub size={20} />
           </a>
           
           <a
@@ -24,7 +24,7 @@ function BottomFooter() {
             target="_blank"
             aria-label="LinkedIn"
           >
-            <Linkedin size={20} />
+            <FaLinkedin size={20} />
           </a>
           
           <a
@@ -34,7 +34,7 @@ function BottomFooter() {
             className="nav-link-leetsheet flex items-center gap-2 hover:text-[var(--leetsheet-orange)] transition-colors duration-200 break-words"
             aria-label="X (Twitter)"
           >
-            <Twitter size={20} />
+            <FaXTwitter size={20} />
           </a>
         </div>
       </div>
