@@ -81,27 +81,23 @@ const Playlists = () => {
   }
 
   return (
-    <div className="min-h-screen p-3 md:px-8 rounded-xl m-1" style={{ 
+    <div className="min-h-screen p-3 md:px-8 rounded-xl mt-1 mb-2 pb-12" style={{ 
       backgroundColor: "var(--leetsheet-bg-secondary)", 
       color: "var(--leetsheet-text-primary)",
     }}>
       {/* Heading */}
-      <div className="flex flex-col items-center justify-center w-full mb-12">
-        <div className="flex items-center justify-center space-x-4 mb-4">
-          <div className="w-10 h-10 p-2 rounded-xl flex items-center justify-center" style={{ 
-            backgroundColor: "var(--leetsheet-bg-tertiary)",
-            boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)"
-          }}>
-            <Code2Icon className="w-8 h-8" style={{ color: "var(--leetsheet-orange)" }} />
-          </div>
-          <h1 className="text-3xl font-extrabold" style={{ 
+      <div className="flex flex-col items-center  justify-center w-full mb-12">
+        <div className="flex mt-5  items-center justify-center space-x-4 mb-2">
+          <h1 className="text-5xl font-extrabold" style={{ 
             color: "var(--leetsheet-text-primary)", 
             fontWeight: "var(--font-weight-bold)",
             textShadow: "0 2px 4px rgba(0, 0, 0, 0.3)"
           }}>
              Sheets
           </h1>
+          
         </div>
+        <div className="w-33 h-1 mx-auto mb-6" style={{ backgroundColor: 'var(--leetsheet-orange)' }}></div>
         <p className="text-xl font-medium text-center max-w-3xl mx-auto" style={{ color: "var(--leetsheet-text-secondary)" }}>
           Master Data Structures & Algorithms with curated problem sets. From
           beginner-friendly challenges to advanced company-specific questions.
