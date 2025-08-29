@@ -1,8 +1,12 @@
 import React from "react";
 
+
 const Home = () => {
  
   return (
+    <div
+      className={`flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-br transition-colors duration-300 `}
+    >
     <div className="min-h-screen flex flex-col items-center mt-14">
       <div className="absolute top-16 left-0 w-1/3 h-1/3 "></div>
       <h1 className="text-4xl font-extrabold z-10 text-center">
@@ -16,6 +20,8 @@ const Home = () => {
       </p>
 
       
+    </div>
+
     </div>
   );
 };

@@ -20,7 +20,7 @@ const Navbar = () => {
         {/* Logo (Left) */}
         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
           <img
-            src="/leetsheet.svg"
+            src=""
             className="h-10 w-10 bg-[var(--leetsheet-orange)]/20 text-[var(--leetsheet-orange)] border border-[var(--leetsheet-orange)]/30 px-2 py-2 rounded-full"
             alt="Logo"
           />
