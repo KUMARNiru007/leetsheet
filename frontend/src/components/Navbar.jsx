@@ -68,44 +68,27 @@ const Navbar = () => {
               </div>
             )}
           </div>
-
-          {/* Resources dropdown */}
-          <div className="dropdown relative">
-            <button
-              className="nav-link-leetsheet text-sm font-medium flex items-center gap-1"
-              onClick={() => toggleDropdown("resources")}
-            >
-              Resources 
-              <svg className={`w-4 h-4 transition-transform duration-200 ${openDropdown === "resources" ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
-              </svg>
-            </button>
-            {openDropdown === "resources" && (
-              <div className="dropdown-menu absolute top-full left-0 mt-3 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[180px] py-2 z-50">
-                <Link 
-                  to="/about" 
-                  className="dropdown-item block px-4 py-3 text-sm"
-                  onClick={() => setOpenDropdown(null)}
-                >
-                  About
-                </Link>
-                <Link 
-                  to="/FAQ" 
-                  className="dropdown-item block px-4 py-3 text-sm"
-                  onClick={() => setOpenDropdown(null)}
-                >
-                  FAQ
-                </Link>
-              </div>
-            )}
-          </div>
-
           <Link 
             to="/pricing" 
             className="nav-link-leetsheet text-sm font-medium"
           >
             Pricing
           </Link>
+
+          <Link 
+                  to="/about" 
+                  className="nav-link-leetsheet text-sm font-medium"
+                  onClick={() => setOpenDropdown(null)}
+                >
+                  About
+                </Link>
+                <Link 
+                  to="/FAQ" 
+                  className="nav-link-leetsheet text-sm font-medium"
+                  onClick={() => setOpenDropdown(null)}
+                >
+                  FAQ
+                </Link>
         </div>
 
         {/* Auth/User (Right) */}
