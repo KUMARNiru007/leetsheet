@@ -1,6 +1,6 @@
 import React from "react";
 import { Link, Navigate } from "react-router-dom";
-import { Mail, Phone, MapPin, Github, Linkedin, X, Twitter } from "lucide-react";
+import { FaXTwitter, FaGithub, FaLinkedin } from "react-icons/fa6";
 import "../index.css";
 import { useAuthStore } from "../store/useAuthStore.js";
 import Profile from "../pages/Profile.jsx";
@@ -44,16 +44,16 @@ const Footer = () => {
           <h4 className="footer-subtitle">Contact Us</h4>
           <div className="contact-info">
             <div className="contact-item">
-              <Github className="contact-icon" size={18} />
+              <FaGithub className="contact-icon" size={18} />
               <span>Github</span>
             </div>
             <div className="contact-item">
-              <Linkedin className="contact-icon" size={18} />
+              <FaLinkedin className="contact-icon" size={18} />
               <span>Linkedin</span>
             </div>
             <div className="contact-item">
-              <Twitter className="contact-icon" size={18} />
-              <span>X</span>
+              <FaXTwitter className="contact-icon" size={18} />
+              <span>Twitter</span>
             </div>
           </div>
         </div>
