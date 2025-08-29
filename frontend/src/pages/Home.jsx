@@ -1,14 +1,14 @@
 import React from "react";
+import Footer from "../components/Footer.jsx"
 
 
 const Home = () => {
  
   return (
     <div
-      className={`flex flex-col items-center justify-center min-h-screen w-full bg-gradient-to-br transition-colors duration-300 `}
+      className="flex flex-col items-center justify-center min-h-screen max-w-8xl bg-gradient-to-br transition-colors duration-300  "
     >
     <div className="min-h-screen flex flex-col items-center mt-14">
-      <div className="absolute top-16 left-0 w-1/3 h-1/3 "></div>
       <h1 className="text-4xl font-extrabold z-10 text-center">
         Welcome to <span className="text-leetsheet-primary">LeetSheet</span>
       </h1>
@@ -21,6 +21,7 @@ const Home = () => {
 
       
     </div>
+    <Footer/>
 
     </div>
   );

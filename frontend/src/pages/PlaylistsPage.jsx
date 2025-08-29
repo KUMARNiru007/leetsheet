@@ -81,13 +81,11 @@ const Playlists = () => {
   }
 
   return (
-    <div className="min-h-screen p-3 md:px-8 rounded-2xl m-2" style={{ 
+    <div className="min-h-screen p-3 md:px-8 rounded-xl m-1" style={{ 
       backgroundColor: "var(--leetsheet-bg-secondary)", 
       color: "var(--leetsheet-text-primary)",
-      backgroundImage: "radial-gradient(circle at 25px 25px, rgba(255, 161, 22, 0.05) 2%, transparent 0%), radial-gradient(circle at 75px 75px, rgba(255, 161, 22, 0.025) 2%, transparent 0%)",
-      backgroundSize: "100px 100px"
     }}>
-      {/* Heading with improved styling */}
+      {/* Heading */}
       <div className="flex flex-col items-center justify-center w-full mb-12">
         <div className="flex items-center justify-center space-x-4 mb-4">
           <div className="w-10 h-10 p-2 rounded-xl flex items-center justify-center" style={{ 

@@ -302,7 +302,7 @@ const Profile = () => {
   }
 
   return (
-    <div className="w-full space-y-3 mt-3">
+    <div className="w-full space-y-2 mt-2">
       {/* Header Section */}
       <div className="card-leetsheet rounded-xl">
         <div className="p-2">
@@ -380,7 +380,7 @@ const Profile = () => {
       </div>
 
       {/* Statistics Grid */}
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-3">
+      <div className="grid grid-cols-1 lg:grid-cols-3 gap-2">
         {/* Progress Overview */}
         <div className="card-leetsheet rounded-xl overflow-hidden">
           <div className="p-2 pb-5" style={{ borderBottom: "1px solid var(--leetsheet-border-primary)" }}>
