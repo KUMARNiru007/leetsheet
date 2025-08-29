@@ -43,14 +43,14 @@ const App = () => {
       <Toaster/>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/problems" element={<AllProblems />} />
+          <Route path="/problems" element={authUser?<AllProblems />:<Navigate to ="/login"/>} />
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/login" />} />
           <Route path="/pricing" element={<Pricing/>} />
           <Route path="/about" element={<About/>} />
           <Route path="/faq" element={<FAQ/>} />
-          <Route path="/playlist" element={authUser ? <Playlists /> : <Navigate to="/" />} />
-          <Route path="/playlist/:id" element={authUser ? <PlaylistDetailpage /> : <Navigate to="/" />} />
+          <Route path="/playlist" element={authUser ? <Playlists /> : <Navigate to="/login" />} />
+          <Route path="/playlist/:id" element={authUser ? <PlaylistDetailpage /> : <Navigate to="/login" />} />
         </Route>
 
         <Route path="/login" element={!authUser ?<LoginPage/> : <Navigate to={"/"}/>} />
