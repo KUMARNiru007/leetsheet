@@ -1,6 +1,6 @@
 import React, { useEffect } from "react";
 import { Routes, Route,Navigate } from "react-router-dom";
-import {Toaster} from "react-hot-toast";
+import {Toaster} from "sonner";
 import "./App.css";
 import Layout from "./Layout/Layout.jsx";
 

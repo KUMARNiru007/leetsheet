@@ -15,7 +15,7 @@ import {
 import Editor from "@monaco-editor/react";
 import { useState } from 'react';
 import {axiosInstance} from "../lib/axios"
-import toast from "react-hot-toast";
+import {toast} from "sonner";
 import {useNavigate} from "react-router-dom";
 
 const problemSchema = z.object({

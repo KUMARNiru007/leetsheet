@@ -1,6 +1,6 @@
 import { create } from "zustand";
 import { axiosInstance } from "../lib/axios.js";
-import toast from "react-hot-toast";
+import {toast} from "sonner";
 
 export const useProblemStore = create((set) => ({
   problems: [],
