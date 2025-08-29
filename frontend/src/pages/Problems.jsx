@@ -79,7 +79,7 @@ function AllProblems() {
   }
 
   return (
-     <div className="flex flex-col md:flex-row min-h-screen  py-2 gap-2">
+     <div className="flex flex-col md:flex-row min-h-screen  py-1 gap-2">
       {/* Mobile filter toggle - increased width */}
       <div className="md:hidden flex justify-between items-center mb-4 w-full">
         <h1 className="text-2xl font-bold">Problems</h1>

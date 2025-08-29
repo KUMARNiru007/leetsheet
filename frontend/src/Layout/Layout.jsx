@@ -2,14 +2,14 @@ import React from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Navbar from "../components/Navbar.jsx"
 import BottomFooter from "../components/BottomFooter.jsx"
-import Footer from "../components/Footer.jsx"
+// import Footer from "../components/Footer.jsx"
 
 const Layout = () => {
     const location = useLocation();
-    
+   
     // Check if current path is home page
     const isHomePage = location.pathname === '/' || location.pathname === '/home';
-    
+   
     return (
         <div className="min-h-screen w-full relative bg-[#1a1a1a] flex flex-col">
             {/* LeetSheet Dark Theme Background */}
@@ -22,11 +22,11 @@ const Layout = () => {
             <div className="relative z-10 flex flex-col min-h-screen">
                 <div className="flex flex-col items-center justify-start flex-grow">
                     <Navbar/>
-                    <div className="w-full max-w-6xl mx-auto px-6 flex-grow">
+                    <div className={`w-full ${isHomePage ? 'max-w-full' : 'max-w-6xl px-6'} mx-auto flex-grow`}>
                         <Outlet />
                     </div>
                 </div>
-                {isHomePage && <Footer/>}
+                {/* {isHomePage && <Footer/>} */}
                 <BottomFooter />
             </div>
         </div>
