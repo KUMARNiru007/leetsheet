@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { User, Code, LogOut } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
@@ -8,10 +8,26 @@ import "../index.css";
 const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null); // 'sheets' | 'resources' | null
   const { authUser } = useAuthStore();
+  const sheetsRef = useRef(null);
 
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
+
+  // Handle click outside for user dropdown
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (sheetsRef.current && !sheetsRef.current.contains(event.target)) {
+        if (openDropdown === 'sheets') {
+          setOpenDropdown(null);
+        }
+      }
+    };
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => {
+      document.removeEventListener('mousedown', handleClickOutside);
+    };
+  }, [openDropdown]);
 
   return (
     <nav className="sticky top-0 z-60 w-full mx-auto py-1 nav-leetsheet border-[var(--leetsheet-bg-secondary)]">
@@ -39,7 +55,10 @@ const Navbar = () => {
           </Link>
 
           {/* Sheets dropdown */}
-          <div className="dropdown relative">
+          <div 
+            className="dropdown relative group"
+            ref={sheetsRef}
+          >
             <button
               className="nav-link-leetsheet text-sm font-medium flex items-center gap-1"
               onClick={() => toggleDropdown("sheets")}
@@ -49,24 +68,24 @@ const Navbar = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            {openDropdown === "sheets" && (
-              <div className="dropdown-menu absolute top-full left-0 mt-3 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[180px] py-2 z-50">
-                <Link 
-                  to="/playlist" 
-                  className="dropdown-item block px-4 py-3 text-sm"
-                  onClick={() => setOpenDropdown(null)}
-                >
-                  Company Sheets
-                </Link>
-                <Link 
-                  to="/problems" 
-                  className="dropdown-item block px-4 py-3 text-sm"
-                  onClick={() => setOpenDropdown(null)}
-                >
-                  All Problems
-                </Link>
-              </div>
-            )}
+            <div className={`dropdown-menu absolute top-full left-0 mt-2 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[150px] py-2 z-50 ${
+              openDropdown === "sheets" ? "block" : "hidden"
+            } group-hover:block`}>
+              <Link 
+                to="/playlist" 
+                className="dropdown-item block px-4 py-3 text-xs"
+                onClick={() => setOpenDropdown(null)}
+              >
+                Company Sheets
+              </Link>
+              <Link 
+                to="/problems" 
+                className="dropdown-item block px-4 py-3 text-xs"
+                onClick={() => setOpenDropdown(null)}
+              >
+                All Problems
+              </Link>
+            </div>
           </div>
           <Link 
             to="/pricing" 
@@ -162,8 +181,8 @@ const Navbar = () => {
         )}
       </div>
 
-      {/* Click outside handler */}
-      {openDropdown && (
+      {/* Click outside handler - only for user dropdown */}
+      {openDropdown === "user" && (
         <div 
           className="fixed inset-0 z-40" 
           onClick={() => setOpenDropdown(null)}
