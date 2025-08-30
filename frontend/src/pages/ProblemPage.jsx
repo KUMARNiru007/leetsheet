@@ -205,24 +205,23 @@ const ProblemPage = () => {
       {/* Navigation - Fixed height */}
       <nav className="flex-shrink-0 flex flex-col md:flex-row justify-between items-start md:items-center py-1 px-2 border-b" style={{ borderColor: 'var(--leetsheet-border-primary)' }}>
         {/* Problem Title */}
-        <div className="flex items-center gap-2">
-          {/* Logo (Left) */}
-          <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
+        <Link
+          to="/"
+          className="flex items-center hover:opacity-90 transition-all duration-300"
+        >
+          <div className="flex items-center perspective-[1000px]">
             <img
-              src="/leetsheet.svg"
-              className="h-7 w-7 border px-1 py-1 rounded-full"
-              style={{ 
-                backgroundColor: 'var(--leetsheet-orange)/20',
-                color: 'var(--leetsheet-orange)',
-                borderColor: 'var(--leetsheet-orange)/30'
-              }}
+              src="/logo.webp"
+              className="h-8 w-13 mt-1"
               alt="Logo"
             />
-          </Link>
-          <span className="text-lg md:text-xl font-bold tracking-tight text-[var(--leetsheet-text-primary)] hidden md:block">
-            LeetSheet
-          </span>
-        </div>
+            <span
+              className="text-[var(--leetsheet-text-primary)] font-bold text-xl tracking-wide  transition-transform duration-500 translate-x-[-10px]"
+            >
+              LeetSheet
+            </span>
+          </div>
+        </Link>
 
         <div className="flex gap-2 ml-4">
           <button

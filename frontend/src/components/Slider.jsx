@@ -1,89 +1,71 @@
-import React, { useState, useEffect } from "react";
-import { motion } from "motion/react";
-import { Link } from "react-router-dom";
+import React from 'react';
 
-import googleImg from "../assets/comapnylogo/google.png";
-import amazonImg from "../assets/comapnylogo/amazon.png";
-import accentureImg from "../assets/comapnylogo/accenture.png";
-import zomatoImg from "../assets/comapnylogo/zomato.png";
-import microsoftImg from "../assets/comapnylogo/microsoft.png";
-// import ciscoImg from "../assets/comapnylogo/cisco.png";
-// import oracleImg from "../assets/comapnylogo/oracle.png";
-import nvidiaImg from "../assets/comapnylogo/nvidia.png";
+const InfiniteSlider = ({ images = [] }) => {
+  // Default images for demonstration (you can remove these when using your own)
+  const defaultImages = [
+    'https://via.placeholder.com/300x200/FF6B6B/white?text=Image+1',
+    'https://via.placeholder.com/300x200/4ECDC4/white?text=Image+2', 
+    'https://via.placeholder.com/300x200/45B7D1/white?text=Image+3',
+    'https://via.placeholder.com/300x200/96CEB4/white?text=Image+4',
+    'https://via.placeholder.com/300x200/FECA57/white?text=Image+5',
+    'https://via.placeholder.com/300x200/FF9FF3/white?text=Image+6'
+  ];
 
-const companyLogos = [
-  // { logo: oracleImg, name: "Oracle" },
-  { logo: nvidiaImg, name: "NVIDIA" },
-  // { logo: ciscoImg, name: "Cisco" },
-  // { logo: spotifyImg, name: "Spotify" },
-  { logo: googleImg, name: "Google" },
-  { logo: amazonImg, name: "Amazon" },
-  { logo: microsoftImg, name: "Microsoft" },
-  { logo: accentureImg, name: "Accenture" },
-];
-
-const LogoCard = ({ company }) => (
-  <div className="mx-4 flex items-center justify-center h-16">
-    <img
-      src={company.logo}
-      alt={`${company.name} logo`}
-      className="h-8 md:h-10 object-contain"
-    />
-  </div>
-);
-
-const ImageSlider = () => {
-  const [translateX, setTranslateX] = useState(0);
-  const cardWidth = 120; // Width of each logo card plus margin
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setTranslateX((prev) => prev - 0.5);
-    }, 16);
-
-    return () => clearInterval(interval);
-  }, []);
-
-  useEffect(() => {
-    const resetPoint = -(companyLogos.length * cardWidth);
-    if (translateX <= resetPoint) {
-      setTranslateX(0);
-    }
-  }, [translateX]);
-
-  const infiniteLogos = [...companyLogos, ...companyLogos, ...companyLogos];
+  const slideImages = images.length > 0 ? images : defaultImages;
+  
+  
+  const duplicatedImages = [...slideImages, ...slideImages];
 
   return (
-    <div className="w-full py-12 overflow-hidden">
-      {/* Header */}
-      <div className="text-center mb-6">
-        <h2 className="text-2xl md:text-3xl font-bold mb-2">Where Our Learners Work</h2>
-        <p className="text-sm text-gray-600">From startups to Fortune 500s, our alumni are building the future.</p>
-      </div>
+    <div className=" w-full flex flex-col p-4" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
 
-      {/* Logo Carousel */}
-      <div className="relative w-full">
-        {/* Scrolling Container */}
-        <div className="overflow-hidden w-full">
+
+
+    <div className="w-full overflow-hidden relative">
+      {/* Left blur edge */}
+{/* Left blur edge */}
+<div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-[#1A1A1A] via-[#1A1A1A]/80 to-transparent z-10 pointer-events-none"></div>
+
+{/* Right blur edge */}
+<div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-[#1A1A1A] via-[#1A1A1A]/80 to-transparent z-10 pointer-events-none"></div>
+
+      {/* Slider container */}
+      <div className="flex animate-slide-rtl">
+        {duplicatedImages.map((image, index) => (
           <div
-            className="flex items-center"
-            style={{
-              transform: `translateX(${translateX}px)`,
-              width: "max-content",
-            }}
+            key={index}
+            className="flex-shrink-0 w-64 h-40 mx-2 rounded-lg overflow-hidden border border-gray-200 shadow-sm"
           >
-            {infiniteLogos.map((company, index) => (
-              <LogoCard key={`logo-${index}`} company={company} />
-            ))}
+            <img
+              src={typeof image === 'string' ? image : image.src || image.url}
+              alt={typeof image === 'object' ? image.alt || `Slide ${index + 1}` : `Slide ${index + 1}`}
+              className="w-full h-full object-cover"
+              onError={(e) => {
+                e.target.src = 'https://via.placeholder.com/300x200/E5E5E5/999?text=Image+Not+Found';
+              }}
+            />
           </div>
-        </div>
-
-        {/* Gradient Overlays for smooth fade effect */}
-        <div className="absolute left-0 top-0 w-16 h-full bg-gradient-to-r from-white to-transparent pointer-events-none" />
-        <div className="absolute right-0 top-0 w-16 h-full bg-gradient-to-l from-white to-transparent pointer-events-none" />
+        ))}
       </div>
+      
+      <style jsx>{`
+        @keyframes slide-rtl {
+          from {
+            transform: translateX(0);
+          }
+          to {
+            transform: translateX(-50%);
+          }
+        }
+        
+        .animate-slide-rtl {
+          animation: slide-rtl 20s linear infinite;
+          width: calc(256px * ${duplicatedImages.length} + 16px * ${duplicatedImages.length});
+        }
+      `}</style>
+    </div>
     </div>
   );
 };
 
-export default ImageSlider;
+export default InfiniteSlider;

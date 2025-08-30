@@ -47,7 +47,7 @@ function FAQ() {
           Questions
         </span>
       </h2>
-      <p className="text-base mt-8" style={{ color: 'var(--leetsheet-text-secondary)' }}>
+      <p className="text-xl mt-8" style={{ color: 'var(--leetsheet-text-secondary)' }}>
         This section answers common questions about coding challenges, helping learners understand and approach them with confidence.
       </p>
 
