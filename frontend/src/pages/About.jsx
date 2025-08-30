@@ -62,7 +62,7 @@ const About = () => {
     <div className="w-full min-h-screen" style={{color: 'var(--leetsheet-text-primary)' }}>
       {/* Header Section */}
       <div className="text-center py-12">
-        <h1 className="text-4xl sm:text-5xl md:text-6xl font-bold mb-4">
+        <h1 className="text-4xl sm:text-5xl md:text-5xl font-bold mb-4">
           About <span style={{ color: 'var(--leetsheet-orange)' }}>Us</span>
         </h1>
         <div className="w-64 h-1 mx-auto" style={{ backgroundColor: 'var(--leetsheet-orange)' }}></div>

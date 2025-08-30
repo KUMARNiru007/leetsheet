@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { User, Code, LogOut } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore";
 import LogoutButton from "./LogoutButton";
-import "../index.css";
+import leetsheet from "../assets/leetsheetlogo.png"
 
 const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null); // 'sheets' | 'resources' | null
@@ -60,15 +60,12 @@ const Navbar = () => {
       <div className="max-w-8xl mx-auto flex justify-between items-center px-6">
         
         {/* Logo (Left) */}
-        <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
+        <Link to="/" className="hover:opacity-80 transition-opacity">
           <img
-            src="google.svg"
-            className="h-10 w-10 bg-[var(--leetsheet-orange)]/20 text-[var(--leetsheet-orange)] border border-[var(--leetsheet-orange)]/30 px-2 py-2 rounded-full"
+            src={leetsheet}
+            className="h-10 w-10"
             alt="Logo"
           />
-          <span className="text-xl md:text-2xl font-bold tracking-tight text-[var(--leetsheet-text-primary)] hidden md:block">
-            LeetSheet
-          </span>
         </Link>
 
         {/* Menu (Center) */}

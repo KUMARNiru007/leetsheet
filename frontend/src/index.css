@@ -190,9 +190,8 @@ body {
 }
 
 .nav-link-leetsheet {
-  color: var(--leetsheet-text-secondary);
+  color: var(--leetsheet-text-primary);
   transition: color 0.2s ease-in-out;
-  font-weight: var(--font-weight-medium);
 }
 
 .nav-link-leetsheet:hover {
