@@ -9,10 +9,34 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null); // 'sheets' | 'resources' | null
   const { authUser } = useAuthStore();
   const sheetsRef = useRef(null);
+  const [isScrollingUp, setIsScrollingUp] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
+
+  // Handle scroll events for navbar transparency
+  useEffect(() => {
+    const handleScroll = () => {
+      const currentScrollY = window.scrollY;
+      
+      // Determine scroll direction
+      if (currentScrollY < lastScrollY) {
+        setIsScrollingUp(true);
+      } else {
+        setIsScrollingUp(false);
+      }
+      
+      setLastScrollY(currentScrollY);
+    };
+    
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+    };
+  }, [lastScrollY]);
 
   // Handle click outside for user dropdown
   useEffect(() => {
@@ -30,7 +54,9 @@ const Navbar = () => {
   }, [openDropdown]);
 
   return (
-    <nav className="sticky top-0 z-60 w-full mx-auto py-1 nav-leetsheet border-[var(--leetsheet-bg-secondary)]">
+    <nav 
+      className={`sticky top-0 z-60 w-full mx-auto py-1 border-[var(--leetsheet-bg-secondary)] transition-all duration-300 ${isScrollingUp ? 'bg-transparent' : 'nav-leetsheet'}`}
+    >
       <div className="max-w-8xl mx-auto flex justify-between items-center px-6">
         
         {/* Logo (Left) */}
