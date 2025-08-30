@@ -24,7 +24,7 @@ const Footer = () => {
       {/* Main Content - Four Columns */}
       <div className="footer-container">
         <div className="footer-section">
-          <h4 className="footer-subtitle">About Leetsheet</h4>
+          <h4 className="footer-subtitle">About LeetSheet</h4>
           <p className="footer-description">
             LeetSheet helps you master coding with problem sheets, progress tracking, and company-focused prep for your dream tech job.
           </p>

@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { Plus, Minus } from "lucide-react";
-import {  AnimatePresence } from "motion/react";
 
 const faqs = [
   {
@@ -42,13 +41,13 @@ function FAQ() {
 
   return (
     <section className="w-full max-w-4xl mb-10 mx-auto px-4 py-1 text-center mt-10" style={{ fontFamily: 'var(--font-sans)' }}>
-      <h2 className="text-leetsheet-text-primary text-5xl font-bold mb-4">
+      <h2 className="text-5xl font-bold mb-4" style={{ color: 'var(--leetsheet-text-primary)' }}>
         Frequently Asked{" "}
-        <span style={{color: 'var(--leetsheet-orange)' }}>
+        <span style={{ color: 'var(--leetsheet-orange)' }}>
           Questions
         </span>
       </h2>
-      <p className="text-base  mt-8" style={{color: 'var(--leetsheet-text-secondary)' }}>
+      <p className="text-base mt-8" style={{ color: 'var(--leetsheet-text-secondary)' }}>
         This section answers common questions about coding challenges, helping learners understand and approach them with confidence.
       </p>
 
@@ -60,30 +59,28 @@ function FAQ() {
           >
             <button
               onClick={() => toggle(index)}
-              className="w-full flex justify-between items-center text-xl text-left font-semibold text-leetsheet-text-primary"
+              className="w-full flex justify-between items-center text-xl text-left font-semibold cursor-pointer"
+              style={{ color: 'var(--leetsheet-text-primary)' }}
             >
               <span>{faq.question}</span>
               {openIndex === index ? (
-                <Minus size={20} color="var(--leetsheet-orange)" />
+                <Minus size={20} style={{ color: 'var(--leetsheet-orange)' }} className="flex-shrink-0" />
               ) : (
-                <Plus size={20} color="var(--leetsheet-orange)" />
+                <Plus size={20} style={{ color: 'var(--leetsheet-orange)' }} className="flex-shrink-0" />
               )}
             </button>
 
-            <AnimatePresence initial={false}>
-              {openIndex === index && (
-                <motion.p
-                  key="content"
-                  initial={{ height: 0, opacity: 0 }}
-                  animate={{ height: "auto", opacity: 1 }}
-                  exit={{ height: 0, opacity: 0 }}
-                  transition={{ duration: 0.3 }}
-                  className="text-base overflow-hidden mt-3 text-leetsheet-text-secondary"
-                >
-                  {faq.answer}
-                </motion.p>
-              )}
-            </AnimatePresence>
+            <div
+              className={`overflow-hidden transition-all duration-300 ease-in-out ${
+                openIndex === index 
+                  ? 'max-h-96 opacity-100 mt-3' 
+                  : 'max-h-0 opacity-0 mt-0'
+              }`}
+            >
+              <p className="text-base" style={{ color: 'var(--leetsheet-text-secondary)' }}>
+                {faq.answer}
+              </p>
+            </div>
           </div>
         ))}
       </div>

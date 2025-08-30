@@ -1,9 +1,8 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
 import { User, Code, LogOut } from "lucide-react";
-import { useAuthStore } from "../store/useAuthStore";
-import LogoutButton from "./LogoutButton";
-import leetsheet from "../assets/leetsheetlogo.png"
+import { useAuthStore } from "../store/useAuthStore.js";
+import LogoutButton from "./LogoutButton.jsx";
 
 const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null); // 'sheets' | 'resources' | null
@@ -59,14 +58,24 @@ const Navbar = () => {
     >
       <div className="max-w-8xl mx-auto flex justify-between items-center px-6">
         
-        {/* Logo (Left) */}
-        <Link to="/" className="hover:opacity-80 transition-opacity">
-          <img
-            src={leetsheet}
-            className="h-10 w-10"
-            alt="Logo"
-          />
-        </Link>
+        {/* Long Logo (Left) */}
+<Link
+  to="/"
+  className="flex items-center hover:opacity-90 transition-all duration-300"
+>
+  <div className="flex items-center perspective-[1000px]">
+    <img
+      src="/logo.webp"
+      className="h-8 w-13 mt-1"
+      alt="Logo"
+    />
+    <span
+      className="text-[var(--leetsheet-text-primary)] font-bold text-xl tracking-wide  transition-transform duration-500 translate-x-[-10px]"
+    >
+      LeetSheet
+    </span>
+  </div>
+</Link>
 
         {/* Menu (Center) */}
         <div className="navbar-menu flex items-center gap-8">

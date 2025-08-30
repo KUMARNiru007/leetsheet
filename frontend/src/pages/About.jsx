@@ -91,14 +91,10 @@ const About = () => {
               </h2>
               <div className="space-y-6" style={{ color: 'var(--leetsheet-text-secondary)' }}>
                 <p className="text-lg leading-relaxed">
-                  LeetSheet is an intuitive and modern coding platform designed to help learners and developers 
-                  sharpen their problem-solving skills through hands-on coding challenges. Whether you're preparing 
-                  for technical interviews, improving algorithmic thinking, or just love solving problems, LeetSheet 
-                  provides the tools, challenges, and community you need to grow.
+                  LeetSheet is your personal companion for mastering coding interviews. It goes beyond just solving problems, focusing on structured practice, progress tracking, and consistency to help you build real confidence.
                 </p>
                 <p className="text-lg leading-relaxed">
-                  In just 35 days, I transformed an idea into a working platform, ready to be used by students 
-                  and developers of all levels.
+                 Whether you’re preparing for placements, improving your problem-solving skills, or simply staying sharp with DSA, LeetSheet gives you a smarter, simpler, and more organized way to grow as a coder.
                 </p>
               </div>
             </div>
@@ -203,13 +199,10 @@ const About = () => {
               </h3>
               <div className="space-y-4" style={{ color: 'var(--leetsheet-text-secondary)' }}>
                 <p className="text-lg leading-relaxed">
-                  Hi, I am Kumar Nirupam, the creator of LeetSheet. I am a Computer Science student currently 
-                  in my second year. I am passionate about coding and I am always looking for new challenges 
-                  and opportunities to learn and grow.
+                  Hi, I’m Kumar Nirupam, the creator of LeetSheet and a Computer Science undergraduate student. I’m deeply passionate about coding, problem-solving, and building tools that make learning more effective.
                 </p>
                 <p className="text-lg leading-relaxed">
-                  I created this platform as a challenge given by Hitesh Sir in the Chaicode web development 
-                  Cohort 1.0. Our Cohort teachers and Teaching Assistants helped me a lot in creating this platform.
+                 LeetSheet was born from my desire to build a structured way for students and developers to prepare for coding interviews. With support from my mentors at the Chaicode Cohort, it became a platform that helps learners stay consistent, track progress, and grow with confidence.
                 </p>
               </div>
             </div>
