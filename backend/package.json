@@ -26,6 +26,7 @@
     "fs": "^0.0.1-security",
     "jsonwebtoken": "^9.0.2",
     "mailgen": "^2.0.29",
+    "nodemailer": "^7.0.6",
     "passport": "^0.7.0",
     "passport-google-oauth20": "^2.0.0",
     "prisma": "^6.6.0",
