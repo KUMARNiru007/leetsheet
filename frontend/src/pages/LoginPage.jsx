@@ -46,16 +46,24 @@ const LoginPage = () => {
 
 
   return (
-    <div className='h-screen grid lg:grid-cols-2 bg-[#1a1a1a]'>
-        <div className="flex flex-col justify-center items-center p-6 sm:p-12">
+    <div className='min-h-screen flex items-center justify-center bg-[#1a1a1a] p-4'>
         <div className="w-full max-w-md space-y-8">
           {/* Logo */}
           <div className="text-center mb-8">
             <div className="flex flex-col items-center gap-2 group">
-              <div className="w-12 h-12 rounded-xl bg-[#ffa116]/10 flex items-center justify-center group-hover:bg-[#ffa116]/20 transition-colors">
-                <Code className="w-6 h-6 text-[#ffa116]" />
-              </div>
-              <h1 className="text-2xl font-bold mt-2 text-white">Welcome Back</h1>
+              <div className="flex items-center perspective-[1000px]">
+    <img
+      src="/logo.webp"
+      className="h-20 w-23 mt-1"
+      alt="Logo"
+    />
+    <span
+      className="text-[var(--leetsheet-text-primary)] font-bold text-xl tracking-wide  transition-transform duration-500 translate-x-[-20px]"
+    >
+      LeetSheet
+    </span>
+  </div>
+              <h1 className="text-xl font-bold  text-white">Welcome Back</h1>
               <p className="text-[#b3b3b3]">Login to your account</p>
             </div>
           </div>
@@ -73,7 +81,6 @@ const LoginPage = () => {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Mail className="h-5 w-5 text-[#8c8c8c]" />
                 </div>
                 <input
                   type="email"
@@ -96,7 +103,6 @@ const LoginPage = () => {
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                  <Lock className="h-5 w-5 text-[#8c8c8c]" />
                 </div>
                 <input
                   type={showPassword ? "text" : "password"}
@@ -164,7 +170,6 @@ const LoginPage = () => {
             </p>
           </div>
         </div>
-      </div>
     </div>
   )
 }
