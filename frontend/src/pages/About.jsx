@@ -1,5 +1,5 @@
 import React, { useRef } from "react";
-import codeleaplogo from "./assets/google.svg";
+import profile from "./assets/creator.webp";
 import { FaXTwitter, FaGithub, FaLinkedin } from "react-icons/fa6";
 
 import akash from "./assets/akash.webp";
@@ -99,14 +99,29 @@ const About = () => {
               </div>
             </div>
             <div className="relative">
-              <div className="rounded-2xl overflow-hidden shadow-2xl border" style={{ borderColor: 'var(--leetsheet-border-primary)' }}>
-                <img
-                  src={codeleaplogo}
-                  alt="Leetsheet journey"
-                  className="w-full h-80 object-contain"
-                  style={{ backgroundColor: 'var(--leetsheet-bg-secondary)' }}
-                />
-              </div>
+              <div
+  className="rounded-2xl overflow-hidden shadow-2xl border"
+  style={{ borderColor: "var(--leetsheet-border-primary)" }}
+>
+  <div
+    className="flex items-center justify-center w-full h-80"
+    style={{ backgroundColor: "var(--leetsheet-bg-secondary)" }}
+  >
+    <div className="flex items-center perspective-[1000px]">
+      <img
+        src="/logo.webp"
+        className="h-48 w-63 mt-1"
+        alt="Logo"
+      />
+      <span
+        className="text-[var(--leetsheet-text-primary)] font-bold text-5xl tracking-wide transition-transform duration-500 translate-x-[-60px]"
+      >
+        LeetSheet
+      </span>
+    </div>
+  </div>
+</div>
+
             </div>
           </div>
         </div>
@@ -119,8 +134,12 @@ const About = () => {
       >
         <div className="grid md:grid-cols-2 gap-20">
           {/* Why LeetSheet? */}
-          <div>
-            <h3 className="text-3xl font-semibold mb-6">Why "Leet<span style={{ color: 'var(--leetsheet-orange)' }}>Sheet</span>"?</h3>
+          <div >
+            <div className="mb-3">
+            <h3 className="text-3xl font-semibold">Why "LeetSheet"?</h3>
+            <div className="w-34 h-1 mx-auto ml-21" style={{ backgroundColor: 'var(--leetsheet-orange)' }}></div>
+            </div>
+
             <p className="text-lg mb-6" style={{ color: 'var(--leetsheet-text-secondary)' }}>
               We wanted a name that reflects clarity, structure, and growth. LeetSheet is all about:
             </p>
@@ -209,41 +228,44 @@ const About = () => {
             <div className="relative group">
               <div className="rounded-2xl overflow-hidden shadow-2xl border" style={{ borderColor: 'var(--leetsheet-border-primary)' }}>
                 <img
-                  src={codeleaplogo}
+                  src={profile}
                   alt="Kumar Nirupam"
                   className="w-full h-80 object-cover"
                 />
                 
                 {/* Social Icons Overlay */}
-                <div className="absolute top-4 right-4 z-20 flex flex-col gap-2 text-xl opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300">
-                  <a
-                    href="https://x.com/KumarNirupam1"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full transition-all duration-300 hover:scale-110"
-                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(10px)' }}
-                  >
-                    <FaXTwitter className="transition duration-300" />
-                  </a>
-                  <a
-                    href="https://github.com/KUMARNiru007"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full transition-all duration-300 hover:scale-110"
-                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(10px)' }}
-                  >
-                    <FaGithub className="transition duration-300" />
-                  </a>
-                  <a
-                    href="https://www.linkedin.com/in/kumarnirupam/"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="p-2 rounded-full transition-all duration-300 hover:scale-110"
-                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.2)', backdropFilter: 'blur(10px)' }}
-                  >
-                    <FaLinkedin className="transition duration-300" />
-                  </a>
-                </div>
+<div
+  className="absolute top-4 right-4 z-20 flex flex-col gap-2 text-xl opacity-100 md:opacity-0 md:group-hover:opacity-100 transition-opacity duration-300"
+>
+  <a
+    href="https://x.com/KumarNirupam1"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="p-2 rounded-full transition-all duration-300 hover:scale-110 group bg-white/90 backdrop-blur-sm border border-black/10"
+  >
+    <FaXTwitter className="text-black transition duration-300 group-hover:text-gray-700" />
+  </a>
+
+  <a
+    href="https://github.com/KUMARNiru007"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="p-2 rounded-full transition-all duration-300 hover:scale-110 group bg-white/90 backdrop-blur-sm border border-black/10"
+  >
+    <FaGithub className="text-black transition duration-300 group-hover:text-gray-700" />
+  </a>
+
+  <a
+    href="https://www.linkedin.com/in/kumarnirupam/"
+    target="_blank"
+    rel="noopener noreferrer"
+    className="p-2 rounded-full transition-all duration-300 hover:scale-110 group bg-white/90 backdrop-blur-sm border border-black/10"
+  >
+    <FaLinkedin className="text-black transition duration-300 group-hover:text-gray-700" />
+  </a>
+</div>
+
+
               </div>
             </div>
           </div>
@@ -261,7 +283,7 @@ const About = () => {
                    color: 'var(--leetsheet-orange)',
                    borderColor: 'var(--leetsheet-orange)'
                  }}>
-              Our Mentors
+              Mentors
             </div>
             <h2 className="text-3xl sm:text-4xl md:text-5xl font-bold mb-4" style={{ color: 'var(--leetsheet-orange)' }}>
               Mentorship that <span style={{ color: 'var(--leetsheet-text-primary)' }}>Guided</span>  Me

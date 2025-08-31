@@ -1,18 +1,18 @@
 import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Link } from 'react-router-dom';
-import herobg from '../assets/bg.png';
+import herobg from '../assets/bg.webp';
 // import ImageSlider from '../components/Slider.jsx';
 
 // Import language icons
-import javaIcon from '../assets/languages/java.png';
-import javascriptIcon from '../assets/languages/javascript.png';
-import pythonIcon from '../assets/languages/python.png';
-import rubyIcon from '../assets/languages/ruby.png';
-import rustIcon from '../assets/languages/rust.png';
-import typescriptIcon from '../assets/languages/typescript.png';
-import goIcon from '../assets/languages/go.png';
-import phpIcon from '../assets/languages/php.png';
+import javaIcon from '../assets/languages/java.webp';
+import javascriptIcon from '../assets/languages/javascript.webp';
+import pythonIcon from '../assets/languages/python.webp';
+import rubyIcon from '../assets/languages/ruby.webp';
+import rustIcon from '../assets/languages/rust.webp';
+import typescriptIcon from '../assets/languages/typescript.webp';
+import goIcon from '../assets/languages/go.webp';
+import phpIcon from '../assets/languages/php.webp';
 import { ArrowRight } from 'lucide-react';
 
 const Hero = () => {

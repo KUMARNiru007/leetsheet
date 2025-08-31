@@ -1,14 +1,14 @@
 import  React from 'react';
 
-import accentureImg from "../assets/comapnylogo/accenture.png"
-import amazonImg from "../assets/comapnylogo/amazon.png"
-import googleImg from "../assets/comapnylogo/google.png"
-import microsoftImg from "../assets/comapnylogo/microsoft.png"
-import netflixImg from "../assets/comapnylogo/netflix.png"
-import nvidiaImg from "../assets/comapnylogo/nvidia.png"
-import openaiImg from "../assets/comapnylogo/openai.png"
-import paypalImg from "../assets/comapnylogo/paypal.png"
-import zomatoImg from "../assets/comapnylogo/zomato.png"
+import accentureImg from "../assets/comapnylogo/accenture.webp"
+import amazonImg from "../assets/comapnylogo/amazon.webp"
+import googleImg from "../assets/comapnylogo/google.webp"
+import microsoftImg from "../assets/comapnylogo/microsoft.webp"
+import netflixImg from "../assets/comapnylogo/netflix.webp"
+import nvidiaImg from "../assets/comapnylogo/nvidia.webp"
+import openaiImg from "../assets/comapnylogo/openai.webp"
+import paypalImg from "../assets/comapnylogo/paypal.webp"
+import zomatoImg from "../assets/comapnylogo/zomato.webp"
 
 
 
