@@ -332,7 +332,7 @@ await db.user.update({
     console.log('Session after:', req.session);
     console.log(
       'Cookies set, redirecting to:',
-      `${process.env.FONTEND_URL}/problems`,
+      `${process.env.FRONTEND_URL}/problems`,
     );
 
     res.redirect(`${process.env.FRONTEND_URL}/problems`);
