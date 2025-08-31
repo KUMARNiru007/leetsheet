@@ -335,7 +335,7 @@ await db.user.update({
       `${process.env.FONTEND_URL}/problems`,
     );
 
-    res.redirect(`${process.env.FONTEND_URL}/problems`);
+    res.redirect(`${process.env.FRONTEND_URL}/problems`);
 
         }catch(error){
             return res.status(400).json({
