@@ -18,7 +18,7 @@ function BottomFooter() {
           </a>
           
           <a
-            href="https://linkedin.com/in/your-profile"
+            href="https://www.linkedin.com/in/kumarnirupam/"
             className="nav-link-leetsheet flex items-center gap-2 hover:text-[var(--leetsheet-orange)] transition-colors duration-200"
             rel="noopener noreferrer"
             target="_blank"
@@ -41,9 +41,7 @@ function BottomFooter() {
       <div className="flex flex-wrap justify-center lg:justify-end gap-4 lg:gap-6 font-normal text-center break-words">
         <span className="text-[var(--leetsheet-text-secondary)]">
           © 2025 
-          <span className="font-semibold mx-1 text-[var(--leetsheet-orange)]">
-            LeetSheet
-          </span>
+          LeetSheet
           All Rights Reserved.
         </span>
         <span className="text-[var(--leetsheet-text-secondary)] hover:text-[var(--leetsheet-orange)]">

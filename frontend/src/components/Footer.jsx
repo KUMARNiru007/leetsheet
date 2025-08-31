@@ -41,22 +41,42 @@ const Footer = () => {
         </div>
         
         <div className="footer-section">
-          <h4 className="footer-subtitle">Contact Us</h4>
-          <div className="contact-info">
-            <div className="contact-item">
-              <FaGithub className="contact-icon" size={18} />
-              <span>Github</span>
-            </div>
-            <div className="contact-item">
-              <FaLinkedin className="contact-icon" size={18} />
-              <span>Linkedin</span>
-            </div>
-            <div className="contact-item">
-              <FaXTwitter className="contact-icon" size={18} />
-              <span>Twitter</span>
-            </div>
-          </div>
-        </div>
+  <h4 className="footer-subtitle">Contact Us</h4>
+  <div className="contact-info">
+
+    <a
+      href="https://github.com/KUMARNiru007/leetsheet"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="contact-item"
+    >
+      <FaGithub className="contact-icon" size={18} />
+      <span>Github</span>
+    </a>
+
+    <a
+      href="https://www.linkedin.com/in/kumarnirupam/"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="contact-item"
+    >
+      <FaLinkedin className="contact-icon" size={18} />
+      <span>LinkedIn</span>
+    </a>
+
+    <a
+      href="https://x.com/KumarNirupam1"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="contact-item"
+    >
+      <FaXTwitter className="contact-icon" size={18} />
+      <span>Twitter</span>
+    </a>
+
+  </div>
+</div>
+
         
         <div className="footer-section">
           <h4 className="footer-subtitle">Newsletter</h4>
