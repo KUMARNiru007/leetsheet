@@ -64,7 +64,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.get("/", (req, res) => {
-  res.send("Hello Guys welcome to leetlab🔥  ");
+  res.send("Hello Guys welcome to leetsheet🔥  ");
 });
 
 
