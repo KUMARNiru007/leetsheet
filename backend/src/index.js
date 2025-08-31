@@ -53,7 +53,7 @@ app.use(
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       sameSite: isProduction ? 'none' : 'lax',
-      domain: isProduction ? '.codeleap.in' : undefined,
+      domain: isProduction ? '.leetsheet.in' : undefined,
     },
   }),
 );
