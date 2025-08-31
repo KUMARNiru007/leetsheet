@@ -18,7 +18,7 @@ import {
   Activity,
   BarChart2,
 } from "lucide-react";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "../store/useAuthStore.js";
 import { useProblemStore } from "../store/useProblemStore.js";
 import { useSubmissionStore } from "../store/useSubmissionStore.js";
 import { useUserStore } from "../store/useUserStore.js";

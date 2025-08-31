@@ -12,7 +12,7 @@ import {
 } from "lucide-react";
 
 import {z} from "zod";
-import { useAuthStore } from "../store/useAuthStore";
+import { useAuthStore } from "../store/useAuthStore.js";
 import google from "./assets/google.svg";
 
 const SignUpSchema = z.object({
