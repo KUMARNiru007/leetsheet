@@ -1,45 +1,67 @@
-import React from 'react';
+import  React from 'react';
+
+import accentureImg from "../assets/comapnylogo/accenture.png"
+import amazonImg from "../assets/comapnylogo/amazon.png"
+import googleImg from "../assets/comapnylogo/google.png"
+import microsoftImg from "../assets/comapnylogo/microsoft.png"
+import netflixImg from "../assets/comapnylogo/netflix.png"
+import nvidiaImg from "../assets/comapnylogo/nvidia.png"
+import openaiImg from "../assets/comapnylogo/openai.png"
+import paypalImg from "../assets/comapnylogo/paypal.png"
+import zomatoImg from "../assets/comapnylogo/zomato.png"
+
+
+
 
 const InfiniteSlider = ({ images = [] }) => {
-  // Default images for demonstration (you can remove these when using your own)
-  const defaultImages = [
-    'https://via.placeholder.com/300x200/FF6B6B/white?text=Image+1',
-    'https://via.placeholder.com/300x200/4ECDC4/white?text=Image+2', 
-    'https://via.placeholder.com/300x200/45B7D1/white?text=Image+3',
-    'https://via.placeholder.com/300x200/96CEB4/white?text=Image+4',
-    'https://via.placeholder.com/300x200/FECA57/white?text=Image+5',
-    'https://via.placeholder.com/300x200/FF9FF3/white?text=Image+6'
+  // Company logos array
+  const companyLogos = [
+    { src: accentureImg, alt: 'Accenture' },
+    { src: amazonImg, alt: 'Amazon' },
+    { src: googleImg, alt: 'Google' },
+    { src: microsoftImg, alt: 'Microsoft' },
+    { src: netflixImg, alt: 'Netflix' },
+    { src: nvidiaImg, alt: 'NVIDIA' },
+    { src: openaiImg, alt: 'OpenAI' },
+    { src: paypalImg, alt: 'PayPal' },
+    { src: zomatoImg, alt: 'Zomato' }
   ];
 
-  const slideImages = images.length > 0 ? images : defaultImages;
-  
+  const slideImages = images.length > 0 ? images : companyLogos;
   
   const duplicatedImages = [...slideImages, ...slideImages];
 
+
   return (
-    <div className=" w-full flex flex-col p-4" style={{ backgroundColor: 'var(--leetsheet-bg-primary)' }}>
+    <div className=" w-full flex flex-col py-4 pb-20 " >
 
-
+      <div className="text-center mb-8 mt-10">
+        <h2 className="text-4xl font-bold mb-4" style={{ color: 'var(--leetsheet-text-primary)' }}>
+          Company Specific <span style={{ color: 'var(--leetsheet-orange)' }}>DSA </span>Sheets
+        </h2>
+        <p className="text-lg mb-6" style={{ color: 'var(--leetsheet-text-secondary)' }}>
+          Boost your coding preparation with sheets tailored to company-specific requirements.
+        </p>
+      </div>
 
     <div className="w-full overflow-hidden relative">
       {/* Left blur edge */}
-{/* Left blur edge */}
-<div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-[#1A1A1A] via-[#1A1A1A]/80 to-transparent z-10 pointer-events-none"></div>
+      <div className="absolute left-0 top-0 w-20 h-full bg-gradient-to-r from-[#1A1A1A] via-[#1A1A1A]/80 to-transparent z-10 pointer-events-none"></div>
 
-{/* Right blur edge */}
-<div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-[#1A1A1A] via-[#1A1A1A]/80 to-transparent z-10 pointer-events-none"></div>
+      {/* Right blur edge */}
+      <div className="absolute right-0 top-0 w-20 h-full bg-gradient-to-l from-[#1A1A1A] via-[#1A1A1A]/80 to-transparent z-10 pointer-events-none"></div>
 
       {/* Slider container */}
       <div className="flex animate-slide-rtl">
         {duplicatedImages.map((image, index) => (
           <div
             key={index}
-            className="flex-shrink-0 w-64 h-40 mx-2 rounded-lg overflow-hidden border border-gray-200 shadow-sm"
+            className="flex-shrink-0 w-64 h-35 mx-2 rounded-lg overflow-hidden border border-gray-200 shadow-sm bg-white flex items-center justify-center p-4"
           >
             <img
               src={typeof image === 'string' ? image : image.src || image.url}
               alt={typeof image === 'object' ? image.alt || `Slide ${index + 1}` : `Slide ${index + 1}`}
-              className="w-full h-full object-cover"
+              className="max-w-full max-h-full object-contain"
               onError={(e) => {
                 e.target.src = 'https://via.placeholder.com/300x200/E5E5E5/999?text=Image+Not+Found';
               }}

@@ -23,7 +23,7 @@ const Hero = () => {
   const floatingLeftRef = useRef(null);
   const floatingRightRef = useRef(null);
   const bottomImageSection = useRef(null);
-  const underlineRef = useRef(null); // New ref for the animated underline
+  const underlineRef = useRef(null); 
   
   // Refs for language icons
   const javaRef = useRef(null);
