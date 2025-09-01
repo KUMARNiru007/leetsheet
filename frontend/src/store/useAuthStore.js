@@ -122,14 +122,19 @@ export const useAuthStore = create((set) => ({
     }
   },
   
-  // Add this new function
-  handleGoogleAuthSuccess: () => {
-    // This will be called after a successful Google auth redirect
-    const isRedirectedFromGoogle = sessionStorage.getItem('googleAuthRedirect') === 'true';
-    
-    if (isRedirectedFromGoogle) {
+  // Add this new function to handle Google auth completion
+  completeGoogleAuth: async () => {
+    try {
+      const response = await axiosInstance.get("/auth/check");
+      set({ authUser: response.data.user });
+      set({ isLoggedOut: false });
+      localStorage.removeItem('isLoggedOut');
       toast.success("Successfully logged in with Google");
-      sessionStorage.removeItem('googleAuthRedirect');
+      return true;
+    } catch (error) {
+      console.log("Error completing Google auth:", error);
+      toast.error("Failed to complete Google login");
+      return false;
     }
   },
 }));

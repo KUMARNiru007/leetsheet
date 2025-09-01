@@ -23,7 +23,7 @@ import Pricing from "./pages/Pricing.jsx"
 
 const App = () => {
 
-  const { authUser, checkAuth, isCheckingAuth, refreshToken, handleGoogleAuthSuccess } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth, refreshToken, completeGoogleAuth } = useAuthStore();
   const location = useLocation();
 
   // Create a memoized version of checkAuth
@@ -50,12 +50,23 @@ const App = () => {
     return () => clearInterval(interval);
   }, [refreshToken]);
 
-  // Add this effect to handle Google auth success
+  // Add this effect to handle Google auth redirect
   useEffect(() => {
-    if (authUser && location.pathname === '/problems') {
-      handleGoogleAuthSuccess();
-    }
-  }, [authUser, location.pathname, handleGoogleAuthSuccess]);
+    const handleGoogleAuthRedirect = async () => {
+      // Check if we're coming from a Google auth redirect
+      const isRedirectedFromGoogle = sessionStorage.getItem('googleAuthRedirect') === 'true';
+      
+      if (isRedirectedFromGoogle && location.pathname === '/problems') {
+        // Complete the Google auth process
+        const success = await completeGoogleAuth();
+        if (success) {
+          sessionStorage.removeItem('googleAuthRedirect');
+        }
+      }
+    };
+
+    handleGoogleAuthRedirect();
+  }, [location.pathname, completeGoogleAuth]);
 
   if (isCheckingAuth && !authUser) {
     return (
