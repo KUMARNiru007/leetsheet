@@ -32,7 +32,7 @@ model User {
   email             String   @unique
   image             String?
   role              UserRole @default(USER)
-  password          String
+  password          String?
   verificationToken String?
   isVerified        Boolean  @default(false)
   accessToken       String?
