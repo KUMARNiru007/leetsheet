@@ -23,7 +23,7 @@ import Pricing from "./pages/Pricing.jsx"
 
 const App = () => {
 
-  const { authUser, checkAuth, isCheckingAuth, refreshToken } = useAuthStore();
+  const { authUser, checkAuth, isCheckingAuth, refreshToken, handleGoogleAuthSuccess } = useAuthStore();
   const location = useLocation();
 
   // Create a memoized version of checkAuth
@@ -49,6 +49,13 @@ const App = () => {
 
     return () => clearInterval(interval);
   }, [refreshToken]);
+
+  // Add this effect to handle Google auth success
+  useEffect(() => {
+    if (authUser && location.pathname === '/problems') {
+      handleGoogleAuthSuccess();
+    }
+  }, [authUser, location.pathname, handleGoogleAuthSuccess]);
 
   if (isCheckingAuth && !authUser) {
     return (

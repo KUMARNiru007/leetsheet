@@ -165,8 +165,10 @@ const SignUpPage = () => {
           )}
         </button>
         <a
-  href={`https://leetsheet.onrender.com/api/v1/auth/google`}
+  href={`https://api.leetsheet.in/api/v1/auth/google`}
   className="w-full py-2 rounded-lg font-semibold text-white bg-[#4285f4] hover:bg-[#3367d6] transition flex items-center justify-center gap-2 cursor-pointer"
+  onClick={() => sessionStorage.setItem('googleAuthRedirect', 'true')}
+
 >
   <img
     src={google}

@@ -121,4 +121,15 @@ export const useAuthStore = create((set) => ({
       console.error("Error refreshing tokens: ", error);
     }
   },
+  
+  // Add this new function
+  handleGoogleAuthSuccess: () => {
+    // This will be called after a successful Google auth redirect
+    const isRedirectedFromGoogle = sessionStorage.getItem('googleAuthRedirect') === 'true';
+    
+    if (isRedirectedFromGoogle) {
+      toast.success("Successfully logged in with Google");
+      sessionStorage.removeItem('googleAuthRedirect');
+    }
+  },
 }));
