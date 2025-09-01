@@ -14,7 +14,7 @@ function AllProblems() {
   const [selectedDifficulty, setSelectedDifficulty] = useState("ALL");
 
   // Mock company data
-  const companies = ["Google", "Microsoft", "Amazon", "Facebook", "Apple", "Netflix"];
+  const companies = ["Google", "Microsoft", "Amazon", "Facebook", "Apple", "Netflix","PayPal","Oracle","Airbub","Bloomberg","Adobe","Stripe"];
   
   // Topic categories
   const topics = ["Array", "String", "Tree", "Graph", "Dynamic Programming", "Math", "Hash Table", "Sorting"];

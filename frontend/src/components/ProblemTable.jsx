@@ -21,7 +21,7 @@ const ProblemsTable = ({ problems }) => {
   const [expandedRows, setExpandedRows] = useState(new Set());
 
   // Known company tags
-  const companyTags = ["Google", "Amazon", "Netflix", "Microsoft", "Facebook", "Apple"];
+  const companyTags =  ["Google", "Microsoft", "Amazon", "Facebook", "Apple", "Netflix","PayPal","Oracle","Airbub","Bloomberg","Adobe","Stripe"];
 
   // Extract all unique tags from problems
   const allTags = useMemo(() => {
@@ -49,7 +49,7 @@ const ProblemsTable = ({ problems }) => {
   }, [problems, search, difficulty, selectedTag]);
 
   // Pagination logic
-  const itemsPerPage = 5;
+  const itemsPerPage = 6;
   const totalPages = Math.ceil(filteredProblems.length / itemsPerPage);
   const paginatedProblems = useMemo(() => {
     return filteredProblems.slice(
