@@ -316,16 +316,7 @@ const Hero = () => {
             </Link>
           </div>
           
-          {/* Peerlist image*/}
-          <Link 
-          to="https://peerlist.io/kumarnirupam/project/leetsheet"
-          className="mt-6 flex justify-center">
-            <img
-              src={Peerlist}
-              alt="Peerlist badge"
-              className="w-44 md:w-48 bg-black/80 backdrop-blur-sm p-3 rounded-xl border border-gray-600 hover:border-orange-300 shadow-lg hover:shadow-[0_0_20px_rgba(244,255,84,0.3)] transition-all duration-300"
-            />
-          </Link>
+          
         </div>
       </section>
     </div>
