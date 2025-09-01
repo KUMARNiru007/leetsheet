@@ -14,6 +14,7 @@ import typescriptIcon from '../assets/languages/typescript.webp';
 import goIcon from '../assets/languages/go.webp';
 import phpIcon from '../assets/languages/php.webp';
 import { ArrowRight } from 'lucide-react';
+import Peerlist from "../assets/PeerlistSvg_light.svg"
 
 const Hero = () => {
   const headingRef = useRef(null);
@@ -311,9 +312,20 @@ const Hero = () => {
               to='/playlist'
               className='px-6 py-3 rounded-full w-[85%] sm:w-auto border border-orange-300 font-semibold hover:text-white hover:bg-orange-400 transition'
             >
-              Explore Sheets <i class="ri-arrow-right-line"></i>
+              Explore Sheets <ArrowRight className="inline ml-1" size={16} />
             </Link>
           </div>
+          
+          {/* Peerlist image*/}
+          <Link 
+          to="https://peerlist.io/kumarnirupam/project/leetsheet"
+          className="mt-6 flex justify-center">
+            <img
+              src={Peerlist}
+              alt="Peerlist badge"
+              className="w-44 md:w-48 bg-black/80 backdrop-blur-sm p-3 rounded-xl border border-gray-600 hover:border-orange-300 shadow-lg hover:shadow-[0_0_20px_rgba(244,255,84,0.3)] transition-all duration-300"
+            />
+          </Link>
         </div>
       </section>
     </div>
