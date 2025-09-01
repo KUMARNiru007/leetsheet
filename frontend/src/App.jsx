@@ -1,5 +1,5 @@
-import React, { useEffect } from "react";
-import { Routes, Route,Navigate } from "react-router-dom";
+import React, { useEffect, useCallback } from "react";
+import { Routes, Route, Navigate, useLocation } from "react-router-dom";
 import {Toaster} from "sonner";
 import "./App.css";
 import Layout from "./Layout/Layout.jsx";
@@ -8,7 +8,7 @@ import Home from "./pages/Home";
 import LoginPage from "./pages/LoginPage";
 
 import SignUpPage from "./pages/SignUpPage";
-import { useAuthStore } from "./store/useAuthStore";
+import { useAuthStore } from "./store/useAuthStore.js";
 import { Loader } from "lucide-react";
 import AddProblem from "./pages/AddProblem.jsx";
 import AdminRoute from "./components/AdminRoute.jsx";
@@ -23,12 +23,32 @@ import Pricing from "./pages/Pricing.jsx"
 
 const App = () => {
 
-  const{authUser,checkAuth,isCheckingAuth} = useAuthStore()
+  const { authUser, checkAuth, isCheckingAuth, refreshToken } = useAuthStore();
+  const location = useLocation();
 
+  // Create a memoized version of checkAuth
+  const checkAuthStatus = useCallback(() => {
+    checkAuth();
+  }, [checkAuth]);
+
+  // Check auth on initial load
   useEffect(() => {
-    checkAuth()
+    checkAuthStatus();
+  }, [checkAuthStatus]);
 
-  },[checkAuth]);
+  // Check auth when route changes (especially after Google redirect)
+  useEffect(() => {
+    checkAuthStatus();
+  }, [location.pathname, checkAuthStatus]);
+
+  // Token refresh interval
+  useEffect(() => {
+    const interval = setInterval(() => {
+      refreshToken();
+    }, 1000 * 60 * 3); // Refresh every 3 minutes
+
+    return () => clearInterval(interval);
+  }, [refreshToken]);
 
   if (isCheckingAuth && !authUser) {
     return (
