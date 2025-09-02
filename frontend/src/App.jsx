@@ -81,7 +81,7 @@ const App = () => {
       <Toaster/>
       <Routes>
         <Route element={<Layout />}>
-          <Route path="/problems" element={<AllProblems />} />
+          <Route path="/problems" element={authUser ?<AllProblems /> :<Navigate to = "/login"/>} />
           <Route path="/" element={<Home />} />
           <Route path="/profile" element={authUser ? <Profile /> : <Navigate to="/login" />} />
           <Route path="/pricing" element={<Pricing/>} />

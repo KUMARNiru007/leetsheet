@@ -2,9 +2,7 @@ import { useLayoutEffect, useRef } from 'react';
 import { gsap } from 'gsap';
 import { Link } from 'react-router-dom';
 import herobg from '../assets/bg.webp';
-// import ImageSlider from '../components/Slider.jsx';
-
-// Import language icons
+import PeerlistIcon from "../assets/PeerlistSvg_light.svg";
 import javaIcon from '../assets/languages/java.webp';
 import javascriptIcon from '../assets/languages/javascript.webp';
 import pythonIcon from '../assets/languages/python.webp';
@@ -14,7 +12,6 @@ import typescriptIcon from '../assets/languages/typescript.webp';
 import goIcon from '../assets/languages/go.webp';
 import phpIcon from '../assets/languages/php.webp';
 import { ArrowRight } from 'lucide-react';
-import Peerlist from "../assets/PeerlistSvg_light.svg"
 
 const Hero = () => {
   const headingRef = useRef(null);
@@ -24,7 +21,8 @@ const Hero = () => {
   const floatingLeftRef = useRef(null);
   const floatingRightRef = useRef(null);
   const bottomImageSection = useRef(null);
-  const underlineRef = useRef(null); 
+  const underlineRef = useRef(null);
+  const peerlistRef = useRef(null);
   
   // Refs for language icons
   const javaRef = useRef(null);
@@ -51,10 +49,9 @@ const Hero = () => {
           duration: 1,
           ease: 'power3.out',
           stagger: 0.2,
-        },
+        }
       );
 
-      // Animated underline for "Coding" - starts after the main text animations
       gsap.fromTo(underlineRef.current, 
         {
           width: '0%',
@@ -64,8 +61,23 @@ const Hero = () => {
           width: '100%',
           opacity: 1,
           duration: 1.2,
-          delay: 1, // Starts after the main heading animation
+          delay: 1,
           ease: 'power2.out',
+        }
+      );
+
+      // Animation for Peerlist image
+      gsap.fromTo(peerlistRef.current,
+        {
+          opacity: 0,
+          y: 20
+        },
+        {
+          opacity: 1,
+          y: 0,
+          duration: 1,
+          delay: 1,
+          ease: 'power2.out'
         }
       );
 
@@ -247,7 +259,7 @@ const Hero = () => {
         ref={goRef}
         src={goIcon} 
         alt="Go" 
-        className="absolute z-10 opacity-70 hover:opacity-600 transition-opacity"
+        className="absolute z-10 opacity-70 hover:opacity-100 transition-opacity"
         style={{ width: "70px", height: "60px", top: "55%", right: "6%" }}
       />
       
@@ -276,8 +288,7 @@ const Hero = () => {
             className='text-4xl sm:text-5xl md:text-6xl font-bold '
           >
             Your Personal <span className ="text-orange-400">Sheet</span>  To <br /> 
-            Master <span className="relative inline-block  ">
-              Coding
+            Master <span className="relative inline-block  ">Coding
               {/* Animated underline */}
               <span 
                 ref={underlineRef}
@@ -316,7 +327,23 @@ const Hero = () => {
             </Link>
           </div>
           
-          
+
+           {/* Peerlist Link */}
+          <div className="pt-8">
+            <a
+              href="https://peerlist.io/kumarnirupam/project/leetsheet"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-block transition-all duration-300 hover:scale-110 hover:drop-shadow-[0_0_15px_rgba(251,146,60,0.8)]"
+              ref={peerlistRef}
+            >
+              <img 
+                src={PeerlistIcon} 
+                alt="View on Peerlist" 
+                className="h-8 opacity-80 hover:opacity-100 transition-opacity duration-300"
+              />
+            </a>
+          </div>
         </div>
       </section>
     </div>
