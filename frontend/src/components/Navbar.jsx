@@ -1,18 +1,23 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link } from "react-router-dom";
-import { User, Code, LogOut } from "lucide-react";
+import { User, Code, LogOut, Menu, X } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore.js";
 import LogoutButton from "./LogoutButton.jsx";
 
 const Navbar = () => {
-  const [openDropdown, setOpenDropdown] = useState(null); // 'sheets' | 'resources' | null
+  const [openDropdown, setOpenDropdown] = useState(null); // 'sheets' | 'resources' | 'user' | 'mobile' | null
   const { authUser } = useAuthStore();
   const sheetsRef = useRef(null);
   const [isScrollingUp, setIsScrollingUp] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
+  };
+
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
   };
 
   // Handle scroll events for navbar transparency
@@ -59,26 +64,38 @@ const Navbar = () => {
       <div className="max-w-8xl mx-auto flex justify-between items-center px-6">
         
         {/* Long Logo (Left) */}
-<Link
-  to="/"
-  className="flex items-center hover:opacity-90 transition-all duration-300"
->
-  <div className="flex items-center perspective-[1000px]">
-    <img
-      src="/logo.webp"
-      className="h-8 w-13 mt-1"
-      alt="Logo"
-    />
-    <span
-      className="text-[var(--leetsheet-text-primary)] font-bold text-xl tracking-wide  transition-transform duration-500 translate-x-[-10px]"
-    >
-      LeetSheet
-    </span>
-  </div>
-</Link>
+        <Link
+          to="/"
+          className="flex items-center hover:opacity-90 transition-all duration-300"
+        >
+          <div className="flex items-center perspective-[1000px]">
+            <img
+              src="/logo.webp"
+              className="h-8 w-13 mt-1"
+              alt="Logo"
+            />
+            <span
+              className="text-[var(--leetsheet-text-primary)] font-bold text-xl tracking-wide transition-transform duration-500 translate-x-[-10px]"
+            >
+              LeetSheet
+            </span>
+          </div>
+        </Link>
 
-        {/* Menu (Center) */}
-        <div className="navbar-menu flex items-center gap-8">
+        {/* Hamburger Menu Button (visible only on mobile) */}
+        <button 
+          className="md:hidden flex items-center justify-center p-2 rounded-md text-[var(--leetsheet-text-primary)] hover:bg-[var(--leetsheet-bg-tertiary)] transition-colors duration-200"
+          onClick={toggleMobileMenu}
+        >
+          {mobileMenuOpen ? (
+            <X className="w-6 h-6" />
+          ) : (
+            <Menu className="w-6 h-6" />
+          )}
+        </button>
+
+        {/* Desktop Menu (Center) - Hidden on mobile */}
+        <div className="hidden md:flex navbar-menu items-center gap-8">
           <Link 
             to="/" 
             className="nav-link-leetsheet text-sm font-medium"
@@ -100,9 +117,7 @@ const Navbar = () => {
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            <div className={`dropdown-menu absolute top-full left-0 mt-2 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[150px] py-2 z-50 ${
-              openDropdown === "sheets" ? "block" : "hidden"
-            } group-hover:block`}>
+            <div className={`dropdown-menu absolute top-full left-0 mt-2 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[150px] py-2 z-50 ${openDropdown === "sheets" ? "block" : "hidden"} group-hover:block`}>
               <Link 
                 to="/playlist" 
                 className="dropdown-item block px-4 py-3 text-xs"
@@ -127,24 +142,24 @@ const Navbar = () => {
           </Link>
 
           <Link 
-                  to="/about" 
-                  className="nav-link-leetsheet text-sm font-medium"
-                  onClick={() => setOpenDropdown(null)}
-                >
-                  About
-                </Link>
-                <Link 
-                  to="/FAQ" 
-                  className="nav-link-leetsheet text-sm font-medium"
-                  onClick={() => setOpenDropdown(null)}
-                >
-                  FAQ
-                </Link>
+            to="/about" 
+            className="nav-link-leetsheet text-sm font-medium"
+            onClick={() => setOpenDropdown(null)}
+          >
+            About
+          </Link>
+          <Link 
+            to="/FAQ" 
+            className="nav-link-leetsheet text-sm font-medium"
+            onClick={() => setOpenDropdown(null)}
+          >
+            FAQ
+          </Link>
         </div>
 
-        {/* Auth/User (Right) */}
+        {/* Auth/User (Right) - Hidden on mobile */}
         {authUser ? (
-          <div className="relative">
+          <div className="relative hidden md:block">
             <button 
               className="flex items-center gap-2 p-2 rounded-full hover:bg-[var(--leetsheet-bg-tertiary)] transition-colors duration-200"
               onClick={() => toggleDropdown("user")}
@@ -187,16 +202,16 @@ const Navbar = () => {
                   </Link>
                 )}
                 <div className="mt-1 pt-1">
-         <LogoutButton className="dropdown-item flex items-center gap-3 w-full justify-start">
-          <LogOut className="w-4 h-4" />
-          Logout
-          </LogoutButton>
-         </div>
+                  <LogoutButton className="dropdown-item flex items-center gap-3 w-full justify-start">
+                    <LogOut className="w-4 h-4" />
+                    Logout
+                  </LogoutButton>
+                </div>
               </div>
             )}
           </div>
         ) : (
-          <div className="flex items-center gap-4">
+          <div className="hidden md:flex items-center gap-4">
             <Link 
               to="/login" 
               className="nav-link-leetsheet text-sm font-medium px-4 py-2"
@@ -212,6 +227,142 @@ const Navbar = () => {
           </div>
         )}
       </div>
+
+      {/* Mobile Menu - Full screen overlay */}
+      {mobileMenuOpen && (
+        <div className="md:hidden fixed inset-0 bg-[var(--leetsheet-bg-primary)] bg-opacity-95 z-50 flex flex-col pt-20 px-6 overflow-y-auto">
+          <div className="flex flex-col space-y-6">
+            <Link 
+              to="/" 
+              className="nav-link-leetsheet text-lg font-medium py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Home
+            </Link>
+            
+            {/* Mobile Sheets Menu */}
+            <div className="flex flex-col space-y-2">
+              <button
+                className="nav-link-leetsheet text-lg font-medium flex items-center justify-between py-2"
+                onClick={() => toggleDropdown("mobile-sheets")}
+              >
+                <span>Sheets</span>
+                <svg 
+                  className={`w-5 h-5 transition-transform duration-200 ${openDropdown === "mobile-sheets" ? "rotate-180" : ""}`} 
+                  fill="none" 
+                  stroke="currentColor" 
+                  viewBox="0 0 24 24"
+                >
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                </svg>
+              </button>
+              
+              {openDropdown === "mobile-sheets" && (
+                <div className="flex flex-col space-y-2 pl-4 border-l-2 border-[var(--leetsheet-border-primary)]">
+                  <Link 
+                    to="/playlist" 
+                    className="nav-link-leetsheet text-base py-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Company Sheets
+                  </Link>
+                  <Link 
+                    to="/problems" 
+                    className="nav-link-leetsheet text-base py-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    All Problems
+                  </Link>
+                </div>
+              )}
+            </div>
+            
+            <Link 
+              to="/pricing" 
+              className="nav-link-leetsheet text-lg font-medium py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              Pricing
+            </Link>
+            
+            <Link 
+              to="/about" 
+              className="nav-link-leetsheet text-lg font-medium py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              About
+            </Link>
+            
+            <Link 
+              to="/FAQ" 
+              className="nav-link-leetsheet text-lg font-medium py-2"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              FAQ
+            </Link>
+            
+            {/* Mobile Auth Section */}
+            <div className="pt-6 border-t border-[var(--leetsheet-border-primary)]">
+              {authUser ? (
+                <div className="flex flex-col space-y-4">
+                  <div className="flex items-center space-x-3">
+                    <div className="w-10 h-10 rounded-full overflow-hidden border-2 border-[var(--leetsheet-border-primary)]">
+                      <img
+                        src={authUser.image || "https://avatar.iran.liara.run/public/boy"}
+                        alt="User Avatar"
+                        className="w-full h-full object-cover"
+                      />
+                    </div>
+                    <p className="font-semibold">{authUser.name}</p>
+                  </div>
+                  
+                  <Link
+                    to="/profile"
+                    className="flex items-center gap-3 py-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    <User className="w-5 h-5" />
+                    My Profile
+                  </Link>
+                  
+                  {authUser.role === "ADMIN" && (
+                    <Link
+                      to="/add-problem"
+                      className="flex items-center gap-3 py-2"
+                      onClick={() => setMobileMenuOpen(false)}
+                    >
+                      <Code className="w-5 h-5" />
+                      Add Problem
+                    </Link>
+                  )}
+                  
+                  <LogoutButton className="flex items-center gap-3 py-2">
+                    <LogOut className="w-5 h-5" />
+                    Logout
+                  </LogoutButton>
+                </div>
+              ) : (
+                <div className="flex flex-col space-y-4">
+                  <Link 
+                    to="/login" 
+                    className="nav-link-leetsheet text-lg font-medium py-2"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Log In
+                  </Link>
+                  <Link 
+                    to="/signup" 
+                    className="btn-leetsheet-primary py-3 rounded-3xl text-lg font-medium text-center"
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Click outside handler - only for user dropdown */}
       {openDropdown === "user" && (
