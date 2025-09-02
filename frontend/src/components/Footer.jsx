@@ -10,15 +10,17 @@ const Footer = () => {
   return (
     <footer className="footer w-full left-0 right-0 px-4 sm:px-6 md:px-8 py-8 sm:py-10 md:py-12">
       {/* Top Section - Logo and Tagline */}
-      <div className="footer-top flex flex-col gap-1 items-center text-center mb-6 sm:mb-8 md:mb-10">
-        <div className="footer-logo">
-          <span className="logo-sheet">Leet</span>
-          <span className="logo-sheet">Sheet</span>
-        </div>
-        <p className="footer-tagline text-sm md:text-base max-w-xs sm:max-w-sm md:max-w-md mx-auto">
-          Guiding coders towards success, one problem at a time.
-        </p>
-      </div>
+            <div className="footer-top flex flex-col gap-1 items-center text-center mb-2 sm:mb-2 md:mb-2 w-full">
+                <div className="footer-logo flex justify-center w-full">
+                    <h1 className="text-2xl md:text-3xl font-bold text-center">
+                        <span className="logo-sheet">Leet</span>
+                        <span className="logo-sheet">Sheet</span>
+                    </h1>
+                </div>
+                <p className="footer-tagline text-sm md:text-base max-w-xs sm:max-w-sm md:max-w-md mx-auto">
+                    Guiding coders towards success, one problem at a time.
+                </p>
+            </div>
 
       {/* Main Content - Four Columns */}
       <div className="footer-container grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8 md:gap-10">
