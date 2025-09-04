@@ -191,7 +191,7 @@ const Playlists = () => {
                     </p>
                     <div className="mt-auto flex flex-col gap-2">
                       <button
-                        onClick={() => navigate(`/Playlist/${playlist.id}`)}
+                        onClick={() => navigate(`/playlist/${playlist.id}`)}
                         className="btn-leetsheet-primary w-full font-semibold py-2 rounded-lg flex justify-center items-center gap-1 transition-all duration-300"
                       >
                         Start Learning <span className="text-lg">→</span>
@@ -260,7 +260,7 @@ const Playlists = () => {
                     </p>
                     <div className="mt-auto flex flex-col gap-2">
                       <button
-                        onClick={() => navigate(`/Playlist/${playlist.id}`)}
+                        onClick={() => navigate(`/playlist/${playlist.id}`)}
                         className="btn-leetsheet-primary w-full font-semibold py-2 rounded-lg flex justify-center items-center gap-1 transition-all duration-300"
                       >
                         Start Learning <span className="text-lg">→</span>
