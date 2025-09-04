@@ -125,7 +125,7 @@ const Navbar = () => {
               </svg>
             </button>
             <div 
-              className={`dropdown-menu absolute top-full left-0 mt-2 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[150px] py-2 z-50 ${(openDropdown === "sheets" || sheetsHover) ? "block" : "hidden"}`}
+              className={`dropdown-menu absolute top-full left-0  bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[150px] py-2 z-50 ${(openDropdown === "sheets" || sheetsHover) ? "block" : "hidden"}`}
               onMouseEnter={() => setSheetsHover(true)}
               onMouseLeave={() => {
                 setSheetsHover(false);
