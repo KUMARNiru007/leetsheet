@@ -8,17 +8,28 @@ import {
 export const createProblem = async (req,res) => {
    // going to get all the data from the request body
 
+   // Extract hints and editorial from request body
    const {
-    title,
-    description,
-    difficulty,
-    tags,
-    examples,
-    constraints,
-    testcases,
-    codeSnippets,
-    referenceSolutions,
-  } = req.body;
+     title,
+     description,
+     difficulty,
+     tags,
+     examples,
+     constraints,
+     hints,
+     editorial,
+     testcases,
+     codeSnippets,
+     referenceSolutions,
+   } = req.body;
+   
+   // Later in the code:
+   const newProblem = await db.problem.create({
+     data:{
+        title, description, difficulty, tags, examples, constraints, hints, editorial, testcases, codeSnippets, referenceSolutions, 
+        userId: req.user.id,
+     }
+   });
    console.log(req.user)
 
    // going to check the user role
