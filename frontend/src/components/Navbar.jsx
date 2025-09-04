@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { User, Code, LogOut, Menu, X } from "lucide-react";
 import { useAuthStore } from "../store/useAuthStore.js";
 import LogoutButton from "./LogoutButton.jsx";
@@ -12,6 +12,7 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const [sheetsHover, setSheetsHover] = useState(false);
+  const navigate = useNavigate();
 
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
@@ -19,6 +20,10 @@ const Navbar = () => {
 
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
+    // Close any open dropdowns when toggling mobile menu
+    if (!mobileMenuOpen) {
+      setOpenDropdown(null);
+    }
   };
 
   // Handle scroll events for navbar transparency
@@ -55,6 +60,14 @@ const Navbar = () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
   }, [openDropdown]);
+
+  // Close mobile menu when route changes
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      setMobileMenuOpen(false);
+      setOpenDropdown(null);
+    }
+  }, [window.location.pathname]);
 
   return (
     <nav 
@@ -285,14 +298,20 @@ const Navbar = () => {
                   <Link 
                     to="/playlist" 
                     className="nav-link-leetsheet text-base py-2"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      setOpenDropdown(null);
+                      setMobileMenuOpen(false);
+                    }}
                   >
                     Company Sheets
                   </Link>
                   <Link 
                     to="/problems" 
                     className="nav-link-leetsheet text-base py-2"
-                    onClick={() => setMobileMenuOpen(false)}
+                    onClick={() => {
+                      setOpenDropdown(null);
+                      setMobileMenuOpen(false);
+                    }}
                   >
                     All Problems
                   </Link>
