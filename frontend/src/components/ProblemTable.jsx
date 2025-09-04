@@ -198,7 +198,7 @@ const ProblemsTable = ({ problems }) => {
                         {isExpanded && companies.length > 0 && (
                           <button 
                             onClick={() => toggleRowExpansion(problem.id)}
-                            className="flex items-center text-xs text-gray-400 mt-1"
+                            className="flex cursor-pointer items-center text-xs text-orange-300 mt-1"
                           >
                             Show less <ChevronUp className="w-3 h-3 ml-1" />
                           </button>
@@ -228,7 +228,7 @@ const ProblemsTable = ({ problems }) => {
                         {isExpanded && otherTags.length > 0 && (
                           <button 
                             onClick={() => toggleRowExpansion(problem.id)}
-                            className="flex items-center text-xs text-orange-300 mt-1"
+                            className="flex cursor-pointer  items-center text-xs text-orange-300 mt-1"
                           >
                             Show less <ChevronUp className="w-3 h-3 ml-1 text-orange-300" />
                           </button>

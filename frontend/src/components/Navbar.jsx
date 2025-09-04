@@ -5,12 +5,13 @@ import { useAuthStore } from "../store/useAuthStore.js";
 import LogoutButton from "./LogoutButton.jsx";
 
 const Navbar = () => {
-  const [openDropdown, setOpenDropdown] = useState(null); // 'sheets' | 'resources' | 'user' | 'mobile' | null
+  const [openDropdown, setOpenDropdown] = useState(null);
   const { authUser } = useAuthStore();
   const sheetsRef = useRef(null);
   const [isScrollingUp, setIsScrollingUp] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [sheetsHover, setSheetsHover] = useState(false);
 
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
@@ -42,13 +43,11 @@ const Navbar = () => {
     };
   }, [lastScrollY]);
 
-  // Handle click outside for user dropdown
+  // Handle click outside for dropdowns
   useEffect(() => {
     const handleClickOutside = (event) => {
       if (sheetsRef.current && !sheetsRef.current.contains(event.target)) {
-        if (openDropdown === 'sheets') {
-          setOpenDropdown(null);
-        }
+        setOpenDropdown(null);
       }
     };
     document.addEventListener('mousedown', handleClickOutside);
@@ -105,30 +104,54 @@ const Navbar = () => {
 
           {/* Sheets dropdown */}
           <div 
-            className="dropdown relative group"
+            className="dropdown relative"
             ref={sheetsRef}
+            onMouseEnter={() => setSheetsHover(true)}
+            onMouseLeave={() => {
+              // Only close if not opened by click
+              if (openDropdown !== "sheets") {
+                setSheetsHover(false);
+              }
+            }}
           >
             <button
               className="nav-link-leetsheet text-sm font-medium flex items-center gap-1"
               onClick={() => toggleDropdown("sheets")}
+              onMouseEnter={() => setSheetsHover(true)}
             >
               Sheets 
-              <svg className={`w-4 h-4 transition-transform duration-200 ${openDropdown === "sheets" ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <svg className={`w-4 h-4 transition-transform duration-200 ${(openDropdown === "sheets" || sheetsHover) ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
               </svg>
             </button>
-            <div className={`dropdown-menu absolute top-full left-0 mt-2 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[150px] py-2 z-50 ${openDropdown === "sheets" ? "block" : "hidden"} group-hover:block`}>
+            <div 
+              className={`dropdown-menu absolute top-full left-0 mt-2 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[150px] py-2 z-50 ${(openDropdown === "sheets" || sheetsHover) ? "block" : "hidden"}`}
+              onMouseEnter={() => setSheetsHover(true)}
+              onMouseLeave={() => {
+                setSheetsHover(false);
+                if (openDropdown === "sheets") {
+                  // Keep it open if clicked, but we're leaving the dropdown area
+                  // This ensures it stays open until clicked elsewhere
+                }
+              }}
+            >
               <Link 
                 to="/playlist" 
                 className="dropdown-item block px-4 py-3 text-xs"
-                onClick={() => setOpenDropdown(null)}
+                onClick={() => {
+                  setOpenDropdown(null);
+                  setSheetsHover(false);
+                }}
               >
                 Company Sheets
               </Link>
               <Link 
                 to="/problems" 
                 className="dropdown-item block px-4 py-3 text-xs"
-                onClick={() => setOpenDropdown(null)}
+                onClick={() => {
+                  setOpenDropdown(null);
+                  setSheetsHover(false);
+                }}
               >
                 All Problems
               </Link>
