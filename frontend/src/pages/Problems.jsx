@@ -42,7 +42,7 @@ function AllProblems() {
       
       // Filter by difficulty
       const difficultyMatch = selectedDifficulty === "ALL" || 
-        problem.difficulty === selectedDifficulty;
+        problem.difficulty === selectedDifficulty.toUpperCase();
       
       return companyMatch && topicMatch && difficultyMatch;
     });
