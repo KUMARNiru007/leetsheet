@@ -410,7 +410,14 @@ const Navbar = () => {
       {openDropdown === "user" && (
         <div 
           className="fixed inset-0 z-40" 
-          onClick={() => setOpenDropdown(null)}
+          onClick={(e) => {
+            // Prevent clicks inside the dropdown from closing it
+            if (e.target.closest('.dropdown-menu')) {
+              e.stopPropagation();
+              return;
+            }
+            setOpenDropdown(null);
+          }}
         />
       )}
     </nav>
