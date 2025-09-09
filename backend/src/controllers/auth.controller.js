@@ -315,7 +315,7 @@ await db.user.update({
       sameSite: isProduction ? 'none' : 'lax',
       secure: isProduction,
       maxAge: 1000 * 60 * 15, // 15 minutes
-    //   domain: '.leetsheet.in',
+      domain: '.leetsheet.in',
     };
 
     const RefreshCookieOptions = {
@@ -323,7 +323,7 @@ await db.user.update({
       sameSite: isProduction ? 'none' : 'lax',
       secure: isProduction,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    //   domain: '.leetsheet.in',
+      domain: '.leetsheet.in',
     };
 
     res.cookie('accessToken', accessToken, AccessCookieOptions);
@@ -400,7 +400,7 @@ await db.user.update({
       sameSite: 'none',
       secure: true,
       maxAge: 1000 * 60 * 15, // 15 minutes
-    //   domain: '.leetsheet.in',
+      domain: '.leetsheet.in',
     };
 
     const RefreshCookieOptions = {
@@ -408,7 +408,7 @@ await db.user.update({
       sameSite: 'none',
       secure: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-    //   domain: '.leetsheet.in',
+      domain: '.leetsheet.in',
     };
 
     res.cookie('accessToken', newAccessToken, AccessCookieOptions);
