@@ -8,6 +8,7 @@ const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
   const { authUser } = useAuthStore();
   const sheetsRef = useRef(null);
+  const userDropdownRef = useRef(null);
   const [isScrollingUp, setIsScrollingUp] = useState(true);
   const [lastScrollY, setLastScrollY] = useState(0);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -51,15 +52,20 @@ const Navbar = () => {
   // Handle click outside for dropdowns
   useEffect(() => {
     const handleClickOutside = (event) => {
-      if (sheetsRef.current && !sheetsRef.current.contains(event.target)) {
+      // Check if click is outside both sheets and user dropdowns
+      const isOutsideSheets = sheetsRef.current && !sheetsRef.current.contains(event.target);
+      const isOutsideUser = userDropdownRef.current && !userDropdownRef.current.contains(event.target);
+      
+      if (isOutsideSheets && isOutsideUser) {
         setOpenDropdown(null);
       }
     };
+    
     document.addEventListener('mousedown', handleClickOutside);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
     };
-  }, [openDropdown]);
+  }, []);
 
   // Close mobile menu when route changes
   useEffect(() => {
@@ -195,7 +201,7 @@ const Navbar = () => {
 
         {/* Auth/User (Right) - Hidden on mobile */}
         {authUser ? (
-          <div className="relative hidden md:block">
+          <div className="relative hidden md:block" ref={userDropdownRef}>
             <button 
               className="flex items-center gap-2 p-2 rounded-full hover:bg-[var(--leetsheet-bg-tertiary)] transition-colors duration-200"
               onClick={() => toggleDropdown("user")}
@@ -212,7 +218,6 @@ const Navbar = () => {
               </div>
             </button>
             {openDropdown === "user" && (
-              
               <div className="dropdown-menu absolute top-full right-0 mt-2 bg-[var(--leetsheet-bg-secondary)] border border-[var(--leetsheet-border-primary)] rounded-xl shadow-2xl min-w-[220px] py-2 z-50">
                 <div className="">
                   <p className="flex items-center hover:bg-[var(--leetsheet-bg-tertiary)] px-3 py-2 text-[var(--leetsheet-text-primary)] font-semibold text-sm  cursor-pointer">
@@ -404,21 +409,6 @@ const Navbar = () => {
             </div>
           </div>
         </div>
-      )}
-
-      {/* Click outside handler - only for user dropdown */}
-      {openDropdown === "user" && (
-        <div 
-          className="fixed inset-0 z-40" 
-          onClick={(e) => {
-            // Prevent clicks inside the dropdown from closing it
-            if (e.target.closest('.dropdown-menu')) {
-              e.stopPropagation();
-              return;
-            }
-            setOpenDropdown(null);
-          }}
-        />
       )}
     </nav>
   );
