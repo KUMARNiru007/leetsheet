@@ -56,7 +56,13 @@ export const getPlayListDetails = async (req, res) => {
 
   try {
     const playList = await db.playlist.findUnique({
-      where: { id: playlistId, userId: req.user.id },
+      where: {
+        id: playlistId,
+        OR: [
+          { userId: req.user.id },
+          { isPublic: true }
+        ]
+      },
       include: {
         problems: {
           include: {
