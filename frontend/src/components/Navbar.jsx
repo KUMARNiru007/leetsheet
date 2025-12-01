@@ -1,8 +1,9 @@
 import React, { useState, useEffect, useRef } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { User, Code, LogOut, Menu, X } from "lucide-react";
 
 import LogoutButton from "./LogoutButton.jsx";
+import { useAuthStore } from "../store/useAuthStore.js";
 
 const Navbar = () => {
   const [openDropdown, setOpenDropdown] = useState(null);
@@ -12,18 +13,20 @@ const Navbar = () => {
   const [lastScrollY, setLastScrollY] = useState(0);
 
 
-  const navigate = useNavigate();
+  // const navigate = useNavigate(); // not needed here; LogoutButton manages navigation
+  const { authUser } = useAuthStore();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
   const toggleDropdown = (menu) => {
     setOpenDropdown(openDropdown === menu ? null : menu);
   };
 
   const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-    // Close any open dropdowns when toggling mobile menu
-    if (!mobileMenuOpen) {
-      setOpenDropdown(null);
-    }
+    setMobileMenuOpen((prev) => {
+      const next = !prev;
+      if (next) setOpenDropdown(null);
+      return next;
+    });
   };
 
   // Handle scroll events for navbar transparency
@@ -91,11 +94,20 @@ const Navbar = () => {
           </div>
         </Link>
 
+        {/* Mobile menu toggle */}
+        <button
+          className="md:hidden p-2 rounded hover:bg-[var(--leetsheet-bg-tertiary)]"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle mobile menu"
+        >
+          {mobileMenuOpen ? <X className="w-6 h-6" /> : <Menu className="w-6 h-6" />}
+        </button>
+
 
 
 
         {/* Auth/User (Right) - Hidden on mobile */}
-        {authUser ? (
+        {authUser && (
           <div className="relative hidden md:block" ref={userDropdownRef}>
             <button 
               className="flex items-center gap-2 p-2 rounded-full hover:bg-[var(--leetsheet-bg-tertiary)] transition-colors duration-200"
@@ -136,7 +148,8 @@ const Navbar = () => {
               </div>
             )}
           </div>
-        ) }
+        )}
+      </div>
       
     </nav>
   );
