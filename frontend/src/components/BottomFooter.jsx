@@ -2,6 +2,8 @@ import React from 'react';
 import { FaXTwitter, FaGithub, FaLinkedin } from "react-icons/fa6";
 
 function BottomFooter() {
+
+  const currentYear = new Date().getFullYear();
   return (
     <div className="bottom-footer flex flex-col lg:px-26 lg:flex-row lg:justify-between lg:items-center border-t border-[var(--leetsheet-border-primary)] pt-6 pb-6 gap-y-4 text-sm nav-leetsheet">
 
@@ -40,7 +42,7 @@ function BottomFooter() {
       </div>
       <div className="flex flex-wrap justify-center lg:justify-end gap-4 lg:gap-6 font-normal text-center break-words">
         <span className="text-[var(--leetsheet-text-secondary)]">
-          © 2025 
+           &copy; {currentYear}
           LeetSheet
           All Rights Reserved.
         </span>
