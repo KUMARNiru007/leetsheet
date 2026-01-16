@@ -34,7 +34,7 @@ export const executeCode = async (req, res) => {
 
     // 3. Send batch of submissions to judge0
     const submitResponse = await submitBatch(submissions);
-    console.log("SubmitBatch",submissions);
+    // console.log("SubmitBatch",submissions);
 
     const tokens = submitResponse.map((res) => res.token);
 
