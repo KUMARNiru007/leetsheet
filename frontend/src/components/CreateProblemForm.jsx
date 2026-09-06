@@ -31,6 +31,7 @@ const problemSchema = z.object({
       z.object({
         input: z.string().min(1, "Input is required"),
         output: z.string().min(1, "Output is required"),
+        isSample: z.boolean().optional(),
       })
     )
     .min(1, "At least one test case is required"),
@@ -480,7 +481,7 @@ const CreateProblemForm = () => {
         {
             resolver:zodResolver(problemSchema),
             defaultValues:{
-                 testcases: [{ input: "", output: "" }],
+                 testcases: [{ input: "", output: "", isSample: true }],
       tags: [""],
       examples: {
         JAVASCRIPT: { input: "", output: "", explanation: "" },
@@ -544,7 +545,9 @@ const CreateProblemForm = () => {
     const sampleData = sampleType === "DP" ? sampledpData : sampleStringProblem
   
    replaceTags(sampleData.tags.map((tag) => tag));
-    replacetestcases(sampleData.testcases.map((tc) => tc));
+    replacetestcases(
+      sampleData.testcases.map((tc, index) => ({ ...tc, isSample: index === 0 }))
+    );
 
    // Reset the form with sample data
     reset(sampleData);
@@ -714,7 +717,7 @@ const CreateProblemForm = () => {
                 <button
                   type="button"
                   className="btn-leetsheet-primary btn-sm"
-                  onClick={() => appendTestCase({ input: "", output: "" })}
+                  onClick={() => appendTestCase({ input: "", output: "", isSample: false })}
                 >
                   <Plus className="w-4 h-4 mr-1" /> Add Test Case
                 </button>
@@ -724,8 +727,18 @@ const CreateProblemForm = () => {
                   <div key={field.id} className="card bg-base-100 shadow-md">
                     <div className="card-body p-4 md:p-6">
                       <div className="flex justify-between items-center mb-4">
-                        <h4 className="text-base md:text-lg font-semibold">
+                        <h4 className="text-base md:text-lg font-semibold flex items-center gap-3">
                           Test Case #{index + 1}
+                          <label className="flex items-center gap-1.5 cursor-pointer">
+                            <input
+                              type="checkbox"
+                              className="checkbox checkbox-sm"
+                              {...register(`testcases.${index}.isSample`)}
+                            />
+                            <span className="text-xs font-normal text-base-content/70">
+                              Example (Run Code)
+                            </span>
+                          </label>
                         </h4>
                         <button
                           type="button"

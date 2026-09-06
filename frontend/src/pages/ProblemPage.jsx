@@ -150,10 +150,7 @@ const ProblemPage = () => {
 
     try {
       const language_id = getLanguageId(selectedLanguage);
-      const stdin = problem.testcases.map((tc) => tc.input);
-      const expected_outputs = problem.testcases.map((tc) => tc.output);
-
-      executeCode(code, language_id, stdin, expected_outputs, id, false);
+      executeCode(code, language_id, id, "run");
       startCooldown();
     } catch (error) {
       console.log("Error running code: ", error);
@@ -166,10 +163,7 @@ const ProblemPage = () => {
 
     try {
       const language_id = getLanguageId(selectedLanguage);
-      const stdin = problem.testcases.map((tc) => tc.input);
-      const expected_outputs = problem.testcases.map((tc) => tc.output);
-
-      executeCode(code, language_id, stdin, expected_outputs, id, true);
+      executeCode(code, language_id, id, "submit");
       startCooldown();
     } catch (error) {
       console.log("Error submitting code: ", error);
