@@ -13,6 +13,7 @@ import {
 
 import {z} from "zod";
 import { useAuthStore } from "../store/useAuthStore.js";
+import { API_BASE_URL } from "../lib/axios.js";
 import google from "./assets/google.svg";
 
 const SignUpSchema = z.object({
@@ -165,7 +166,7 @@ const SignUpPage = () => {
           )}
         </button>
         <a
-  href={`https://api.leetsheet.in/api/v1/auth/google?redirect=${window.location.origin}/problems`}
+  href={`${API_BASE_URL}/auth/google?redirect=${window.location.origin}/problems`}
   className="w-full py-2 rounded-lg font-semibold text-white bg-[#4285f4] hover:bg-[#3367d6] transition flex items-center justify-center gap-2 cursor-pointer"
   onClick={() => {
     // Clear any previous logout state

@@ -21,15 +21,30 @@ import userRoutes from "./routes/user.routes.js";
 dotenv.config();
 const app = express();
 
+// Trust the reverse proxy (Render/Vercel) so req.protocol and secure cookies work
+app.set("trust proxy", process.env.NODE_ENV === "production" ? 1 : 0);
+
 const PORT = process.env.PORT || 8080
 
 const isProduction = process.env.NODE_ENV === 'production';
 
 const pgStore = pgSession(session);
 
+const allowedOrigins = (process.env.FRONTEND_URL || "")
+  .split(",")
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 app.use(
   cors({
-    origin: process.env.FRONTEND_URL,
+    origin(origin, callback) {
+      // Allow server-to-server / curl requests (no Origin header),
+      // and every origin in dev when none are configured.
+      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
+        return callback(null, true);
+      }
+      return callback(new Error("Not allowed by CORS"));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
@@ -53,7 +68,7 @@ app.use(
       httpOnly: true,
       maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
       sameSite: isProduction ? 'none' : 'lax',
-      domain: isProduction ? '.leetsheet.in' : undefined,
+      domain: process.env.COOKIE_DOMAIN || undefined,
     },
   }),
 );

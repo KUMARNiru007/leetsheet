@@ -8,4 +8,4 @@ Disallow: /api/
 Crawl-delay: 1
 
 # Sitemaps
-Sitemap: https://leetsheet.in/sitemap.xml
+Sitemap: https://leetsheet.me/sitemap.xml

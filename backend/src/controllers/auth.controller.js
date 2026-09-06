@@ -7,6 +7,11 @@
 import { mailVerificationMailGenContent,sendEmail } from "../utils/verificationMail.js";
 import { generateAccessToken, generateRefreshToken } from "../utils/generateToken.js";
 import { uploadRandomAvatar } from '../utils/avatar.js'
+import {
+  getAccessCookieOptions,
+  getClearCookieOptions,
+  getRefreshCookieOptions,
+} from "../utils/cookieOptions.js";
 
 
 
@@ -64,21 +69,8 @@ import { uploadRandomAvatar } from '../utils/avatar.js'
         });
 
     
-        const AccessCookieOptions = {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        maxAge: 1000 * 60 * 15, // 15 minutes
-        domain: '.leetsheet.in',
-        };
-
-        const RefreshCookieOptions = {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        domain: '.leetsheet.in',
-        };
+        const AccessCookieOptions = getAccessCookieOptions();
+        const RefreshCookieOptions = getRefreshCookieOptions();
 
         res.cookie('accessToken', accessToken, AccessCookieOptions);
         res.cookie('refreshToken', refreshToken, RefreshCookieOptions);
@@ -231,21 +223,8 @@ import { uploadRandomAvatar } from '../utils/avatar.js'
         },
         });
 
-        const AccessCookieOptions = {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        maxAge: 1000 * 60 * 15, // 15 minutes
-        domain: '.leetsheet.in',
-        };
-
-        const RefreshCookieOptions = {
-        httpOnly: true,
-        sameSite: 'none',
-        secure: true,
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-        domain: '.leetsheet.in',
-        };
+        const AccessCookieOptions = getAccessCookieOptions();
+        const RefreshCookieOptions = getRefreshCookieOptions();
 
         res.cookie('accessToken', accessToken, AccessCookieOptions);
         res.cookie('refreshToken', refreshToken, RefreshCookieOptions);
@@ -310,21 +289,8 @@ await db.user.update({
 
     const isProduction = process.env.NODE_ENV === 'production';
 
-    const AccessCookieOptions = {
-      httpOnly: true,
-      sameSite: isProduction ? 'none' : 'lax',
-      secure: isProduction,
-      maxAge: 1000 * 60 * 15, // 15 minutes
-      domain: '.leetsheet.in',
-    };
-
-    const RefreshCookieOptions = {
-      httpOnly: true,
-      sameSite: isProduction ? 'none' : 'lax',
-      secure: isProduction,
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      domain: '.leetsheet.in',
-    };
+    const AccessCookieOptions = getAccessCookieOptions();
+    const RefreshCookieOptions = getRefreshCookieOptions();
 
     res.cookie('accessToken', accessToken, AccessCookieOptions);
     res.cookie('refreshToken', refreshToken, RefreshCookieOptions);
@@ -395,21 +361,8 @@ await db.user.update({
       },
     });
 
-    const AccessCookieOptions = {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-      maxAge: 1000 * 60 * 15, // 15 minutes
-      domain: '.leetsheet.in',
-    };
-
-    const RefreshCookieOptions = {
-      httpOnly: true,
-      sameSite: 'none',
-      secure: true,
-      maxAge: 1000 * 60 * 60 * 24 * 7, // 7 days
-      domain: '.leetsheet.in',
-    };
+    const AccessCookieOptions = getAccessCookieOptions();
+    const RefreshCookieOptions = getRefreshCookieOptions();
 
     res.cookie('accessToken', newAccessToken, AccessCookieOptions);
     res.cookie('refreshToken', newRefreshToken, RefreshCookieOptions);
@@ -451,18 +404,8 @@ await db.user.update({
             }
 
             // Clear cookies
-            res.clearCookie('accessToken', {
-                httpOnly: true,
-                sameSite: 'none',
-                secure: true,
-                
-            });
-            res.clearCookie('refreshToken', {
-                httpOnly: true,
-                sameSite: 'none',
-                secure: true,
-                
-            });
+            res.clearCookie('accessToken', getClearCookieOptions());
+            res.clearCookie('refreshToken', getClearCookieOptions());
             
             res.status(200).json({
                 success: true,
