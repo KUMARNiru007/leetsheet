@@ -1,5 +1,30 @@
 import { db } from "../libs/db.js";
 
+// Middleware: only the owner may mutate a playlist.
+export const ensurePlaylistOwner = async (req, res, next) => {
+  const { playlistId } = req.params;
+
+  try {
+    const playlist = await db.playlist.findUnique({
+      where: { id: playlistId },
+      select: { userId: true },
+    });
+
+    if (!playlist) {
+      return res.status(404).json({ error: "Playlist not found" });
+    }
+
+    if (playlist.userId !== req.user.id) {
+      return res.status(403).json({ error: "You do not have access to this playlist" });
+    }
+
+    next();
+  } catch (error) {
+    console.error("Error checking playlist ownership:", error.message);
+    res.status(500).json({ error: "Failed to verify playlist access" });
+  }
+};
+
 export const createPlayList = async (req, res) => {
   try {
     const { name, description, isPublic } = req.body;
@@ -110,6 +135,7 @@ export const addProblemToPlaylist = async (req, res) => {
         playListId: playlistId, // ✅ match your Prisma field name exactly
         problemId,
       })),
+      skipDuplicates: true,
     });
 
     res.status(201).json({
@@ -145,7 +171,7 @@ export const deletePlayList = async (req, res) => {
 };
 
 export const removeProblemFromPlaylist = async (req, res) => {
-  const { playListId } = req.params;
+  const { playlistId } = req.params;
   const { problemIds } = req.body;
 
   try {
@@ -156,7 +182,7 @@ export const removeProblemFromPlaylist = async (req, res) => {
 
     const deletedProblem = await db.problemInPlaylist.deleteMany({
       where: {
-        playListId,
+        playListId: playlistId,
         problemId: {
           in: problemIds,
         },

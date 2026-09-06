@@ -35,7 +35,6 @@ const ProblemPage = () => {
     isLoading: isSubmissionsLoading,
     getSubmissionForProblem,
     getSubmissionCountForProblem,
-    submissionCount,
   } = useSubmissionStore();
   const [code, setCode] = useState("");
   const [activeTab, setActiveTab] = useState("description");
@@ -53,7 +52,7 @@ const ProblemPage = () => {
   const [leftPanelWidth, setLeftPanelWidth] = useState(50);
   const [editorHeight, setEditorHeight] = useState(70);
 
-  const { executeCode, submission, isExecuting, clearSubmission } = useExecutionStore();
+  const { executeCode, submission, isExecuting } = useExecutionStore();
 
   useEffect(() => {
     getProblemById(id);
@@ -98,11 +97,14 @@ const ProblemPage = () => {
       const currentCode = problem.codeSnippets?.[selectedLanguage] || "";
       setCode(currentCode);
 
+      const allCases = problem.testcases || [];
+      const sampleCases = allCases.filter((tc) => tc.isSample === true);
       setTestCases(
-        problem.testcases?.map((tc) => ({
+        (sampleCases.length > 0 ? sampleCases : allCases.slice(0, 1)).map((tc) => ({
           input: tc.input,
           output: tc.output,
-        })) || []
+          explanation: tc.explanation,
+        }))
       );
     }
   }, [problem, selectedLanguage]);
@@ -312,7 +314,7 @@ const ProblemPage = () => {
           {/* Tab navigation - Fixed */}
           <div className="flex-shrink-0 relative flex justify-between mb-2 border-b pb-1 w-full" style={{ borderColor: 'var(--leetsheet-border-primary)' }}>
             {["description", "submissions", "discussion", "hints"].map(
-              (tab, index) => {
+              (tab) => {
                 const Icon =
                   tab === "description"
                     ? FileText
@@ -332,7 +334,7 @@ const ProblemPage = () => {
                     }}
                   >
                     <div className="flex justify-center items-center gap-1">
-                      <Icon className="w-3 h-3" />
+<Icon className="w-3 h-3" />
                       <span className="uppercase">{tab}</span>
                     </div>
                   </button>
@@ -394,7 +396,7 @@ const ProblemPage = () => {
                     </h3>
 
                     <div className="space-y-2">
-                      {Object.entries(problem.examples).map(([lang, ex], idx) => (
+                      {Object.entries(problem.examples).map(([, ex], idx) => (
                         <div
                           key={idx}
                           className="p-2 rounded-md space-y-1"
@@ -635,28 +637,31 @@ const ProblemPage = () => {
                 {[
                   { key: "testcases", label: "Test Cases", icon: Code2 },
                   { key: "results", label: "Results", icon: CheckCircle },
-                ].map(({ key, label, icon: Icon }) => (
+                ].map((tab) => {
+                  const TabIcon = tab.icon;
+                  return (
                   <button
-                    key={key}
-                    onClick={() => setActiveResultTab(key)}
+                    key={tab.key}
+                    onClick={() => setActiveResultTab(tab.key)}
                     className={`px-2 py-1 rounded-md text-xs font-medium transition-all duration-300 flex items-center gap-1 ${
-                      activeResultTab === key
+                      activeResultTab === tab.key
                         ? "shadow-md transform scale-105"
                         : "hover:scale-102"
                     }`}
                     style={{
-                      backgroundColor: activeResultTab === key 
+                      backgroundColor: activeResultTab === tab.key 
                         ? 'var(--leetsheet-orange)' 
                         : 'var(--leetsheet-bg-elevated)',
-                      color: activeResultTab === key 
+                      color: activeResultTab === tab.key 
                         ? 'var(--leetsheet-bg-primary)' 
                         : 'var(--leetsheet-text-primary)'
                     }}
                   >
-                    <Icon className="w-3 h-3" />
-                    {label}
+                    <TabIcon className="w-3 h-3" />
+                    {tab.label}
                   </button>
-                ))}
+                  );
+                })}
               </div>
             </div>
 

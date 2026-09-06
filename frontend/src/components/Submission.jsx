@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React from "react";
 import {
   CheckCircle2,
   XCircle,
@@ -82,6 +82,55 @@ const SubmissionResults = ({ submission }) => {
           </div>
         ))}
       </div>
+
+      {/* Per-test-case verdicts */}
+      {testcases.length > 0 && (
+        <div className="space-y-2 overflow-y-auto">
+          {testcases.map((tc, idx) => (
+            <div key={idx} className="p-3 rounded-lg border" style={{
+              backgroundColor: 'var(--leetsheet-bg-secondary)',
+              borderColor: tc?.passed ? 'var(--leetsheet-success)' : 'var(--leetsheet-error)',
+              borderLeftWidth: 3,
+            }}>
+              <div className="flex items-center justify-between mb-1">
+                <span className="text-xs font-semibold" style={{ color: 'var(--leetsheet-text-primary)' }}>
+                  Test case #{tc.testCase || idx + 1}
+                </span>
+                {tc?.passed ? (
+                  <span className="text-xs font-semibold flex items-center gap-1" style={{ color: 'var(--leetsheet-success)' }}>
+                    <CheckCircle className="w-3 h-3" /> Accepted
+                  </span>
+                ) : (
+                  <span className="text-xs font-semibold flex items-center gap-1" style={{ color: 'var(--leetsheet-error)' }}>
+                    <XCircle className="w-3 h-3" /> {tc?.status || "Wrong Answer"}
+                  </span>
+                )}
+              </div>
+
+              {tc?.stderr && (
+                <p className="text-xs mb-1" style={{ color: 'var(--leetsheet-error)' }}>
+                  <strong>stderr:</strong> <code className="break-all">{tc.stderr}</code>
+                </p>
+              )}
+              {tc?.compile_output && (
+                <p className="text-xs mb-1" style={{ color: 'var(--leetsheet-warning)' }}>
+                  <strong>compile:</strong> <code className="break-all">{tc.compile_output}</code>
+                </p>
+              )}
+              {tc?.stdout != null && (
+                <p className="text-xs mb-1" style={{ color: 'var(--leetsheet-text-secondary)' }}>
+                  <strong>Output:</strong> <code className="break-all whitespace-pre-wrap">{tc.stdout}</code>
+                </p>
+              )}
+              {tc?.expected != null && (
+                <p className="text-xs" style={{ color: 'var(--leetsheet-text-secondary)' }}>
+                  <strong>Expected:</strong> <code className="break-all whitespace-pre-wrap">{tc.expected}</code>
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
   );
 };

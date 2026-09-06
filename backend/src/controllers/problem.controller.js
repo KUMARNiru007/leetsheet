@@ -5,120 +5,114 @@ import {
    submitBatch,
  } from "../libs/judge0.lib.js";
 
-export const createProblem = async (req,res) => {
-   // going to get all the data from the request body
+export const createProblem = async (req, res) => {
+  // Going to get all the data from the request body
+  const {
+    title,
+    description,
+    difficulty,
+    tags,
+    examples,
+    constraints,
+    hints,
+    editorial,
+    testcases,
+    codeSnippets,
+    referenceSolutions,
+  } = req.body;
 
-   // Extract hints and editorial from request body
-   const {
-     title,
-     description,
-     difficulty,
-     tags,
-     examples,
-     constraints,
-     hints,
-     editorial,
-     testcases,
-     codeSnippets,
-     referenceSolutions,
-   } = req.body;
-   
-   // Later in the code:
-   const newProblem = await db.problem.create({
-     data:{
-        title, description, difficulty, tags, examples, constraints, hints, editorial, testcases, codeSnippets, referenceSolutions, 
-        userId: req.user.id,
-     }
-   });
-   console.log(req.user)
-
-   // going to check the user role
-
-   if(req.user.role !== "ADMIN"){
+  // 1. Authorization FIRST - never touch the DB before this check.
+  if (req.user.role !== "ADMIN") {
     return res.status(403).json({
-        message:"You are not allowed to create problem"
-    })
-   }
-//loop through diff reference solution
-   try{
+      message: "You are not allowed to create problem",
+    });
+  }
+
+  try {
     if (!referenceSolutions || typeof referenceSolutions !== "object" || Array.isArray(referenceSolutions)) {
       return res.status(400).json({
-        error: "referenceSolutions must be a non-empty object"
+        error: "referenceSolutions must be a non-empty object",
       });
     }
-     if (!Array.isArray(testcases) || testcases.length === 0) {
+    if (!Array.isArray(testcases) || testcases.length === 0) {
       return res.status(400).json({
-        error: "testcases must be a non-empty array"
+        error: "testcases must be a non-empty array",
       });
     }
-    
-    for(const [language , solutionCode] of Object.entries(referenceSolutions)){
- const languageId = getJudge0LanguageId(language)
-    
- if (!languageId){
-    return res.status(400).json({error:`Language ${language} is not supported`})
- }
-//destructure input and output
-   const submissions = testcases.map(({input,output}) => ({
 
-      source_code:solutionCode,
-      language_id:languageId,
-      stdin:input, // input send to judge0
-      expected_output:output, //the output that will come after judge0
+    // 2. Verify every reference solution passes all test cases BEFORE saving.
+    for (const [language, solutionCode] of Object.entries(referenceSolutions)) {
+      const languageId = getJudge0LanguageId(language);
 
+      if (!languageId) {
+        return res.status(400).json({ error: `Language ${language} is not supported` });
+      }
 
-   })) // array of submission of each language -- all language will be checked.
-   
-   const submissionResults = await submitBatch(submissions);  //recieved tokens from the test cases
-   // batch ready
+      const submissions = testcases.map(({ input, output }) => ({
+        source_code: solutionCode,
+        language_id: languageId,
+        stdin: input,
+        expected_output: output,
+      }));
 
-
-   const tokens = submissionResults.map((res) => res.token); //token recived res- result
-
-
-   //polling- ungali karna ho gaya hogaya
-
-
-     const results = await pollBatchResults(tokens);
+      const submissionResults = await submitBatch(submissions);
+      const tokens = submissionResults.map((res) => res.token);
+      const results = await pollBatchResults(tokens);
 
       for (let i = 0; i < results.length; i++) {
-        const result = results[i];
-
-        console.log("Result-----", result);
-        // console.log(
-        //   `Testcase ${i + 1} and Language ${language} ----- result ${JSON.stringify(result.status.description)}`
-        // );
-        if (result.status.id !== 3) {
+        if (results[i].status.id !== 3) {
           return res.status(400).json({
             error: `Testcase ${i + 1} failed for language ${language}`,
           });
         }
       }
     }
-       // save the problem to database
-   const newProblem = await db.problem.create({
-      data:{
-         title ,description , difficulty ,tags , examples , constraints , testcases , codeSnippets , referenceSolutions , 
-         userId:req.user.id,
-      }
-   });
-     
+
+    // 3. A single insert, only after everything has been validated.
+    const newProblem = await db.problem.create({
+      data: {
+        title,
+        description,
+        difficulty,
+        tags,
+        examples,
+        constraints,
+        hints,
+        editorial,
+        testcases,
+        codeSnippets,
+        referenceSolutions,
+        userId: req.user.id,
+      },
+    });
 
     return res.status(201).json({
-      success:"true",
-      message:"Problem Created Successfully",
-      problem:newProblem
-   });
-    }
-  
-   catch(error){
-      console.log(error);
-      return res.status(500).json({
-         error : "Error While Creating Problem"
-      })
-   }
-   // loop each and every solution for different language
-}
+      success: "true",
+      message: "Problem Created Successfully",
+      problem: newProblem,
+    });
+  } catch (error) {
+    console.log(error);
+    return res.status(500).json({
+      error: "Error While Creating Problem",
+    });
+  }
+};
+
+// Never send hidden test cases or reference solutions to non-admins.
+const sanitizeProblem = (problem, isAdmin) => {
+  if (!problem) return problem;
+
+  const { referenceSolutions, testcases, ...rest } = problem;
+  const testcaseCount = Array.isArray(testcases) ? testcases.length : 0;
+
+  if (isAdmin) {
+    return { ...rest, testcases, referenceSolutions, testcaseCount };
+  }
+
+  const samples = Array.isArray(testcases) ? testcases.filter((tc) => tc.isSample === true) : [];
+  return { ...rest, testcases: samples.length > 0 ? samples : testcases.slice(0, 1), testcaseCount };
+};
 
 export const getAllProblems = async (req,res) => {
    try{
@@ -144,7 +138,7 @@ export const getAllProblems = async (req,res) => {
     res.status(200).json({
       success: true,
       message: "Message Fetched Successfully",
-      problems,
+      problems: problems.map((problem) => sanitizeProblem(problem, req.user.role === "ADMIN")),
     });
 
    } catch (error) {
@@ -176,7 +170,7 @@ export const getProblemById = async (req, res) => {
       {
       success: true,
       message: "Message Created Successfully",
-      problem,
+      problem: sanitizeProblem(problem, req.user.role === "ADMIN"),
     });
   } catch (error) {
     console.log(error);
@@ -345,7 +339,7 @@ export const getAllProblemsSolvedByUser = async (req, res) => {
     res.status(200).json({
       success:true,
       message:"Problems fetched successfully",
-      problems
+      problems: problems.map((problem) => sanitizeProblem(problem, req.user.role === "ADMIN"))
     })
   } catch (error) {
     console.error("Error fetching problems :" , error);

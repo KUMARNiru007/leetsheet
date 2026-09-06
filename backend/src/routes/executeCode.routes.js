@@ -5,11 +5,12 @@ import {
   submitCode,
   legacyExecuteCode,
 } from "../controllers/executeCode.controller.js";
+import { executeCodeValidator, validateRequest } from "../validators/index.js";
 
 const executionRoute = express.Router();
 
-executionRoute.post("/run", authMiddleware, runCode);
-executionRoute.post("/submit", authMiddleware, submitCode);
-executionRoute.post("/", authMiddleware, legacyExecuteCode);
+executionRoute.post("/run", authMiddleware, executeCodeValidator(), validateRequest, runCode);
+executionRoute.post("/submit", authMiddleware, executeCodeValidator(), validateRequest, submitCode);
+executionRoute.post("/", authMiddleware, executeCodeValidator(), validateRequest, legacyExecuteCode);
 
 export default executionRoute;

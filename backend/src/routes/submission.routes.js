@@ -9,7 +9,7 @@ submissionRoutes.get("/get-all-submissions" , authMiddleware, getAllSubmission )
 
 submissionRoutes.get("/get-submission/:problemId" , authMiddleware , getSubmissionsForProblem )
 
-submissionRoutes.get("/get-submissions-count/:problemId" , authMiddleware , getAllTheSubmissionsForProblem)
+submissionRoutes.get("/get-submission-count/:problemId" , authMiddleware , getAllTheSubmissionsForProblem)
 
 
 export default submissionRoutes;

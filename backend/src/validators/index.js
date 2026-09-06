@@ -1,4 +1,13 @@
-import { body } from 'express-validator';
+import { body, validationResult } from 'express-validator';
+
+// Run AFTER the validator chains to short-circuit with a 400 when any check failed.
+export const validateRequest = (req, res, next) => {
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ error: errors.array()[0].msg });
+  }
+  next();
+};
 
 const userRegistrationvalidator = () => {
   return [
@@ -48,7 +57,7 @@ const userLoginValidator = () => {
 
 const executeCodeValidator = () => {
   return [
-    body('sourceCode')
+    body('source_code')
       .notEmpty()
       .withMessage('Source code is required')
       .isString()
@@ -59,10 +68,6 @@ const executeCodeValidator = () => {
       .bail()
       .custom((value) => typeof value === 'number' && Number.isInteger(value))
       .withMessage('Language id should be an integer'),
-    body('stdin').isArray().withMessage('stdin in should be an array'),
-    body('expectedOutputs')
-      .isArray()
-      .withMessage('expectedOutputs should be an array'),
     body('problemId')
       .notEmpty()
       .withMessage('Problem id is required')
@@ -82,7 +87,7 @@ const createAndUpdateProblemValidator = () => {
       .notEmpty()
       .withMessage('Description is required')
       .isString()
-      .withMessage('Description is required'),
+      .withMessage('Description should be a string'),
     body('difficulty')
       .notEmpty()
       .withMessage('Difficulty is required')
@@ -102,22 +107,22 @@ const createAndUpdateProblemValidator = () => {
       .notEmpty()
       .withMessage('The constraints are required')
       .isString()
-      .withMessage('The constraints should bae a string'),
+      .withMessage('The constraints should be a string'),
     body('testcases')
       .notEmpty()
-      .withMessage('At lest one testcase is required')
+      .withMessage('At least one testcase is required')
       .isArray()
       .withMessage('Testcases should be an array'),
-    body('codeSnippet')
+    body('codeSnippets')
       .notEmpty()
       .withMessage('Code snippet is required')
       .isObject()
       .withMessage('Code snippet should be an object'),
-    body('refrenceSolution')
+    body('referenceSolutions')
       .notEmpty()
-      .withMessage('Refrence solution for each codeSnippet is required')
+      .withMessage('Reference solution for each codeSnippet is required')
       .isObject()
-      .withMessage('Refrence solution should be an object'),
+      .withMessage('Reference solution should be an object'),
   ];
 };
 
@@ -125,13 +130,17 @@ const createPlaylistValidator = () => {
   return [
     body('name')
       .notEmpty()
-      .withMessage('Name o fPlaylist is required')
+      .withMessage('Name of playlist is required')
       .isString()
       .withMessage('Name of playlist should be a string'),
     body('description')
       .optional()
       .isString()
       .withMessage('Description should be a string'),
+    body('isPublic')
+      .optional()
+      .isBoolean()
+      .withMessage('isPublic should be a boolean'),
   ];
 };
 
