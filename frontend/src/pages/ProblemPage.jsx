@@ -52,12 +52,16 @@ const ProblemPage = () => {
   const [leftPanelWidth, setLeftPanelWidth] = useState(50);
   const [editorHeight, setEditorHeight] = useState(70);
 
-  const { executeCode, submission, isExecuting } = useExecutionStore();
+  const { executeCode, submission, isExecuting, executionMode, resetExecutionMode } = useExecutionStore();
 
   useEffect(() => {
     getProblemById(id);
     getSubmissionCountForProblem(id);
   }, [id]);
+
+  useEffect(() => {
+    if (cooldown === 0) resetExecutionMode();
+  }, [cooldown]);
 
   const startCooldown = () => {
     setCooldown(30);
@@ -230,9 +234,9 @@ const ProblemPage = () => {
             }}
             disabled={isExecuting || cooldown > 0}
           >
-            {isExecuting ? (
+            {isExecuting && executionMode === "run" ? (
               "Running..."
-            ) : cooldown > 0 ? (
+            ) : cooldown > 0 && executionMode === "run" ? (
               `Wait ${cooldown}s`
             ) : (
               <>
@@ -251,9 +255,9 @@ const ProblemPage = () => {
             }}
             disabled={isExecuting || cooldown > 0}
           >
-            {isExecuting ? (
+            {isExecuting && executionMode === "submit" ? (
               "Submitting..."
-            ) : cooldown > 0 ? (
+            ) : cooldown > 0 && executionMode === "submit" ? (
               `Wait ${cooldown}s`
             ) : (
               <>

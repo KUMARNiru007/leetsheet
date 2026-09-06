@@ -4,11 +4,12 @@ import { toast } from "sonner";
 
 export const useExecutionStore = create((set) => ({
   isExecuting: false,
+  executionMode: null,
   submission: null,
 
   executeCode: async (sourceCode, language_id, problemId, mode) => {
     try {
-      set({ isExecuting: true });
+      set({ isExecuting: true, executionMode: mode });
 
       const response = await axiosInstance.post(
         mode === "submit" ? "/execute-code/submit" : "/execute-code/run",
@@ -30,4 +31,6 @@ export const useExecutionStore = create((set) => ({
   },
 
   clearSubmission: () => set({ submission: null }),
+
+  resetExecutionMode: () => set({ executionMode: null }),
 }));
