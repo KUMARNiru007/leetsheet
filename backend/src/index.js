@@ -30,19 +30,43 @@ const isProduction = process.env.NODE_ENV === 'production';
 
 const pgStore = pgSession(session);
 
-const allowedOrigins = (process.env.FRONTEND_URL || "")
+const ALLOWED_URLS = (process.env.FRONTEND_URL || "")
   .split(",")
-  .map((origin) => origin.trim())
+  .map((url) => url.trim())
   .filter(Boolean);
+
+// Allow the deployed frontend (its apex + www subdomain) plus localhost,
+// while still letting server-to-server/curl requests through (no Origin).
+function isAllowedOrigin(origin) {
+  if (!origin) return true;
+  if (ALLOWED_URLS.length === 0) return !isProduction;
+
+  let hostname;
+  try {
+    hostname = new URL(origin).hostname;
+  } catch {
+    return false;
+  }
+
+  for (const allowed of ALLOWED_URLS) {
+    try {
+      const allowedHost = new URL(allowed).hostname;
+      if (hostname === allowedHost || hostname === `www.${allowedHost}`) {
+        return true;
+      }
+    } catch {
+      /* ignore malformed ALLOWED_URLS entry */
+    }
+  }
+
+  // Let local development reach the API regardless of port.
+  return hostname === "localhost" || hostname === "127.0.0.1";
+}
 
 app.use(
   cors({
     origin(origin, callback) {
-      // Allow server-to-server / curl requests (no Origin header),
-      // and every origin in dev when none are configured.
-      if (!origin || allowedOrigins.length === 0 || allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      }
+      if (isAllowedOrigin(origin)) return callback(null, true);
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
