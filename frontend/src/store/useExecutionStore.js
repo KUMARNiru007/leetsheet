@@ -7,7 +7,7 @@ export const useExecutionStore = create((set) => ({
   executionMode: null,
   submission: null,
 
-  executeCode: async (sourceCode, language_id, problemId, mode) => {
+  executeCode: async (sourceCode, language_id, problemId, mode, customTestCases = []) => {
     try {
       set({ isExecuting: true, executionMode: mode });
 
@@ -17,6 +17,7 @@ export const useExecutionStore = create((set) => ({
           source_code: sourceCode,
           language_id,
           problemId,
+          customTestCases,
         }
       );
 

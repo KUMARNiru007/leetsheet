@@ -111,7 +111,7 @@ const sanitizeProblem = (problem, isAdmin) => {
   }
 
   const samples = Array.isArray(testcases) ? testcases.filter((tc) => tc.isSample === true) : [];
-  return { ...rest, testcases: samples.length > 0 ? samples : testcases.slice(0, 1), testcaseCount };
+  return { ...rest, testcases: samples.length > 0 ? samples : testcases.slice(0, 3), testcaseCount };
 };
 
 export const getAllProblems = async (req,res) => {

@@ -16,6 +16,8 @@ import {
   Code,
   Send,
   CloudUpload,
+  Plus,
+  Trash2,
 } from "lucide-react";
 import { toast } from "sonner";
 
@@ -41,6 +43,7 @@ const ProblemPage = () => {
   const [selectedLanguage, setSelectedLanguage] = useState("JAVASCRIPT");
   const [isBookmarked, setIsBookmarked] = useState(false);
   const [testCases, setTestCases] = useState([]);
+  const [customTestCases, setCustomTestCases] = useState([]);
   const [activeTestCase, setActiveTestCase] = useState(0);
   const [activeResultTab, setActiveResultTab] = useState("testcases");
   const [cooldown, setCooldown] = useState(0);
@@ -104,12 +107,14 @@ const ProblemPage = () => {
       const allCases = problem.testcases || [];
       const sampleCases = allCases.filter((tc) => tc.isSample === true);
       setTestCases(
-        (sampleCases.length > 0 ? sampleCases : allCases.slice(0, 1)).map((tc) => ({
+        (sampleCases.length > 0 ? sampleCases : allCases.slice(0, 3)).map((tc) => ({
           input: tc.input,
           output: tc.output,
           explanation: tc.explanation,
         }))
       );
+      setCustomTestCases([]);
+      setActiveTestCase(0);
     }
   }, [problem, selectedLanguage]);
 
@@ -156,7 +161,7 @@ const ProblemPage = () => {
 
     try {
       const language_id = getLanguageId(selectedLanguage);
-      executeCode(code, language_id, id, "run");
+      executeCode(code, language_id, id, "run", customTestCases);
       startCooldown();
     } catch (error) {
       console.log("Error running code: ", error);
@@ -190,6 +195,31 @@ const ProblemPage = () => {
       console.log("Failed to copy url: ", error);
       toast.error("Failed to copy url");
     }
+  };
+
+  const displayCases = [...testCases, ...customTestCases];
+  const activeCaseIsCustom = activeTestCase >= testCases.length;
+
+  const handleAddCustomCase = () => {
+    if (customTestCases.length >= 5) return;
+    const newIndex = displayCases.length;
+    setCustomTestCases((prev) => [...prev, { input: "", output: "" }]);
+    setActiveTestCase(newIndex);
+  };
+
+  const handleCustomCaseChange = (field, value) => {
+    const customIndex = activeTestCase - testCases.length;
+    if (customIndex < 0) return;
+    setCustomTestCases((prev) =>
+      prev.map((tc, i) => (i === customIndex ? { ...tc, [field]: value } : tc))
+    );
+  };
+
+  const handleDeleteCustomCase = () => {
+    const customIndex = activeTestCase - testCases.length;
+    if (customIndex < 0) return;
+    setCustomTestCases((prev) => prev.filter((_, i) => i !== customIndex));
+    setActiveTestCase((prev) => Math.max(0, Math.min(prev, displayCases.length - 2)));
   };
 
   if (isProblemLoading || !problem) {
@@ -686,7 +716,7 @@ const ProblemPage = () => {
                   {/* Enhanced Test Case Selector */}
                   <div className="flex gap-1 mb-2 pb-2  flex-shrink-0" style={{ borderColor: 'var(--leetsheet-border-primary)'}}>
                     <div className="flex gap-2 flex-wrap flex-1">
-                      {testCases.map((_, idx) => (
+                      {displayCases.map((_, idx) => (
                         <button
                           key={idx}
                           onClick={() => setActiveTestCase(idx)}
@@ -715,14 +745,26 @@ const ProblemPage = () => {
                           Case {idx + 1}
                         </button>
                       ))}
+                      <button
+                        onClick={handleAddCustomCase}
+                        disabled={customTestCases.length >= 5}
+                        className="px-2 py-1 rounded-md text-xs font-semibold transition-all duration-200 flex items-center gap-1 hover:scale-102 disabled:opacity-40 disabled:hover:scale-100 border border-dashed"
+                        style={{
+                          backgroundColor: 'var(--leetsheet-bg-tertiary)',
+                          color: 'var(--leetsheet-orange)',
+                          borderColor: 'var(--leetsheet-border-accent)'
+                        }}
+                      >
+                        <Plus className="w-3 h-3" /> Add Case
+                      </button>
                     </div>
                     <div className="text-xs flex items-center flex-shrink-0" style={{ color: 'var(--leetsheet-text-muted)' }}>
-                      {testCases.length} test{testCases.length !== 1 ? "s" : ""}
+                      {displayCases.length} test{displayCases.length !== 1 ? "s" : ""}
                     </div>
                   </div>
 
                   {/* Enhanced Test Case Display */}
-                  {testCases[activeTestCase] && (
+                  {displayCases[activeTestCase] && (
                     <div className="flex-1 rounded-lg p-2 space-y-2 border overflow-y-auto" style={{
                       background: 'var(--leetsheet-bg-primary)',
                       borderColor: 'var(--leetsheet-bg-tertiary)'
@@ -737,14 +779,25 @@ const ProblemPage = () => {
                             Input
                           </span>
                         </div>
-                        <div className="p-2 rounded-md border transition-colors" style={{
-                          backgroundColor: 'var(--leetsheet-bg-secondary)',
-                          borderColor: 'var(--leetsheet-bg-tertiary)'
-                        }}>
-                          <code className="font-mono text-xs break-all" style={{ color: 'var(--leetsheet-text-primary)' }}>
-                            {testCases[activeTestCase]?.input}
-                          </code>
-                        </div>
+                        {activeCaseIsCustom ? (
+                          <textarea
+                            value={displayCases[activeTestCase].input}
+                            onChange={(e) => handleCustomCaseChange("input", e.target.value)}
+                            spellCheck={false}
+                            className="input-leetsheet font-mono text-xs resize-y"
+                            rows={3}
+                            placeholder="Enter custom input e.g. 3&#10;2 3 1"
+                          />
+                        ) : (
+                          <div className="p-2 rounded-md border transition-colors" style={{
+                            backgroundColor: 'var(--leetsheet-bg-secondary)',
+                            borderColor: 'var(--leetsheet-bg-tertiary)'
+                          }}>
+                            <code className="font-mono text-xs break-all" style={{ color: 'var(--leetsheet-text-primary)' }}>
+                              {displayCases[activeTestCase]?.input}
+                            </code>
+                          </div>
+                        )}
                       </div>
 
                       {/* Output Section */}
@@ -757,18 +810,29 @@ const ProblemPage = () => {
                             Expected Output
                           </span>
                         </div>
-                        <div className=" p-2 rounded-md border transition-colors" style={{
-                          backgroundColor: 'var(--leetsheet-bg-secondary)',
-                          borderColor: 'var(--leetsheet-bg-tertiary)'
-                        }}>
-                          <code className="font-mono text-xs break-all" style={{ color: 'var(--leetsheet-text-primary)' }}>
-                            {testCases[activeTestCase]?.output}
-                          </code>
-                        </div>
+                        {activeCaseIsCustom ? (
+                          <textarea
+                            value={displayCases[activeTestCase].output}
+                            onChange={(e) => handleCustomCaseChange("output", e.target.value)}
+                            spellCheck={false}
+                            className="input-leetsheet font-mono text-xs resize-y"
+                            rows={3}
+                            placeholder="Enter expected output e.g. 6"
+                          />
+                        ) : (
+                          <div className=" p-2 rounded-md border transition-colors" style={{
+                            backgroundColor: 'var(--leetsheet-bg-secondary)',
+                            borderColor: 'var(--leetsheet-bg-tertiary)'
+                          }}>
+                            <code className="font-mono text-xs break-all" style={{ color: 'var(--leetsheet-text-primary)' }}>
+                              {displayCases[activeTestCase]?.output}
+                            </code>
+                          </div>
+                        )}
                       </div>
 
-                      {/* Explanation Section */}
-                      {testCases[activeTestCase]?.explanation && (
+                      {/* Explanation Section - samples only */}
+                      {!activeCaseIsCustom && displayCases[activeTestCase]?.explanation && (
                         <div className="group">
                           <div className="flex items-center gap-2 mb-1">
                             <div className="w-4 h-4 rounded-full flex items-center justify-center flex-shrink-0" style={{ backgroundColor: 'var(--leetsheet-warning)/20' }}>
@@ -783,9 +847,26 @@ const ProblemPage = () => {
                             borderColor: 'var(--leetsheet-warning)/20'
                           }}>
                             <p className="text-xs leading-relaxed" style={{ color: 'var(--leetsheet-text-primary)' }}>
-                              {testCases[activeTestCase].explanation}
+                              {displayCases[activeTestCase].explanation}
                             </p>
                           </div>
+                        </div>
+                      )}
+
+                      {/* Delete custom case */}
+                      {activeCaseIsCustom && (
+                        <div className="flex items-center justify-end pt-1">
+                          <button
+                            onClick={handleDeleteCustomCase}
+                            className="px-2 py-1 rounded-md text-xs font-medium flex items-center gap-1 border transition-all duration-200 hover:scale-102"
+                            style={{
+                              color: 'var(--leetsheet-error)',
+                              borderColor: 'rgba(255, 77, 79, 0.35)',
+                              backgroundColor: 'var(--leetsheet-bg-tertiary)'
+                            }}
+                          >
+                            <Trash2 className="w-3 h-3" /> Delete Case
+                          </button>
                         </div>
                       )}
                     </div>

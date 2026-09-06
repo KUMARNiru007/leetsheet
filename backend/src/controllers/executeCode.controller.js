@@ -13,9 +13,9 @@ class HttpError extends Error {
 }
 
 // Shared evaluation pipeline.
-// mode: "run"    -> only the sample cases (isSample: true), older problems fall back to the first case.
+// mode: "run"    -> sample cases (isSample: true), older problems fall back to the first 3 cases.
 // mode: "submit" -> the full hidden test suite.
-const evaluate = async ({ problemId, source_code, language_id, mode }) => {
+const evaluate = async ({ problemId, source_code, language_id, mode, customTestCases }) => {
   const problem = await db.problem.findUnique({ where: { id: problemId } });
 
   if (!problem) {
@@ -34,10 +34,20 @@ const evaluate = async ({ problemId, source_code, language_id, mode }) => {
     ? allTestcases
     : sampleCases.length > 0
       ? sampleCases
-      : allTestcases.slice(0, 1);
+      : allTestcases.slice(0, 3);
 
-  const stdin = testcases.map((tc) => tc.input);
-  const expectedOutputs = testcases.map((tc) => tc.output);
+  // User-supplied cases are only ever used for Run, never for Submit.
+  const extraCases = !isSubmit
+    ? (Array.isArray(customTestCases) ? customTestCases : [])
+        .filter((tc) => tc && typeof tc.input === "string" && typeof tc.output === "string")
+        .slice(0, 5)
+        .map((tc) => ({ input: tc.input, output: tc.output }))
+    : [];
+
+  const combined = [...testcases, ...extraCases];
+
+  const stdin = combined.map((tc) => tc.input);
+  const expectedOutputs = combined.map((tc) => tc.output);
 
   const submissions = stdin.map((input) => ({
     source_code,
@@ -78,7 +88,7 @@ const evaluate = async ({ problemId, source_code, language_id, mode }) => {
 // Never persists, never marks a problem solved.
 export const runCode = async (req, res) => {
   try {
-    const { source_code, language_id, problemId } = req.body;
+    const { source_code, language_id, problemId, customTestCases } = req.body;
 
     if (!source_code || !language_id || !problemId) {
       return res
@@ -91,6 +101,7 @@ export const runCode = async (req, res) => {
       source_code,
       language_id,
       mode: "run",
+      customTestCases,
     });
 
     return res.status(200).json({
